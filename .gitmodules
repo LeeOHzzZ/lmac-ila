@@ -1,0 +1,3 @@
+[submodule "design"]
+	path = design
+	url = https://github.com/lewiz-support/LMAC_CORE2.git
