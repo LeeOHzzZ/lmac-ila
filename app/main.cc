@@ -10,7 +10,8 @@
 
 int main() {
 
-  ExportLmacCore2ToFile("lmac_core_2.json");
+  // ExportLmacCore2ToFile("LMacCore2", "LMacCore2.json");
+  ExportLmacCore2ToFile();
 
   return 0;
 }
