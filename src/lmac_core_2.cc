@@ -80,37 +80,53 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
   auto tx_fifo_buff = m.NewMemState("TX_FIFO_BUFF", TX_FIFO_BUFF_ADDR_BIT_WID,
                                     TX_FIFO_BUFF_DATA_BIT_WID);
 
-  /* TX_FIFO_BUFF_RD_PTR
-   *  - the FIFO buffer read pointer
-   *  - In the abstract model -- at most one packet -- the read pointer is
-   *    always 0.
+  /* TX_PKT_WR_STEP_CNT
+   *  - the number of remaining steps to write in the current packet
+   *  - This counter is set when the size (first qword) is read.
+   *  - The step number is calculated w.r.t. the user interface, e.g., Qword.
+   *  - When receiving the remaining packet, the counter decrements to zero.
+   *  - Packet size does not need to be a multitude of user interface bit width
    */
-  auto tx_fifo_buff_rd_ptr =
-      m.NewBvState("TX_FIFO_BUFF_RD_PTR", TX_FIFO_BUFF_ADDR_BIT_WID);
+  auto tx_pkt_wr_step_cnt =
+      m.NewBvState("TX_PKT_WR_STEP_CNT", TX_FIFO_BUFF_ADDR_BIT_WID);
+
+  /* TX_PKT_RD_STEP_CNT
+   *  - the number of remaining steps to read in the current packet
+   *  - This counter is set when the full packet is received.
+   *  - The steps are used by the child-ILAs to process the complete packet.
+   */
+  auto tx_pkt_rd_step_cnt =
+      m.NewBvState("TX_PKT_RD_STEP_CNT", TX_FIFO_BUFF_ADDR_BIT_WID);
 
   /* TX_FIFO_BUFF_WR_PTR
    *  - the FIFO buffer write pointer
-   *  - In the abstract model -- at most one packet -- the write pointer is
-   *    consistent with the byte count (constant sum).
+   *  - The write pointer follows the write step count (reversely)..
+   *  - Complex: the pointer wraps around when reaching the buffer boundary and
+   *    does not reset when new packet arrives.
+   *  - Simple (at most one packet): the pointer resets for each packet, and has
+   *    constant sum with the step counter (packet size + 1).
    */
   auto tx_fifo_buff_wr_ptr =
       m.NewBvState("TX_FIFO_BUFF_WR_PTR", TX_FIFO_BUFF_ADDR_BIT_WID);
 
-  /* TX_PKT_BYTE_COUNT
-   *  - the number of processed bytes in the current packet
-   *  - This counter is modeled as a decrementing counter (from packet size).
-   *  - Ths byte count is used for triggering child-instructions, i.e.,
-   *    decrementing to 0 indicates the start for adding paddings and forming
-   *    Ethernet frames.
+  /* TX_FIFO_BUFF_RD_PTR
+   *  - the FIFO buffer read pointer
+   *  - The read pointer follows the read step count (reversely).
+   *  - Complex: the pointer wraps around when reaching the buffer boundary and
+   *    does not reset when new packet is processed.
+   *  - Simple (at most one packet): the pointer resets for each packet, and has
+   *    constant sum with the step counter (packet size + 1).
    */
-  auto tx_pkt_byte_count =
-      m.NewBvState("TX_PKT_BYTE_COUNT", USER_INTERFACE_BIT_WID);
+  auto tx_fifo_buff_rd_ptr =
+      m.NewBvState("TX_FIFO_BUFF_RD_PTR", TX_FIFO_BUFF_ADDR_BIT_WID);
 
+#if 0
   /* TX_PKT_READY
    *  - indicate that the packet is ready to be sent
    *  - This signal is set when the last qword is received.
    */
   auto tx_pkt_ready = m.NewBoolState("TX_PKT_READY");
+#endif
 
   //
   // Internal states -- Rx FIFO
@@ -156,51 +172,68 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
     // state update functions
     //
 
-#if 1 // simplified FIFO
-    auto is_new_pkt = (tx_pkt_byte_count == 0);
-    auto is_last_qword_of_pkt = (tx_pkt_byte_count == QWORD_BYTE_NUM);
-    // XXX replace to be used by child-instructions
-    // auto is_last_qword_of_pkt =
-    // ((tx_fifo_buff_wr_ptr * QWORD_BYTE_NUM) == tx_pkt_byte_count);
-    auto data_in = tx_data & tx_be;
+    // example of simple model: (x: some value; -: don't care)
+    //
+    // in_data_val 8 x x x x x x x x -
+    // wr_step_cnt 0 8 7 6 5 4 3 2 1 0
+    // buff_wr_ptr 0 1 2 3 4 5 6 7 8 9/0 (reset to 0 in simple model)
+    //
+    // FIFO buffer - 8 x x x x x x x x
+    //
+    // rd_step_cnt 0 0 0 0 0 0 0 0 0 8
+    // buff_rd_ptr 0 0 0 0 0 0 0 0 0 0 (start from 0 in simple model)
+
+    auto is_size_qwrd = (tx_pkt_wr_step_cnt == 0x0);
+    auto is_last_qwrd = (tx_pkt_wr_step_cnt == 0x1);
+    auto tx_complete = (tx_pkt_rd_step_cnt == 0x0);
+    auto in_data_val = tx_data & tx_be;
+    auto k_zero_addr = ilang::BvConst(0x0, TX_FIFO_BUFF_ADDR_BIT_WID);
 
     // tx_fifo_wused_qwd
     auto tx_fifo_wused_qwd_nxt =
-        tx_fifo_wused_qwd + (USER_INTERFACE_BIT_WID / QWORD_BIT_WID);
+        tx_fifo_wused_qwd + (USER_INTERFACE_BIT_WID / QWRD_BIT_WID);
     instr.SetUpdate(tx_fifo_wused_qwd, tx_fifo_wused_qwd_nxt);
 
     // tx_fifo_full
-    auto tx_fifo_full_nxt = is_last_qword_of_pkt;
+    // XXX implementation specific
+    auto tx_fifo_full_nxt = (is_last_qwrd | !tx_complete);
     instr.SetUpdate(tx_fifo_full, tx_fifo_full_nxt);
 
-    // tx_fifo_buff_rd_ptr
-    auto tx_fifo_buff_rd_ptr_nxt =
-        ilang::BvConst(0x0, TX_FIFO_BUFF_ADDR_BIT_WID);
-    instr.SetUpdate(tx_fifo_buff_rd_ptr, tx_fifo_buff_rd_ptr_nxt);
+    // tx_pkt_wr_step_cnt
+    auto down_shift = in_data_val >> 3; // XXX change per user interface width
+    auto has_remainder = (down_shift != (down_shift >> 3));
+    auto size_measured_in_steps = Ite(has_remainder,  // is a multitude?
+                                      down_shift + 1, // add one more step
+                                      down_shift);    // keep as is
+    auto tx_pkt_wr_step_cnt_nxt = Ite(is_size_qwrd,
+                                      size_measured_in_steps,  // initialize
+                                      tx_pkt_wr_step_cnt - 1); // decrement
+    instr.SetUpdate(tx_pkt_wr_step_cnt, tx_pkt_wr_step_cnt_nxt);
 
     // tx_fifo_buff_wr_ptr
-    auto tx_fifo_buff_wr_ptr_nxt = Ite(
-        is_last_qword_of_pkt, ilang::BvConst(0x0, TX_FIFO_BUFF_ADDR_BIT_WID),
-        tx_fifo_buff_wr_ptr + 1);
+    // reset to 0 for each packet -- at most one packet in the FIFO buffer
+    // TODO wrap when reaching buffer boundary
+    auto wr_ptr_inc = tx_fifo_buff_wr_ptr + 1;
+    auto tx_fifo_buff_wr_ptr_nxt = Ite(is_last_qwrd, // end of packet?
+                                       k_zero_addr,  // reset
+                                       wr_ptr_inc);  // increment
     instr.SetUpdate(tx_fifo_buff_wr_ptr, tx_fifo_buff_wr_ptr_nxt);
 
+    // tx_pkt_rd_step_cnt
+    auto size_load_from_buffer = Load(tx_fifo_buff, tx_fifo_buff_rd_ptr);
+    auto tx_pkt_rd_step_cnt_nxt = Ite(is_last_qwrd,          // end of packet?
+                                      size_load_from_buffer, // initialize
+                                      k_zero_addr);          // reset/unchanged
+    instr.SetUpdate(tx_pkt_rd_step_cnt, tx_pkt_rd_step_cnt_nxt);
+
+    // tx_fifo_buff_rd_ptr
+    auto tx_fifo_buff_rd_ptr_nxt = k_zero_addr; // keep the size field
+    instr.SetUpdate(tx_fifo_buff_rd_ptr, tx_fifo_buff_rd_ptr_nxt);
+
     // tx_fifo_buff
-    auto tx_fifo_buff_nxt = Store(tx_fifo_buff, tx_fifo_buff_wr_ptr, data_in);
+    auto tx_fifo_buff_nxt = Store(tx_fifo_buff, tx_fifo_buff_wr_ptr,
+                                  in_data_val); // store the masked value
     instr.SetUpdate(tx_fifo_buff, tx_fifo_buff_nxt);
-
-    // tx_pkt_byte_count
-    auto tx_pkt_byte_count_nxt =
-        Ite(is_new_pkt, data_in, tx_pkt_byte_count - QWORD_BYTE_NUM);
-    instr.SetUpdate(tx_pkt_byte_count, tx_pkt_byte_count_nxt);
-
-    // tx_pkt_ready
-    auto tx_pkt_ready_nxt = is_last_qword_of_pkt;
-    instr.SetUpdate(tx_pkt_ready, tx_pkt_ready_nxt);
-#endif
-
-#if 0 // cyclic FIFO
-    auto tx_fifo_full_nxt = (tx_fifo_wused_qwd_nxt >= TX_FIFO_BUFF_QWORD_NUM);
-#endif
   }
 
   return m;
