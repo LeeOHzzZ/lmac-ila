@@ -49,7 +49,7 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
   /* TX_FIFO_WUSED_QWD
    *  - the number of qwords Tx FIFO contained
    *  - This value is dynamic and can change from clock to clock.
-   *  - XXX does this mean that it cannot/shouldn't be checked against RTL?
+   *  - XXX cannot/shouldn't be checked against RTL
    *  - We can see this as the pointer pointed to the head of the FIFO buffer.
    */
   auto tx_fifo_wused_qwd =
@@ -160,7 +160,7 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
     // state update functions
     //
 
-    // example of simple model: (x: some value; -: don't care)
+    // example: (x: some value; -: don't care)
     //
     // in_data_val 8 x x x x x x x x -
     // pkt_wr_cnt  0 8 7 6 5 4 3 2 1 0
@@ -200,14 +200,13 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
 
     // tx_buff_wr_ptr
     // reset to 0 for each packet -- at most one packet in the FIFO buffer
-    // TODO wrap when reaching buffer boundary
     auto tx_buff_wr_ptr_inc = tx_buff_wr_ptr + 1;
     auto tx_buff_wr_ptr_nxt = Ite(is_last_qwrd,        // end of packet?
                                   k_zero_addr,         // reset
                                   tx_buff_wr_ptr_inc); // increment
     instr.SetUpdate(tx_buff_wr_ptr, tx_buff_wr_ptr_nxt);
 
-    // tx_pkt_rd_step_cnt
+    // tx_pkt_rd_cnt
     auto size_load_from_buffer = Load(tx_fifo_buff, tx_buff_rd_ptr);
     auto tx_pkt_rd_cnt_nxt = Ite(is_last_qwrd,          // end of packet?
                                  size_load_from_buffer, // initialize
@@ -224,9 +223,30 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
     instr.SetUpdate(tx_fifo_buff, tx_fifo_buff_nxt);
   }
 
-  auto child_tx = m.NewChild(model_name + "_Tx");
+  auto child_tx = m.NewChild(model_name + "_Tx_crc");
   { // child Tx
     /* ----------------------- Architectural States ------------------------- */
+    /* TX_FRAME_SUM
+     *  - running sum of the whole frame, used to calculate the CRC 32 field
+     */
+    auto tx_frame_sum =
+        child_tx.NewBvState("TX_FRAME_SUM", TX_BUFF_DATA_BIT_WID);
+
+    /* TX_CRC_VALUE
+     *  - crc value calcuated based on the running sum
+     *  - We model this using uninterpreted function.
+     */
+    auto tx_crc_value =
+        child_tx.NewBvState("TX_CRC_VALUE", TX_BUFF_DATA_BIT_WID);
+
+    /* TX_CRC_FUNC
+     *  - the uninterpreted function for computing CRC value
+     *  - input:  64-bit frame sum
+     *  - output: 64-bit CRC value
+     */
+    auto tx_crc_func =
+        ilang::FuncRef("TX_CRC_FUNC", ilang::SortRef::BV(TX_BUFF_DATA_BIT_WID),
+                       ilang::SortRef::BV(TX_BUFF_DATA_BIT_WID));
 
     /* ----------------------- Fetch States --------------------------------- */
     auto child_tx_fetch = Concat(fetch, tx_pkt_rd_cnt);
@@ -237,8 +257,94 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
     child_tx.SetValid(child_tx_valid);
 
     /* ----------------------- Instructions --------------------------------- */
-    auto instr_compute_crc = child_tx.NewInstr("COMPUTE_CRC");
-    // TODO
+
+    // example: (x: some value; -: don't care)
+    //
+    // in_data_val  8 x x x x x x x x -
+    // FIFO buffer  - 8 x x x x x x x x
+    //
+    // pkt_rd_cnt   0 0 0 0 0 0 0 0 0 8 8 8 8 8 8 8 8 8 0
+    // buff_rd_ptr  0 0 0 0 0 0 0 0 0 0 1 2 3 4 5 6 7 8 0
+    // tx_frame_sum - - - - - - - - - - x x x x x x x x -
+    // tx_crc_value - - - - - - - - - - - - - - - - - - x
+    // CRC_INIT                       |
+    // CRC_SUM                          | | | | | | |
+    // CRC_COMPUTE                                    |
+
+    auto k_zero_addr = ilang::BvConst(0x0, TX_BUFF_ADDR_BIT_WID);
+
+    { // CRC_INIT
+      auto instr_init = child_tx.NewInstr("CRC_INIT");
+
+      // decode
+      auto decode = child_tx_valid & (tx_buff_rd_ptr == k_zero_addr);
+      instr_init.SetDecode(decode);
+
+      //
+      // state update functions
+      //
+
+      // tx_buff_rd_ptr
+      auto tx_buff_rd_ptr_nxt = tx_buff_rd_ptr + 0x1;
+      instr_init.SetUpdate(tx_buff_rd_ptr, tx_buff_rd_ptr_nxt);
+
+      // tx_frame_sum
+      // initialize the running sum to the first data in the buffer (not size)
+      auto tx_frame_sum_nxt = Load(tx_fifo_buff, tx_buff_rd_ptr + 0x1);
+      instr_init.SetUpdate(tx_frame_sum, tx_frame_sum_nxt);
+    }
+
+    { // CRC_SUM
+      auto instr_sum = child_tx.NewInstr("CRC_SUM");
+
+      // decode
+      auto decode = child_tx_valid & (tx_buff_rd_ptr != k_zero_addr) &
+                    (tx_buff_rd_ptr != tx_pkt_rd_cnt);
+      instr_sum.SetDecode(decode);
+
+      //
+      // state update functions
+      //
+
+      // tx_buff_rd_ptr
+      auto tx_buff_rd_ptr_nxt = tx_buff_rd_ptr + 0x1;
+      instr_sum.SetUpdate(tx_buff_rd_ptr, tx_buff_rd_ptr_nxt);
+
+      // tx_frame_sum
+      // add up the running sum with the previous sum
+      auto tx_frame_sum_nxt =
+          tx_frame_sum + Load(tx_fifo_buff, tx_buff_rd_ptr + 0x1);
+      instr_sum.SetUpdate(tx_frame_sum, tx_frame_sum_nxt);
+    }
+
+    { // CRC_COMPUTE
+      auto instr_compute = child_tx.NewInstr("CRC_COMPUTE");
+
+      // decode
+      auto decode = child_tx_valid & (tx_buff_rd_ptr != k_zero_addr) &
+                    (tx_buff_rd_ptr == tx_pkt_rd_cnt);
+      instr_compute.SetDecode(decode);
+
+      //
+      // state update functions
+      //
+
+      // tx_fifo_full
+      auto tx_fifo_full_nxt = (tx_pkt_rd_cnt != 0x0);
+      instr_compute.SetUpdate(tx_fifo_full, tx_fifo_full_nxt);
+
+      // tx_pkt_rd_cnt
+      auto tx_pkt_rd_cnt_nxt = k_zero_addr;
+      instr_compute.SetUpdate(tx_pkt_rd_cnt, tx_pkt_rd_cnt_nxt);
+
+      // tx_buff_rd_ptr
+      auto tx_buff_rd_ptr_nxt = k_zero_addr;
+      instr_compute.SetUpdate(tx_buff_rd_ptr, tx_buff_rd_ptr_nxt);
+
+      // tx_crc_value
+      auto tx_crc_value_nxt = tx_crc_func(tx_frame_sum);
+      instr_compute.SetUpdate(tx_crc_value, tx_crc_value_nxt);
+    }
   }
 
   return m;
