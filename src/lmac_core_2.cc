@@ -77,28 +77,26 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
    *  - We choose to model the buffer as memory/array in stead of bit-vector.
    *    Further, the value (of each entry) is as wide as the user interface.
    */
-  auto tx_fifo_buff = m.NewMemState("TX_FIFO_BUFF", TX_FIFO_BUFF_ADDR_BIT_WID,
-                                    TX_FIFO_BUFF_DATA_BIT_WID);
+  auto tx_fifo_buff =
+      m.NewMemState("TX_FIFO_BUFF", TX_BUFF_ADDR_BIT_WID, TX_BUFF_DATA_BIT_WID);
 
-  /* TX_PKT_WR_STEP_CNT
+  /* TX_PKT_WR_CNT
    *  - the number of remaining steps to write in the current packet
    *  - This counter is set when the size (first qword) is read.
    *  - The step number is calculated w.r.t. the user interface, e.g., Qword.
    *  - When receiving the remaining packet, the counter decrements to zero.
    *  - Packet size does not need to be a multitude of user interface bit width
    */
-  auto tx_pkt_wr_step_cnt =
-      m.NewBvState("TX_PKT_WR_STEP_CNT", TX_FIFO_BUFF_ADDR_BIT_WID);
+  auto tx_pkt_wr_cnt = m.NewBvState("TX_PKT_WR_CNT", TX_BUFF_ADDR_BIT_WID);
 
-  /* TX_PKT_RD_STEP_CNT
+  /* TX_PKT_RD_CNT
    *  - the number of remaining steps to read in the current packet
    *  - This counter is set when the full packet is received.
    *  - The steps are used by the child-ILAs to process the complete packet.
    */
-  auto tx_pkt_rd_step_cnt =
-      m.NewBvState("TX_PKT_RD_STEP_CNT", TX_FIFO_BUFF_ADDR_BIT_WID);
+  auto tx_pkt_rd_cnt = m.NewBvState("TX_PKT_RD_CNT", TX_BUFF_ADDR_BIT_WID);
 
-  /* TX_FIFO_BUFF_WR_PTR
+  /* TX_BUFF_WR_PTR
    *  - the FIFO buffer write pointer
    *  - The write pointer follows the write step count (reversely)..
    *  - Complex: the pointer wraps around when reaching the buffer boundary and
@@ -106,10 +104,9 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
    *  - Simple (at most one packet): the pointer resets for each packet, and has
    *    constant sum with the step counter (packet size + 1).
    */
-  auto tx_fifo_buff_wr_ptr =
-      m.NewBvState("TX_FIFO_BUFF_WR_PTR", TX_FIFO_BUFF_ADDR_BIT_WID);
+  auto tx_buff_wr_ptr = m.NewBvState("TX_BUFF_WR_PTR", TX_BUFF_ADDR_BIT_WID);
 
-  /* TX_FIFO_BUFF_RD_PTR
+  /* TX_BUFF_RD_PTR
    *  - the FIFO buffer read pointer
    *  - The read pointer follows the read step count (reversely).
    *  - Complex: the pointer wraps around when reaching the buffer boundary and
@@ -117,16 +114,7 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
    *  - Simple (at most one packet): the pointer resets for each packet, and has
    *    constant sum with the step counter (packet size + 1).
    */
-  auto tx_fifo_buff_rd_ptr =
-      m.NewBvState("TX_FIFO_BUFF_RD_PTR", TX_FIFO_BUFF_ADDR_BIT_WID);
-
-#if 0
-  /* TX_PKT_READY
-   *  - indicate that the packet is ready to be sent
-   *  - This signal is set when the last qword is received.
-   */
-  auto tx_pkt_ready = m.NewBoolState("TX_PKT_READY");
-#endif
+  auto tx_buff_rd_ptr = m.NewBvState("TX_BUFF_RD_PTR", TX_BUFF_ADDR_BIT_WID);
 
   //
   // Internal states -- Rx FIFO
@@ -175,19 +163,19 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
     // example of simple model: (x: some value; -: don't care)
     //
     // in_data_val 8 x x x x x x x x -
-    // wr_step_cnt 0 8 7 6 5 4 3 2 1 0
+    // pkt_wr_cnt  0 8 7 6 5 4 3 2 1 0
     // buff_wr_ptr 0 1 2 3 4 5 6 7 8 9/0 (reset to 0 in simple model)
     //
     // FIFO buffer - 8 x x x x x x x x
     //
-    // rd_step_cnt 0 0 0 0 0 0 0 0 0 8
+    // pkt_rd_cnt  0 0 0 0 0 0 0 0 0 8
     // buff_rd_ptr 0 0 0 0 0 0 0 0 0 0 (start from 0 in simple model)
 
-    auto is_size_qwrd = (tx_pkt_wr_step_cnt == 0x0);
-    auto is_last_qwrd = (tx_pkt_wr_step_cnt == 0x1);
-    auto tx_complete = (tx_pkt_rd_step_cnt == 0x0);
+    auto is_size_qwrd = (tx_pkt_wr_cnt == 0x0);
+    auto is_last_qwrd = (tx_pkt_wr_cnt == 0x1);
+    auto tx_complete = (tx_pkt_rd_cnt == 0x0);
     auto in_data_val = tx_data & tx_be;
-    auto k_zero_addr = ilang::BvConst(0x0, TX_FIFO_BUFF_ADDR_BIT_WID);
+    auto k_zero_addr = ilang::BvConst(0x0, TX_BUFF_ADDR_BIT_WID);
 
     // tx_fifo_wused_qwd
     auto tx_fifo_wused_qwd_nxt =
@@ -199,41 +187,58 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
     auto tx_fifo_full_nxt = (is_last_qwrd | !tx_complete);
     instr.SetUpdate(tx_fifo_full, tx_fifo_full_nxt);
 
-    // tx_pkt_wr_step_cnt
+    // tx_pkt_wr_cnt
     auto down_shift = in_data_val >> 3; // XXX change per user interface width
     auto has_remainder = (down_shift != (down_shift >> 3));
     auto size_measured_in_steps = Ite(has_remainder,  // is a multitude?
                                       down_shift + 1, // add one more step
                                       down_shift);    // keep as is
-    auto tx_pkt_wr_step_cnt_nxt = Ite(is_size_qwrd,
-                                      size_measured_in_steps,  // initialize
-                                      tx_pkt_wr_step_cnt - 1); // decrement
-    instr.SetUpdate(tx_pkt_wr_step_cnt, tx_pkt_wr_step_cnt_nxt);
+    auto tx_pkt_wr_cnt_nxt = Ite(is_size_qwrd,
+                                 size_measured_in_steps, // initialize
+                                 tx_pkt_wr_cnt - 1);     // decrement
+    instr.SetUpdate(tx_pkt_wr_cnt, tx_pkt_wr_cnt_nxt);
 
-    // tx_fifo_buff_wr_ptr
+    // tx_buff_wr_ptr
     // reset to 0 for each packet -- at most one packet in the FIFO buffer
     // TODO wrap when reaching buffer boundary
-    auto wr_ptr_inc = tx_fifo_buff_wr_ptr + 1;
-    auto tx_fifo_buff_wr_ptr_nxt = Ite(is_last_qwrd, // end of packet?
-                                       k_zero_addr,  // reset
-                                       wr_ptr_inc);  // increment
-    instr.SetUpdate(tx_fifo_buff_wr_ptr, tx_fifo_buff_wr_ptr_nxt);
+    auto tx_buff_wr_ptr_inc = tx_buff_wr_ptr + 1;
+    auto tx_buff_wr_ptr_nxt = Ite(is_last_qwrd,        // end of packet?
+                                  k_zero_addr,         // reset
+                                  tx_buff_wr_ptr_inc); // increment
+    instr.SetUpdate(tx_buff_wr_ptr, tx_buff_wr_ptr_nxt);
 
     // tx_pkt_rd_step_cnt
-    auto size_load_from_buffer = Load(tx_fifo_buff, tx_fifo_buff_rd_ptr);
-    auto tx_pkt_rd_step_cnt_nxt = Ite(is_last_qwrd,          // end of packet?
-                                      size_load_from_buffer, // initialize
-                                      k_zero_addr);          // reset/unchanged
-    instr.SetUpdate(tx_pkt_rd_step_cnt, tx_pkt_rd_step_cnt_nxt);
+    auto size_load_from_buffer = Load(tx_fifo_buff, tx_buff_rd_ptr);
+    auto tx_pkt_rd_cnt_nxt = Ite(is_last_qwrd,          // end of packet?
+                                 size_load_from_buffer, // initialize
+                                 k_zero_addr);          // reset/unchanged
+    instr.SetUpdate(tx_pkt_rd_cnt, tx_pkt_rd_cnt_nxt);
 
-    // tx_fifo_buff_rd_ptr
-    auto tx_fifo_buff_rd_ptr_nxt = k_zero_addr; // keep the size field
-    instr.SetUpdate(tx_fifo_buff_rd_ptr, tx_fifo_buff_rd_ptr_nxt);
+    // tx_buff_rd_ptr
+    auto tx_buff_rd_ptr_nxt = k_zero_addr; // keep the size field
+    instr.SetUpdate(tx_buff_rd_ptr, tx_buff_rd_ptr_nxt);
 
     // tx_fifo_buff
-    auto tx_fifo_buff_nxt = Store(tx_fifo_buff, tx_fifo_buff_wr_ptr,
+    auto tx_fifo_buff_nxt = Store(tx_fifo_buff, tx_buff_wr_ptr,
                                   in_data_val); // store the masked value
     instr.SetUpdate(tx_fifo_buff, tx_fifo_buff_nxt);
+  }
+
+  auto child_tx = m.NewChild(model_name + "_Tx");
+  { // child Tx
+    /* ----------------------- Architectural States ------------------------- */
+
+    /* ----------------------- Fetch States --------------------------------- */
+    auto child_tx_fetch = Concat(fetch, tx_pkt_rd_cnt);
+    child_tx.SetFetch(child_tx_fetch);
+
+    /* ----------------------- Valid States --------------------------------- */
+    auto child_tx_valid = !valid & (tx_pkt_rd_cnt != 0x0);
+    child_tx.SetValid(child_tx_valid);
+
+    /* ----------------------- Instructions --------------------------------- */
+    auto instr_compute_crc = child_tx.NewInstr("COMPUTE_CRC");
+    // TODO
   }
 
   return m;

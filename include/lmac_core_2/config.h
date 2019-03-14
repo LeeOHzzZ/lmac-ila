@@ -15,10 +15,10 @@
 #define TX_FIFO_STATUS_BIT_WID 10 // to indicate the # of qwords
 #define USER_INTERFACE_BYTE_CNT (USER_INTERFACE_BIT_WID / BYTE_BIT_WID)
 
-#define TX_FIFO_BUFF_BYTE_CNT 64 // minimum Ethernet packet size is 64
-#define TX_FIFO_BUFF_QWRD_CNT (TX_FIFO_BUFF_BYTE_CNT / QWORD_BYTE_CNT)
-#define TX_FIFO_BUFF_ADDR_BIT_WID USER_INTERFACE_BIT_WID // reduce operations
-#define TX_FIFO_BUFF_DATA_BIT_WID USER_INTERFACE_BIT_WID // reduce array size
+#define TX_BUFF_BYTE_CNT 64 // minimum Ethernet packet size is 64
+#define TX_BUFF_QWRD_CNT (TX_BUFF_BYTE_CNT / QWORD_BYTE_CNT)
+#define TX_BUFF_ADDR_BIT_WID USER_INTERFACE_BIT_WID // reduce operations
+#define TX_BUFF_DATA_BIT_WID USER_INTERFACE_BIT_WID // reduce array size
 
 #endif // LMAC_CORE_2_CONFIG_H__
 
