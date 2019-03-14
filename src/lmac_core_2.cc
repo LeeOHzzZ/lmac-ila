@@ -144,11 +144,17 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
   auto valid = valid_tx | valid_rx | valid_reg | valid_phy;
   m.SetValid(valid);
 
+  /* ------------------------- Child-ILAs ----------------------------------- */
+  auto child_tx = m.NewChild(model_name + "_Tx_crc");
+
   /* ------------------------- Instructions --------------------------------- */
 
   { // TX_WR_DATA
     // declare an instruction in the ILA model
     auto instr = m.NewInstr("TX_WR_DATA");
+
+    // set up child-program
+    instr.SetProgram(child_tx);
 
     //
     // decode
@@ -223,8 +229,7 @@ ilang::Ila GetLMacCore2Ila(const std::string& model_name) {
     instr.SetUpdate(tx_fifo_buff, tx_fifo_buff_nxt);
   }
 
-  auto child_tx = m.NewChild(model_name + "_Tx_crc");
-  { // child Tx
+  { // child ILA -- child_Tx
     /* ----------------------- Architectural States ------------------------- */
     /* TX_FRAME_SUM
      *  - running sum of the whole frame, used to calculate the CRC 32 field
@@ -354,7 +359,7 @@ void ExportLmacCore2ToFile(const std::string& model_name,
                            const std::string& file_name) {
   auto ila = GetLMacCore2Ila(model_name);
 
-  // TODO export
+  ExportIlaPortable(ila, file_name);
 
   return;
 }
