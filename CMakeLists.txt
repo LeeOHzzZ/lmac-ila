@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.8)
 # PROJECT
 # name version language
 # ---------------------------------------------------------------------------- #
-project(lmac-core-2 VERSION 0.0.1 LANGUAGES CXX)
+project(lmac VERSION 0.0.1 LANGUAGES CXX)
 
 # ---------------------------------------------------------------------------- #
 # VARIABLE
