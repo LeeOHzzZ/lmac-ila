@@ -1,11 +1,13 @@
-// main.cc
+// ============================================================================
+// Instruction-Level Abstraction of LeWiz Communications Ethernet MAC
 //
-// Entry point for the executable to generate LMAC-CORE-2 ILA.
+// This Instruction-Level Abstraction (ILA) description is derived based on the
+// LeWiz Communications Ethernet MAC (LMAC), which is licensed under GNU LGPL.
+// Check "LICENSE" which comes with this distribution for more information.
+// ============================================================================
 //
-// References:
-// - https://github.com/lewiz-support/LMAC_CORE2
+// File Name: main.cc
 
-#include <iostream>
 #include <lmac/core2/lmac_core_top.h>
 #include <lmac_core_2/lmac_core_2.h>
 
@@ -13,7 +15,6 @@ using namespace ilang;
 
 int main() {
 
-  // ExportLmacCore2ToFile("LMacCore2", "LMacCore2.json");
   ExportLmacCore2ToFile();
 
   auto core2 = LmacCore2::New();
