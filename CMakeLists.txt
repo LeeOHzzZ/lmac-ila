@@ -30,6 +30,7 @@ find_package(ilang REQUIRED)
 add_executable(${MyTarget} 
   app/main.cc
   src/lmac_core_2.cc
+  src/core2/lmac_core_top.cc
 )
 
 target_include_directories(${MyTarget} PRIVATE include)
