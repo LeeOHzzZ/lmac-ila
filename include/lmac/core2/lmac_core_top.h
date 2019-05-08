@@ -16,18 +16,29 @@
 
 namespace ilang {
 
+// Top level model of LMAC CORE 2
 class LmacCore2 {
 public:
+  // Default constructor
   LmacCore2();
+  // Default destructor
   ~LmacCore2();
 
+  // return a new ILA with the given name
   static Ila New(const std::string& name = "LMAC_CORE_2");
 
 protected:
   //
 
 private:
-  //
+  // set architectural state variable (spec./doc.)
+  static void SetArchStateVar(Ila& m);
+  // set implementation state variable (internal)
+  static void SetImplStateVar(Ila& m);
+  // set child ila
+  static void SetChild(Ila& m);
+  // set instruction
+  static void SetInstr(Ila& m);
 
 }; // class LmacCore2
 

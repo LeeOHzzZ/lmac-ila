@@ -19,9 +19,41 @@ LmacCore2::~LmacCore2() {}
 Ila LmacCore2::New(const std::string& name) {
   auto m = Ila(name);
 
-  //
+  // state vars
+  SetArchStateVar(m);
+  SetImplStateVar(m);
+
+  // model hierarchy
+  SetChild(m);
+
+  // instruction decode & updates
+  SetInstr(m);
+
+  // valid
+
+  // fetch
 
   return m;
+}
+
+void LmacCore2::SetArchStateVar(Ila& m) {
+  //
+  return;
+}
+
+void LmacCore2::SetImplStateVar(Ila& m) {
+  //
+  return;
+}
+
+void LmacCore2::SetChild(Ila& m) {
+  //
+  return;
+}
+
+void LmacCore2::SetInstr(Ila& M) {
+  //
+  return;
 }
 
 }; // namespace ilang
