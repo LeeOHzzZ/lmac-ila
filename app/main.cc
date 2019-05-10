@@ -9,13 +9,12 @@
 // File Name: main.cc
 
 #include <lmac/core2/lmac_core_top.h>
-#include <lmac_core_2/lmac_core_2.h>
 
 using namespace ilang;
 
 int main() {
 
-  ExportLmacCore2ToFile();
+  LogToErr(true);
 
   auto core2 = LmacCore2::New();
 
