@@ -8,7 +8,7 @@
 //
 // File Name: utils.cc
 
-#include <lmac/common.h>
+#include <lmac/share.h>
 #include <lmac/utils.h>
 
 namespace ilang {
