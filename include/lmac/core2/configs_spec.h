@@ -13,11 +13,13 @@
 //  - behavior defined in the specification/documentation
 
 #ifndef LMAC_CORE2_CONFIGS_SPEC_H__
-#define LMAC_CORE2_CONFIGS_SPEC_H__
+#define LMAC_CORE2_CONFIGS_SPEC_H__ #include <lmac/utils.h>
 
 namespace ilang {
 
-// ------------------------- TX FIFO Interface ------------------------------ //
+// -------------------------------------------------------------------------- //
+// TX FIFO Interface
+// -------------------------------------------------------------------------- //
 
 // Write enable.  1 = data is valid on the TX_DATA bus. 0 = no data is on the
 // data bus
@@ -64,10 +66,16 @@ namespace ilang {
 #define TXFIFO_WUSED_QWD "TXFIFO_WUSED_QWD"
 #define TXFIFO_WUSED_QWD_BWID 13
 
-// ------------------------- RX FIFO Interface ------------------------------ //
+// -------------------------------------------------------------------------- //
+// RX FIFO Interface
+// -------------------------------------------------------------------------- //
 // 1. Receiving Bus - package byte count/size interface (IPCS)
 // 2. Receiving Bus - package data interface. (after reading the byte count the
 //    user can read out the packet's data - 1 entire packet at a time)
+
+//
+// 1. Receiving Bus - package byte count/size interface (IPCS)
+//
 
 // Byte count FIFO’s empty signal.  0 = a byte count is available for reading. 1
 // = no byte count is available
@@ -92,6 +100,11 @@ namespace ilang {
 #define RX_IPCS_DATA_BWID 64
 #define RX_IPCS_PKT_BYTE_CNT_BEG 48
 #define RX_IPCS_PKT_BYTE_CNT_END 63
+
+//
+// 2. Receiving Bus - package data interface. (after reading the byte count the
+//    user can read out the packet's data - 1 entire packet at a time)
+//
 
 // Packet data FIFO’s empty signal.  0 = a packet is available for reading. 1 =
 // no packet is available
@@ -123,6 +136,279 @@ namespace ilang {
 // the read enable.
 #define RX_PKT_DATA "RX_PKT_DATA"
 #define RX_PKT_DATA_BWID 64
+
+// -------------------------------------------------------------------------- //
+// LMAC Register Interface, Configuration, Clock and Reset
+// -------------------------------------------------------------------------- //
+// 1. clocks and reset signals
+// 2. configuration signals
+// 3. register interface
+
+//
+// 1. clocks and reset signals
+//
+
+//
+// 2. configuration signals
+//
+
+// Static signal from the LMAC.  If 1, indicating the Ethernet link is up.
+#define LINKUP "Linkup"
+#define LINKUP_BWID 1
+#define LINKUP_V_UP 1
+
+// 32 bit control signals (See MAC_CTRL below)
+#define MAC_CTRL "MAC_CTRL"
+#define MAC_CTRL_BWID 32
+
+// Second set of 32-bit control signals (See MAC_CTRL1 below)
+#define MAC_CTRL1 "MAC_CTRL1"
+#define MAC_CTRL1_BWID 32
+
+// LMAC receive path enable.  This is a static signal.  It allows the user logic
+// to control the receiving function of the LMAC.  It’s useful in debug support.
+// 1 = RX enable
+#define MAC_RXD_EN "MAC_RXD_EN"
+#define MAC_RXD_EN_BWID 1
+#define MAC_RXD_EN_V_ENABLE 1
+
+//
+// MAC_CTRL Configuration Detail
+//
+
+// Enable the TX Path to transmit PAUSE frame for stopping other sources from
+// sending any more packet(s) to this port (XOFF event) or transmitting XON
+// frame.
+// 0 = disable PAUSE frame transmission
+// 1 = enable PAUSE frame transmission
+#define TX_XO_EN_BEG 0
+#define TX_XO_EN_END 0
+#define TX_XO_EN_V_DEFAULT 0
+#define TX_XO_EN_V_DISABLE 0
+#define TX_XO_EN_V_ENABLE 1
+
+// Enable the RX Path to receive PAUSE frame.
+// 0 = disable PAUSE frame receipt
+// 1 = enable PAUSE frame receipt
+#define RX_XO_EN_BEG 1
+#define RX_XO_EN_END 1
+#define RX_XO_EN_V_DEFAULT 0
+#define RX_XO_EN_V_DISABLE 0
+#define RX_XO_EN_V_ENABLE 1
+
+// Reserved
+#define MAC_CTRL_RSV_2_BEG 2
+#define MAC_CTRL_RSV_2_END 2
+#define MAC_CTRL_RSV_2_V_DEFAULT 0
+
+// Enable CRC checking
+// 0 = disable
+// 1 = enable
+// If enabled, incoming CRC will be checked.  Bad CRC packet will be dropped.
+// If disabled, checking of bad CRC is disabled and bad CRC packets will be
+// forwarded as if they are good CRC packets.  This is mainly for diagnostic
+// purposes
+#define RX_CRC_EN_BEG 3
+#define RX_CRC_EN_END 3
+#define RX_CRC_EN_V_DEFAULT 0
+#define RX_CRC_EN_V_DISABLE 0
+#define RX_CRC_EN_V_ENABLE 1
+
+// Enable Promiscuous mode (see definition)
+// 0 = disable
+// 1 = enable
+#define PROMIS_MODE_EN_BEG 4
+#define PROMIS_MODE_EN_END 4
+#define PROMIS_MODE_EN_V_DEFAULT 1
+#define PROMIS_MODE_EN_V_DISABLE 0
+#define PROMIS_MODE_EN_V_ENABLE 1
+
+// Reserved
+#define MAC_CTRL_RSV_5_BEG 5
+#define MAC_CTRL_RSV_5_END 5
+#define MAC_CTRL_RSV_5_V_DEFAULT 0
+
+// If set to 1, enable the auto clearing of TX statistic registers upon a read
+// to the register is detected.  Only a few registers has this capability.
+// 0 = disable
+// 1 = enable
+#define TX_CNT_AUTO_CLR_EN_BEG 6
+#define TX_CNT_AUTO_CLR_EN_END 6
+#define TX_CNT_AUTO_CLR_EN_V_DEFAULT 0
+#define TX_CNT_AUTO_CLR_EN_V_DISABLE 0
+#define TX_CNT_AUTO_CLR_EN_V_ENABLE 1
+
+// If set to 1, enable the auto clearing of RX statistic registers upon a read
+// to the register is detected.  Only a few registers has this capability.
+// 0 = disable
+// 1 = enable
+#define RX_CNT_AUTO_CLR_EN_BEG 7
+#define RX_CNT_AUTO_CLR_EN_END 7
+#define RX_CNT_AUTO_CLR_EN_V_DEFAULT 0
+#define RX_CNT_AUTO_CLR_EN_V_DISABLE 0
+#define RX_CNT_AUTO_CLR_EN_V_ENABLE 1
+
+// Reserved
+#define MAC_CTRL_RSV_8_BEG 8
+#define MAC_CTRL_RSV_8_END 9
+#define MAC_CTRL_RSV_8_V_DEFAULT 0
+
+// Enable Receiving Multicast packets.
+// 1’b0 = disable
+// 1’b1 = enable
+#define MCAST_EN_BEG 10
+#define MCAST_EN_END 10
+#define MCAST_EN_V_DEFAULT 1
+#define MCAST_EN_V_DISABLE 0
+#define MCAST_EN_V_ENABLE 1
+
+// If enabled, LMAC will accept received broadcast packets.
+// 1’b0 = disable
+// 1’b1 = enable
+#define ACCEPT_BRDCST_EN_BEG 11
+#define ACCEPT_BRDCST_EN_END 11
+#define ACCEPT_BRDCST_EN_V_DEFAULT 1
+#define ACCEPT_BRDCST_EN_V_DISABLE 0
+#define ACCEPT_BRDCST_EN_V_ENABLE 1
+
+// Reserved
+#define MAC_CTRL_RSV_12_BEG 12
+#define MAC_CTRL_RSV_12_END 12
+#define MAC_CTRL_RSV_12_V_DEFAULT 0
+
+// Reserved
+#define MAC_CTRL_RSV_13_BEG 13
+#define MAC_CTRL_RSV_13_END 13
+#define MAC_CTRL_RSV_13_V_DEFAULT 0
+
+// Reserved
+#define MAC_CTRL_RSV_14_BEG 14
+#define MAC_CTRL_RSV_14_END 14
+#define MAC_CTRL_RSV_14_V_DEFAULT 0
+
+// Reserved
+#define MAC_CTRL_RSV_15_BEG 15
+#define MAC_CTRL_RSV_15_END 15
+#define MAC_CTRL_RSV_15_V_DEFAULT 0
+
+// Reserved
+#define MAC_CTRL_RSV_16_BEG 16
+#define MAC_CTRL_RSV_16_END 19
+#define MAC_CTRL_RSV_16_V_DEFAULT 0
+
+// Reserved
+#define MAC_CTRL_RSV_20_BEG 20
+#define MAC_CTRL_RSV_20_END 23
+#define MAC_CTRL_RSV_20_V_DEFAULT 0
+
+// Reserved
+#define MAC_CTRL_RSV_24_BEG 24
+#define MAC_CTRL_RSV_24_END 31
+#define MAC_CTRL_RSV_24_V_DEFAULT 0
+
+//
+// MAC_CTRL1
+//
+
+// Reserved
+#define MAC_CTRL1_RSV_28_BEG 28
+#define MAC_CTRL1_RSV_28_END 31
+#define MAC_CTRL1_RSV_28_V_DEFAULT 0
+
+// Reserved
+#define MAC_CTRL1_RSV_27_BEG 27
+#define MAC_CTRL1_RSV_27_END 27
+
+// Reserved
+#define MAC_CTRL1_RSV_24_BEG 24
+#define MAC_CTRL1_RSV_24_END 26
+#define MAC_CTRL1_RSV_24_V_DEFAULT 0
+
+// Reserved
+#define MAC_CTRL1_RSV_23_BEG 23
+#define MAC_CTRL1_RSV_23_END 23
+
+// Reserved
+#define MAC_CTRL1_RSV_20_BEG 20
+#define MAC_CTRL1_RSV_20_END 22
+#define MAC_CTRL1_RSV_20_V_DEFAULT 0
+
+// Reserved
+#define MAC_CTRL1_RSV_19_BEG 19
+#define MAC_CTRL1_RSV_19_END 19
+#define MAC_CTRL1_RSV_19_V_DEFAULT 0
+
+// Reserved
+#define MAC_CTRL1_RSV_18_BEG 18
+#define MAC_CTRL1_RSV_18_END 18
+#define MAC_CTRL1_RSV_18_V_DEFAULT 0
+
+// Reserved
+#define MAC_CTRL1_RSV_16_BEG 16
+#define MAC_CTRL1_RSV_16_END 17
+#define MAC_CTRL1_RSV_16_V_DEFAULT 0
+
+// Reserved
+#define MAC_CTRL1_RSV_15_BEG 15
+#define MAC_CTRL1_RSV_15_END 15
+#define MAC_CTRL1_RSV_15_V_DEFAULT 0
+
+// Reserved
+#define MAC_CTRL1_RSV_14_BEG 14
+#define MAC_CTRL1_RSV_14_END 14
+#define MAC_CTRL1_RSV_14_V_DEFAULT 0
+
+// This field configures the max packet size in byte for the Ethernet port.
+// Typically, Ethernet packets are between 64 and 1518 (5EE hex) bytes. This
+// value is applicable for most applications.
+#define MAX_PKT_SIZE_BEG 0
+#define MAX_PKT_SIZE_END 13
+#define MAC_PKT_SIZE_V_DEFAULT 0x5EE
+
+//
+// 3. register interface
+//
+
+//
+// Host Address Bus
+//
+
+// 16 bit host byte address bus for selecting a memory mapped register. Valid 1
+// clk before register read start signal. Address must be 64-bit aligned for
+// most cases.
+#define HOST_ADDR "host_addr"
+#define HOST_ADDR_BWID 16
+
+// Pulse. Register read start.
+// 1 = Start the read for a register in the LMAC core 0 = idle.
+#define REG_RD_START "reg_rd_start"
+#define REG_RD_START_BWID 1
+#define REG_RD_START_V_BUSY 1
+#define REG_RD_START_V_IDLE 0
+
+// Pulse. Indicating the register read is done and its data is available on the
+// MAC_REGDOUT bus.
+// 1 = indicating the data is available for the read to register
+// 0 = data not available.
+// This signal is the 5-clock delay of the register read start signal.
+#define REG_RD_DONE_OUT "reg_rd_done_out"
+#define REG_RD_DONE_OUT_BWID 1
+#define REG_RD_DONE_OUT_V_READY 1
+#define REG_RD_DONE_OUT_V_NONE 0
+
+//
+// Read Completion Data Bus
+//
+
+// Data returned from LMAC register. Read is 32 bit at a time.
+#define MAC_REGDOUT "mac_regdout"
+#define MAC_REGDOUT_BWID 32
+
+//
+// Available Registers
+//
+
+#include <lmac/core2/configs_spec_mmio_regs.h>
 
 }; // namespace ilang
 

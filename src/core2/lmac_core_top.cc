@@ -8,6 +8,7 @@
 //
 // File Name: lmac_core_top.cc
 
+#include <lmac/core2/configs.h>
 #include <lmac/core2/lmac_core_top.h>
 
 namespace ilang {

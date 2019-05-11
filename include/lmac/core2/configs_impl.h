@@ -27,6 +27,19 @@ namespace ilang {
 // depth of the TX FIFO buffer
 #define TXFIFO_BUFF_DEPTH 1024
 
+// -------------------------------------------------------------------------- //
+// LMAC Register Interface, Configuration, Clock and Reset
+// -------------------------------------------------------------------------- //
+
+//
+// MAC_CTRL1
+//
+
+// Reserved
+#define MAC_CTRL1_RSV_27_V_DEFAULT 0
+// Reserved
+#define MAC_CTRL1_RSV_23_V_DEFAULT 0
+
 }; // namespace ilang
 
 #endif // LMAC_CORE2_CONFIGS_IMPL_H__
