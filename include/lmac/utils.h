@@ -8,12 +8,17 @@
 //
 // File Name: utils.h
 
+// commonly used helper functions/macros
+
 #ifndef LMAC_UTILS_H__
 #define LMAC_UTILS_H__
 
 #include <ilang/ilang++.h>
 
 namespace ilang {
+
+// calculate the bid-width of a range
+#define GET_BWID(beg, end) (end - beg + 1)
 
 // Create new input variable in the ILA
 ExprRef NewInput(Ila& m, const std::string& name, const int& wid = 1);

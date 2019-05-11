@@ -10,7 +10,6 @@
 
 // modeling choices
 // non-hardware parameters
-// commonly used helper macros
 
 #ifndef LMAC_SHARE_H__
 #define LMAC_SHARE_H__
