@@ -25,7 +25,7 @@ public:
   ~LmacCore2();
 
   // return a new ILA with the given name
-  static Ila New(const std::string& name = "LMAC_CORE_2");
+  static Ila New(const std::string& name = "LMAC_CORE2");
 
 protected:
   //
