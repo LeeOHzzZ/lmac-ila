@@ -8,6 +8,12 @@
 //
 // File Name: lmac_core_top.h
 
+// LmacCore2 top level entry points
+//  - TX FIFO
+//  - RX FIFO
+//  - Register interface and configuration
+//  - PHY
+
 #ifndef LMAC_CORE2_LMAC_CORE_TOP_H__
 #define LMAC_CORE2_LMAC_CORE_TOP_H__
 
@@ -39,6 +45,24 @@ private:
   static void SetChild(Ila& m);
   // set instruction
   static void SetInstr(Ila& m);
+  // set initial conditions
+  static void SetInit(Ila& m);
+
+  // set state variables of TX FIFO
+  static void SetupTxInterface(Ila& m);
+  static void SetupTxInternal(Ila& m);
+
+  // set state variables of RX FIFO
+  static void SetupRxInterface(Ila& m);
+  static void SetupRxInternal(Ila& m);
+
+  // set state variables of register interface and configuration
+  static void SetupRegInterface(Ila& m);
+  static void SetupMmioRegs(Ila& m);
+
+  // set state variables of PHY
+  static void SetupPhyInterface(Ila& m);
+  static void SetupPhyInternal(Ila& m);
 
 }; // class LmacCore2
 

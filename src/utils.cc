@@ -8,6 +8,8 @@
 //
 // File Name: utils.cc
 
+// commonly used helper functions/macros
+
 #include <lmac/share.h>
 #include <lmac/utils.h>
 

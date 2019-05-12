@@ -30,6 +30,10 @@ find_package(ilang REQUIRED)
 add_executable(${MyTarget} 
   app/main.cc
   src/core2/lmac_core_top.cc
+  src/core2/mmio_regs.cc
+  src/core2/reg_interface.cc
+  src/core2/rx_interface.cc
+  src/core2/tx_interface.cc
   src/utils.cc
 )
 

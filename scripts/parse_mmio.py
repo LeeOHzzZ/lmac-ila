@@ -20,12 +20,10 @@ def ParseMmioText(in_file):
                 terms = (line.strip('\n')).split('_')
                 if len(terms) == 2:
                     addr = terms[1]
-
                     try:
                         val = int(addr, 16)
                     except BaseException:
                         print('Fail handling address value', addr)
-
                     state = SpecState.NAME
 
                 else:
@@ -52,8 +50,8 @@ def ParseMmioText(in_file):
     return result
 
 
-def GenMacro(pairs, out):
-    with open(out, 'w') as fw:
+def GenMacro(pairs, out_file):
+    with open(out_file, 'w') as fw:
         for p in pairs:
             desp = p['desp']
             name = p['name']
@@ -66,13 +64,31 @@ def GenMacro(pairs, out):
             fw.write('\n')
 
 
+def GenSetup(pairs, out_file):
+    with open(out_file, 'w') as fw:
+        for p in pairs:
+            desp = p['desp']
+            name = p['name']
+            addr = p['addr']
+
+            fw.write('// {0}\n'.format(desp))
+            fw.write('NewState(m, {0}, {0}_BWID);\n'.format(name.upper()))
+            fw.write('\n')
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Generate macro from MMIO list text')
     parser.add_argument('mmio_file', type=str, help='mmio mapping file')
     parser.add_argument('out_file', type=str, help='output file name')
+    parser.add_argument('--macro', action='store_true', help='generate macro')
+    parser.add_argument('--setup', action='store_true', help='geenrate setup')
     args = parser.parse_args()
 
     pairs = ParseMmioText(args.mmio_file)
-    GenMacro(pairs, args.out_file)
 
+    if args.macro:
+        GenMacro(pairs, args.out_file)
+
+    if args.setup:
+        GenSetup(pairs, args.out_file)

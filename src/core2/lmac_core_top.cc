@@ -8,7 +8,13 @@
 //
 // File Name: lmac_core_top.cc
 
-#include <lmac/core2/configs.h>
+// LmacCore2 top level entry points
+//  - TX FIFO
+//  - RX FIFO
+//  - Register interface and configuration
+//  - PHY
+
+#include <ilang/util/log.h>
 #include <lmac/core2/lmac_core_top.h>
 
 namespace ilang {
@@ -18,6 +24,7 @@ LmacCore2::LmacCore2() {}
 LmacCore2::~LmacCore2() {}
 
 Ila LmacCore2::New(const std::string& name) {
+  ILA_INFO << "Create ILA with name " << name;
   auto m = Ila(name);
 
   // state vars
@@ -30,6 +37,9 @@ Ila LmacCore2::New(const std::string& name) {
   // instruction decode & updates
   SetInstr(m);
 
+  // initial condition
+  SetInit(m);
+
   // valid
 
   // fetch
@@ -38,22 +48,53 @@ Ila LmacCore2::New(const std::string& name) {
 }
 
 void LmacCore2::SetArchStateVar(Ila& m) {
-  //
+  ILA_INFO << "Setup state variables from spec.";
+
+  // TX interface signals
+  SetupTxInterface(m);
+
+  // RX interface signals
+  SetupRxInterface(m);
+
+  // Register interface and configuration
+  SetupRegInterface(m);
+  SetupMmioRegs(m);
+
+  // PHY interface signals
+
   return;
 }
 
 void LmacCore2::SetImplStateVar(Ila& m) {
-  //
+  ILA_INFO << "Setup state variables (impl. specific)";
+
+  // TX FIFO internal states
+  // SetupTxInternal(m);
+
+  // RX interface signals
+
+  // Register interface and configuration
+
+  // PHY interface signals
+
   return;
 }
 
 void LmacCore2::SetChild(Ila& m) {
-  //
+  ILA_INFO << "Setup child ILAs";
+
   return;
 }
 
 void LmacCore2::SetInstr(Ila& M) {
-  //
+  ILA_INFO << "Setup instructions";
+
+  return;
+}
+
+void LmacCore2::SetInit(Ila& m) {
+  ILA_INFO << "Setup initial condition";
+
   return;
 }
 
