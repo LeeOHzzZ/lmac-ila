@@ -8,6 +8,11 @@
 //
 // File Name: main.cc
 
+// entry point of the application
+//  - create a new ila of LMAC CORE 2
+//  - perform sanity check (optional)
+//  - export ila portable
+
 #include <lmac/core2/lmac_core_top.h>
 
 using namespace ilang;
