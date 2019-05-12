@@ -19,6 +19,12 @@
 
 namespace ilang {
 
+// -------------------------------------------------------------------------- //
+// TX FIFO
+// -------------------------------------------------------------------------- //
+
+// TX FIFO internal buffer
+#define TXFIFO_BUFF "TXFIFO_BUFF"
 // bit-width of the TX FIFO buffer address (index)
 #define TXFIFO_BUFF_ADDR_BWID                                                  \
   (TX_DATA_PKT_BYTE_CNT_END - TX_DATA_PKT_BYTE_CNT_BEG + 1)
@@ -26,6 +32,14 @@ namespace ilang {
 #define TXFIFO_BUFF_DATA_BWID TX_DATA_BWID
 // depth of the TX FIFO buffer
 #define TXFIFO_BUFF_DEPTH 1024
+
+// TX FIFO read pointer
+#define TXFIFO_BUFF_RD_PTR "TXFIFO_BUFF_RD_PTR"
+#define TXFIFO_BUFF_RD_PTR_BWID TXFIFO_BUFF_ADDR_BWID
+
+// TX FIFO write pointer
+#define TXFIFO_BUFF_WR_PTR "TXFIFO_BUFF_WR_PTR"
+#define TXFIFO_BUFF_WR_PTR_BWID TXFIFO_BUFF_ADDR_BWID
 
 // -------------------------------------------------------------------------- //
 // LMAC Register Interface, Configuration, Clock and Reset

@@ -48,21 +48,26 @@ private:
   // set initial conditions
   static void SetInit(Ila& m);
 
-  // set state variables of TX FIFO
+  // TX FIFO
   static void SetupTxInterface(Ila& m);
   static void SetupTxInternal(Ila& m);
+  static void SetupTxInstr(Ila& m);
 
-  // set state variables of RX FIFO
+  // RX FIFO
   static void SetupRxInterface(Ila& m);
   static void SetupRxInternal(Ila& m);
+  static void SetupRxInstr(Ila& m);
 
   // set state variables of register interface and configuration
-  static void SetupRegInterface(Ila& m);
   static void SetupMmioRegs(Ila& m);
+  static void SetupRegInterface(Ila& m);
+  static void SetupRegInternal(Ila& m);
+  static void SetupRegInstr(Ila& m);
 
   // set state variables of PHY
   static void SetupPhyInterface(Ila& m);
   static void SetupPhyInternal(Ila& m);
+  static void SetupPhyInstr(Ila& m);
 
 }; // class LmacCore2
 

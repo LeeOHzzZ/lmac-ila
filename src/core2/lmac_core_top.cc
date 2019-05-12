@@ -119,11 +119,17 @@ void LmacCore2::SetChild(Ila& m) {
   return;
 }
 
-void LmacCore2::SetInstr(Ila& M) {
+void LmacCore2::SetInstr(Ila& m) {
   ILA_DLOG("LMAC") << "Setup instructions";
 
   // TX FIFO instructions
   SetupTxInstr(m);
+
+  // RX FIFO instructions
+
+  // Register and configuration instructions
+
+  // PHY instructions
 
   return;
 }
