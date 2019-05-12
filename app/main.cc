@@ -20,8 +20,12 @@ using namespace ilang;
 int main() {
 
   LogToErr(true);
+  EnableDebug("LMAC");
 
   auto core2 = LmacCore2::New();
+  ExportIlaPortable(core2, "LmacCore2.json");
+
+  DisableDebug("LMAC");
 
   return 0;
 }
