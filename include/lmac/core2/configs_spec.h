@@ -13,7 +13,7 @@
 //  - behavior defined in the specification/documentation
 
 #ifndef LMAC_CORE2_CONFIGS_SPEC_H__
-#define LMAC_CORE2_CONFIGS_SPEC_H__ #include <lmac/utils.h>
+#define LMAC_CORE2_CONFIGS_SPEC_H__
 
 namespace ilang {
 

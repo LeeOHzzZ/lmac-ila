@@ -17,8 +17,9 @@
 #ifndef LMAC_CORE2_LMAC_CORE_TOP_H__
 #define LMAC_CORE2_LMAC_CORE_TOP_H__
 
-#include <ilang/ilang++.h>
 #include <string>
+
+#include <ilang/ilang++.h>
 
 namespace ilang {
 

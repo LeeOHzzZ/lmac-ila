@@ -12,8 +12,9 @@
 //  - non-interface
 //  - implementation specific
 
-#include <lmac/core2/configs.h>
 #include <lmac/core2/lmac_core_top.h>
+
+#include <lmac/core2/configs.h>
 #include <lmac/utils.h>
 
 namespace ilang {

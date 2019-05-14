@@ -13,8 +13,9 @@
 //  - write pay load (body)
 //  - write pay load (tail)
 
-#include <ilang/util/log.h>
 #include <lmac/core2/lmac_core_top.h>
+
+#include <ilang/util/log.h>
 
 namespace ilang {
 

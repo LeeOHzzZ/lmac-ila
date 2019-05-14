@@ -14,9 +14,10 @@
 //  - Register interface and configuration
 //  - PHY
 
+#include <lmac/core2/lmac_core_top.h>
+
 #include <ilang/util/log.h>
 #include <lmac/core2/configs.h>
-#include <lmac/core2/lmac_core_top.h>
 
 namespace ilang {
 
