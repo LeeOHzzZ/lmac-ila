@@ -2,6 +2,7 @@
 
 import argparse
 from enum import Enum
+from string import Template
 
 
 class SpecState(Enum):
@@ -76,6 +77,30 @@ def GenSetup(pairs, out_file):
             fw.write('\n')
 
 
+def GenReadInstr(pairs, out_file):
+    with open('misc/reg_read_instr.in', 'r') as fr:
+        template_raw = fr.read()
+        template = Template(template_raw)
+
+    with open(out_file, 'w') as fw:
+        for p in pairs:
+            name = p['name']
+            addr = p['addr']
+
+            fw.write('\n')
+
+            d = {}
+            d['comment'] = 'read register {0}'.format(name.upper())
+            d['instr_name'] = 'REG_RD_{0}'.format(name.upper())
+            d['mmio_addr'] = '{0}_ADDR'.format(name.upper())
+            d['reg_name'] = name.upper()
+
+            instr_reg_rd = template.safe_substitute(d)
+            fw.write(instr_reg_rd)
+
+            fw.write('\n')
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Generate macro from MMIO list text')
@@ -83,6 +108,7 @@ if __name__ == '__main__':
     parser.add_argument('out_file', type=str, help='output file name')
     parser.add_argument('--macro', action='store_true', help='generate macro')
     parser.add_argument('--setup', action='store_true', help='geenrate setup')
+    parser.add_argument('--instr', action='store_true', help='generate instr')
     args = parser.parse_args()
 
     pairs = ParseMmioText(args.mmio_file)
@@ -92,3 +118,6 @@ if __name__ == '__main__':
 
     if args.setup:
         GenSetup(pairs, args.out_file)
+
+    if args.instr:
+        GenReadInstr(pairs, args.out_file)

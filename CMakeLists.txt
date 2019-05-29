@@ -31,6 +31,7 @@ add_executable(${MyTarget}
   app/main.cc
   src/core2/lmac_core_top.cc
   src/core2/mmio_regs.cc
+  src/core2/reg_instr.cc
   src/core2/reg_interface.cc
   src/core2/rx_interface.cc
   src/core2/tx_instr.cc
