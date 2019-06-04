@@ -18,30 +18,15 @@
 #include <ilang/util/log.h>
 
 #include <argparse/argparse.hpp>
+#include <lmac/core2/eqcheck.h>
 #include <lmac/core2/lmac_core_top.h>
 
 using namespace ilang;
 
 int main(int argc, const char** argv) {
-  // define the command line parser
-  ArgumentParser parser;
-  parser.addArgument("-d", "--design", 1);
-  parser.addArgument("-i", "--ila", 1);
-  parser.addArgument("-o", "--output", 1);
-  parser.parse(argc, argv);
-
-  auto design_path = parser.retrieve<std::string>("design");
-  design_path = (design_path == "") ? "$HOME/LMAC2_INFO" : design_path;
-
-  auto ila_path = parser.retrieve<std::string>("ila");
-  ila_path = (ila_path == "") ? "." : ila_path;
-
-  auto output_path = parser.retrieve<std::string>("output");
-  output_path = (output_path == "") ? "." : output_path;
-
   // configure debug log
   LogToErr(true);
-  EnableDebug("LMAC");
+  // EnableDebug("LMAC");
 
   // create LMac Core 2 ILA
   auto core2 = LmacCore2::New();
@@ -54,8 +39,28 @@ int main(int argc, const char** argv) {
   std::ofstream fw_verilog(verilog_file_name);
   core2.ExportToVerilog(fw_verilog);
 
-  // define refinement relation
-  // TODO
+  // define the command line parser
+  ArgumentParser parser;
+  parser.addArgument("-d", "--design_path", 1);
+  parser.addArgument("-o", "--output_path", 1);
+  parser.addArgument("-i", "--instr_map", 1);
+  parser.addArgument("-v", "--var_map", 1);
+  parser.parse(argc, argv);
+
+  auto design_path = parser.retrieve<std::string>("design_path");
+  auto output_path = parser.retrieve<std::string>("output_path");
+  auto instr_map = parser.retrieve<std::string>("instr_map");
+  auto var_map = parser.retrieve<std::string>("var_map");
+
+#ifndef NDEBUG
+  design_path = (design_path == "") ? "../design/core2" : design_path;
+  output_path = (output_path == "") ? "../verification/core2" : output_path;
+  instr_map = (instr_map == "") ? "../refinement/core2_instr.json" : instr_map;
+  var_map = (var_map == "") ? "../refinement/core2_var.json" : var_map;
+#endif
+
+  // generate verification target
+  GenVerifTarget(core2, design_path, instr_map, var_map, output_path);
 
   // reset debug config.
   DisableDebug("LMAC");

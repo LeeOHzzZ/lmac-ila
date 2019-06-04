@@ -20,13 +20,16 @@
 
 namespace ilang {
 
-// configure verification settings
-VerilogVerificationTargetGenerator::vtg_config_t SetVerifConfig();
+// verilog generator configs
+VerilogGeneratorBase::VlgGenConfig SetVlgGenConfig();
+
+// verification target generator configs
+VerilogVerificationTargetGenerator::vtg_config_t SetVerifGenConfig();
 
 // generate Verilog verification target
-void GenVerifTarget(Ila& model,
-                    VerilogVerificationTargetGenerator::vtg_config_t vtg_cfg,
-                    const std::vector<std::string>& design_files);
+void GenVerifTarget(Ila& model, const std::string& design_path,
+                    const std::string& instr_map, const std::string& var_map,
+                    const std::string& output_path);
 
 }; // namespace ilang
 

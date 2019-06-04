@@ -101,6 +101,13 @@ def GenReadInstr(pairs, out_file):
             fw.write('\n')
 
 
+def GenVarMap(pairs, out_file):
+    with open(out_file, 'w') as fw:
+        for p in pairs:
+            name = p['name']
+            fw.write('"{0}" : "m1.{0}",\n'.format(name.upper()))
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Generate macro from MMIO list text')
@@ -109,6 +116,7 @@ if __name__ == '__main__':
     parser.add_argument('--macro', action='store_true', help='generate macro')
     parser.add_argument('--setup', action='store_true', help='geenrate setup')
     parser.add_argument('--instr', action='store_true', help='generate instr')
+    parser.add_argument('--var', action='store_true', help='generate var map')
     args = parser.parse_args()
 
     pairs = ParseMmioText(args.mmio_file)
@@ -121,3 +129,6 @@ if __name__ == '__main__':
 
     if args.instr:
         GenReadInstr(pairs, args.out_file)
+
+    if args.var:
+        GenVarMap(pairs, args.out_file)
