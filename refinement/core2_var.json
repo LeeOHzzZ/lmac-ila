@@ -11,15 +11,15 @@
     "FMAC_RX_BYTE_CNT_LO" : "m1.FMAC_RX_BYTE_CNT_LO",
     "FMAC_RX_BYTE_CNT_HI" : "m1.FMAC_RX_BYTE_CNT_HI",
     "FMAC_RX_UNDERSIZE_PKT_CNT" : "m1.FMAC_RX_UNDERSIZE_PKT_CNT",
-    "FMAC_RX_CRC32_ERR_CNT" : "m1.FMAC_RX_CRC32_ERR_CNT",
-    "FMAC_RX_DCNT_OVERRUN" : "m1.FMAC_RX_DCNT_OVERRUN",
-    "FMAC_RX_DCNT_LINK_ERR" : "m1.FMAC_RX_DCNT_LINK_ERR",
-    "FMAC_RX_PKT_CNT_OVERSIZE" : "m1.FMAC_RX_PKT_CNT_OVERSIZE",
-    "FMAC_PHY_STAT" : "m1.FMAC_PHY_STAT",
-    "FMAC_RX_PKT_CNT_JABBER" : "m1.FMAC_RX_PKT_CNT_JABBER",
-    "FMAC_RX_PKT_CNT_FRAGMENT" : "m1.FMAC_RX_PKT_CNT_FRAGMENT",
-    "FMAC_RX_RAW_FRAME_CNT" : "m1.FMAC_RX_RAW_FRAME_CNT",
-    "FMAC_RX_BAD_FRAME_CNT" : "m1.FMAC_RX_BAD_FRAME_CNT",
+    "FMAC_RX_CRC32_ERR_CNT" : "m1.FMAC_RX_CRC_ERR_CNT",
+    "FMAC_RX_DCNT_OVERRUN" : "m1.FMAC_DCNT_OVERRUN",
+    "FMAC_RX_DCNT_LINK_ERR" : "m1.FMAC_DCNT_LINK_ERR",
+    "FMAC_RX_PKT_CNT_OVERSIZE" : "m1.FMAC_PKT_CNT_OVERSIZE",
+    "FMAC_PHY_STAT" : "m1.fmac_register_if.FMAC_PHY_STAT",
+    "FMAC_RX_PKT_CNT_JABBER" : "m1.FMAC_PKT_CNT_JABBER",
+    "FMAC_RX_PKT_CNT_FRAGMENT" : "m1.FMAC_PKT_CNT_FRAGMENT",
+    "FMAC_RX_RAW_FRAME_CNT" : "m1.fmac_register_if.FMAC_RAW_FRAME_CNT",
+    "FMAC_RX_BAD_FRAME_CNT" : "m1.fmac_register_if.FMAC_BAD_FRAMESOF_CNT",
     "FMAC_RX_PKT_CNT64_LO" : "m1.FMAC_RX_PKT_CNT64_LO",
     "FMAC_RX_PKT_CNT64_HI" : "m1.FMAC_RX_PKT_CNT64_HI",
     "FMAC_RX_PKT_CNT127_LO" : "m1.FMAC_RX_PKT_CNT127_LO",
@@ -31,7 +31,9 @@
     "FMAC_RX_PKT_CNT1023_LO" : "m1.FMAC_RX_PKT_CNT1023_LO",
     "FMAC_RX_PKT_CNT1023_HI" : "m1.FMAC_RX_PKT_CNT1023_HI",
     "FMAC_RX_PKT_CNT1518_LO" : "m1.FMAC_RX_PKT_CNT1518_LO",
-    "FMAC_RX_PKT_CNT1518_HI" : "m1.FMAC_RX_PKT_CNT1518_HI"
+    "FMAC_RX_PKT_CNT1518_HI" : "m1.FMAC_RX_PKT_CNT1518_HI",
+    "TXFIFO_FULL" : "m1.tx_mac_full",
+    "TXFIFO_WUSED_QWD" : "m1.tx_mac_usedw"
   },
 
   "interface mapping": {
@@ -78,16 +80,16 @@
       "SYS_ADDR"          : "**KEEP**",
 
       "fail_over"         : "**KEEP**",
-      "fmac_ctrl"         : "mac_ctrl",
-      "fmac_ctrl1"        : "mac_ctrl_1",
+      "fmac_ctrl"         : "MAC_CTRL",
+      "fmac_ctrl1"        : "MAC_CTRL1",
 
-      "fmac_rxd_en"       : "mac_rxv_en",
+      "fmac_rxd_en"       : "MAC_RXD_EN",
 
       "mac_pause_value"   : "**KEEP**",
       "mac_addr0"         : "**KEEP**",
       "mcast_saddr"       : "**KEEP**",
 
-      "reg_rd_start"      : "reg_read_start",
+      "reg_rd_start"      : "reg_rd_start",
 
       "reg_rd_done_out"   : "**SO**",
 
