@@ -60,7 +60,8 @@ int main(int argc, const char** argv) {
 #endif
 
   // generate verification target
-  GenVerifTarget(core2, design_path, instr_map, var_map, output_path);
+  GenVerifTargetReg(core2, design_path, instr_map, var_map,
+                    output_path + "/reg");
 
   // reset debug config.
   DisableDebug("LMAC");

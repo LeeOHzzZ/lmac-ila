@@ -26,10 +26,10 @@ VerilogGeneratorBase::VlgGenConfig SetVlgGenConfig();
 // verification target generator configs
 VerilogVerificationTargetGenerator::vtg_config_t SetVerifGenConfig();
 
-// generate Verilog verification target
-void GenVerifTarget(Ila& model, const std::string& design_path,
-                    const std::string& instr_map, const std::string& var_map,
-                    const std::string& output_path);
+// generate Verilog verification target for reg instr
+void GenVerifTargetReg(Ila& model, const std::string& design_path,
+                       const std::string& instr_map, const std::string& var_map,
+                       const std::string& output_path);
 
 }; // namespace ilang
 

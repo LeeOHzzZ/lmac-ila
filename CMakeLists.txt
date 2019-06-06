@@ -30,6 +30,7 @@ find_package(ilang REQUIRED)
 add_executable(${MyTarget} 
   app/main.cc
   src/core2/eqcheck.cc
+  src/core2/eqcheck_reg.cc
   src/core2/lmac_core_top.cc
   src/core2/mmio_regs.cc
   src/core2/reg_instr.cc
