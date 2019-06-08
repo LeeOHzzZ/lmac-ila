@@ -2,7 +2,8 @@
   "instructions": [
     {
       "instruction" : "REG_RD_FMAC_TX_PKT_CNT",
-      "ready bound": 5
+      "ready bound": [],
+      "ready signal": "m1.reg_rd_done_out"
     }
   ],
   
