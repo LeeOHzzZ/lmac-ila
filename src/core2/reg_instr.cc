@@ -43,9 +43,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_TX_PKT_CNT);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT_LO
