@@ -55,8 +55,9 @@ int main(int argc, const char** argv) {
 #ifndef NDEBUG
   design_path = (design_path == "") ? "../design/core2" : design_path;
   output_path = (output_path == "") ? "../verification/core2" : output_path;
-  instr_map = (instr_map == "") ? "../refinement/core2_instr.json" : instr_map;
-  var_map = (var_map == "") ? "../refinement/core2_var.json" : var_map;
+  instr_map =
+      (instr_map == "") ? "../refinement/core2/instr_cond_reg.json" : instr_map;
+  var_map = (var_map == "") ? "../refinement/core2/var_map.json" : var_map;
 #endif
 
   // generate verification target

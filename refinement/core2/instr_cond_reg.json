@@ -1,0 +1,12 @@
+{
+  "instructions": [
+    {
+      "instruction"  : "REG_RD_FMAC_TX_PKT_CNT",
+      "ready bound"  : 5,
+      "ready signal" : []
+    }
+  ],
+  
+  "global invariants": [] 
+
+}
