@@ -107,6 +107,23 @@ def GenVarMap(pairs, out_file):
             name = p['name']
             fw.write('"{0}" : "m1.{0}",\n'.format(name.upper()))
 
+def GenInstrCond(pairs, out_file):
+    with open('misc/reg_read_cond.in', 'r') as fr:
+        template_raw = fr.read()
+        template = Template(template_raw)
+
+    with open(out_file, 'w') as fw:
+        for p in pairs:
+            name = p['name']
+
+            fw.write('\n')
+
+            d = {}
+            d['instr_name'] = 'REG_RD_{0}'.format(name.upper())
+
+            instr_reg_rd = template.safe_substitute(d)
+            fw.write(instr_reg_rd)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -117,6 +134,7 @@ if __name__ == '__main__':
     parser.add_argument('--setup', action='store_true', help='geenrate setup')
     parser.add_argument('--instr', action='store_true', help='generate instr')
     parser.add_argument('--var', action='store_true', help='generate var map')
+    parser.add_argument('--cond', action='store_true', help='generate instr cond')
     args = parser.parse_args()
 
     pairs = ParseMmioText(args.mmio_file)
@@ -132,3 +150,6 @@ if __name__ == '__main__':
 
     if args.var:
         GenVarMap(pairs, args.out_file)
+
+    if args.cond:
+        GenInstrCond(pairs, args.out_file)
