@@ -3,19 +3,7 @@
     {
       "instruction" : "REG_RD_FMAC_TX_PKT_CNT",
       "ready signal": [],
-      "ready bound" : 5,
-
-      "flush constraint": [ "m1.reg_rd_start == 0" ],
-      "pre-flush end"   : [ 
-          "m1.reg_rd_delay1 == 0", 
-          "m1.reg_rd_delay2 == 0", 
-          "m1.reg_rd_delay3 == 0", 
-          "m1.reg_rd_delay4 == 0", 
-          "m1.reg_rd_done_out == 0" 
-      ],
-      "post-flush end"  : [
-          "m1.reg_rd_delay4 == 1"
-      ] 
+      "ready bound" : 5
     }
   ],
   
