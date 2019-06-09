@@ -1,12 +1,15 @@
 {
   "instructions": [
     {
-      "instruction"  : "REG_RD_FMAC_TX_PKT_CNT",
-      "ready bound"  : 5,
-      "ready signal" : []
+      "instruction"      : "REG_RD_FMAC_TX_PKT_CNT",
+      "ready bound"      : 5,
+      
+      // optional: use the flushing feature
+      "flush constraint" : [ "m1.reg_rd_start == 0" ],
+      "pre-flush end"    : "m1.reg_rd_done_out == 0 && m1.reg_rd_delay1 == 0 && m1.reg_rd_delay2 == 0 && m1.reg_rd_delay3 == 0 && m1.reg_rd_delay4 == 0", 
+      "post-flush end"   : "m1.reg_rd_done_out == 1"
     }
   ],
   
   "global invariants": [] 
-
 }

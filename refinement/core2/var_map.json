@@ -64,7 +64,7 @@
     "tx_mac_usedw"      : "**KEEP**",	
 
     "rx_mac_data"       : "**KEEP**",
-    "rx_mac_ctrl"	      : "**KEEP**",
+    "rx_mac_ctrl"       : "**KEEP**",
     "rx_mac_empty"	    : "**KEEP**",
     "rx_mac_rd"         : "**KEEP**",
     "rx_mac_rd_cycle"   : "**KEEP**",	
