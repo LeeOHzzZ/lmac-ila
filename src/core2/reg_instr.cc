@@ -12,8 +12,8 @@
 //  - read register
 //  - write register
 
-#include <lmac/core2/lmac_core_top.h>
 #include <lmac/core2/configs.h>
+#include <lmac/core2/lmac_core_top.h>
 
 #include <ilang/util/log.h>
 
@@ -26,7 +26,7 @@ void LmacCore2::SetupRegInstr(Ila& m) {
   // read register
   RegRdInstr(m);
 
-  // write configuration 
+  // write configuration
   RegWrInstr(m);
 
   return;
@@ -61,9 +61,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT_LO);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT_HI
@@ -75,9 +79,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT_HI);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_TX_BYTE_CNT
@@ -89,9 +97,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_TX_BYTE_CNT);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_BYTE_CNT_LO
@@ -103,9 +115,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_BYTE_CNT_LO);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_BYTE_CNT_HI
@@ -117,9 +133,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_BYTE_CNT_HI);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_UNDERSIZE_PKT_CNT
@@ -131,9 +151,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_UNDERSIZE_PKT_CNT);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_CRC32_ERR_CNT
@@ -145,9 +169,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_CRC32_ERR_CNT);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_DCNT_OVERRUN
@@ -159,9 +187,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_DCNT_OVERRUN);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_DCNT_LINK_ERR
@@ -173,9 +205,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_DCNT_LINK_ERR);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT_OVERSIZE
@@ -187,9 +223,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT_OVERSIZE);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_PHY_STAT
@@ -201,9 +241,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_PHY_STAT);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT_JABBER
@@ -215,9 +259,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT_JABBER);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT_FRAGMENT
@@ -229,9 +277,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT_FRAGMENT);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_RAW_FRAME_CNT
@@ -243,9 +295,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_RAW_FRAME_CNT);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_BAD_FRAME_CNT
@@ -257,9 +313,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_BAD_FRAME_CNT);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT64_LO
@@ -271,9 +331,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT64_LO);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT64_HI
@@ -285,9 +349,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT64_HI);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT127_LO
@@ -299,9 +367,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT127_LO);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT127_HI
@@ -313,9 +385,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT127_HI);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT255_LO
@@ -327,9 +403,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT255_LO);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT255_HI
@@ -341,9 +421,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT255_HI);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT511_LO
@@ -355,9 +439,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT511_LO);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT511_HI
@@ -369,9 +457,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT511_HI);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT1023_LO
@@ -383,9 +475,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT1023_LO);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT1023_HI
@@ -397,9 +493,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT1023_HI);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT1518_LO
@@ -411,9 +511,13 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT1518_LO);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   { // read register FMAC_RX_PKT_CNT1518_HI
@@ -425,18 +529,22 @@ void RegRdInstr(Ila& m) {
     instr.SetDecode(addr_match & is_reg_read);
 
     // update
-    auto data_out_var = m.state(REG_RD_DONE_OUT);
+    auto data_out_var = m.state(MAC_REGDOUT);
     auto data_out_nxt = m.state(FMAC_RX_PKT_CNT1518_HI);
     instr.SetUpdate(data_out_var, data_out_nxt);
+
+    auto done_signal_var = m.state(REG_RD_DONE_OUT);
+    auto done_signal_nxt = BvConst(1, REG_RD_DONE_OUT_BWID);
+    instr.SetUpdate(done_signal_var, done_signal_nxt);
   }
 
   return;
 }
 
 void RegWrInstr(Ila& m) {
-  // 
-  
-  return; 
+  //
+
+  return;
 }
 
 }; // namespace ilang
