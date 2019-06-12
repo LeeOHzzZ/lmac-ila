@@ -22,8 +22,8 @@ def ParseMmioText(in_file):
                 if len(terms) == 2:
                     addr = terms[1]
                     try:
-                        val = int(addr, 16)
-                    except BaseException:
+                        int(addr, 16)
+                    except Exception:
                         print('Fail handling address value', addr)
                     state = SpecState.NAME
 
@@ -70,7 +70,6 @@ def GenSetup(pairs, out_file):
         for p in pairs:
             desp = p['desp']
             name = p['name']
-            addr = p['addr']
 
             fw.write('// {0}\n'.format(desp))
             fw.write('NewState(m, {0}, {0}_BWID);\n'.format(name.upper()))
