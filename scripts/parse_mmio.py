@@ -2,6 +2,7 @@
 
 import argparse
 from enum import Enum
+from string import Template
 
 
 class SpecState(Enum):
@@ -21,8 +22,8 @@ def ParseMmioText(in_file):
                 if len(terms) == 2:
                     addr = terms[1]
                     try:
-                        val = int(addr, 16)
-                    except BaseException:
+                        int(addr, 16)
+                    except Exception:
                         print('Fail handling address value', addr)
                     state = SpecState.NAME
 
@@ -69,11 +70,58 @@ def GenSetup(pairs, out_file):
         for p in pairs:
             desp = p['desp']
             name = p['name']
-            addr = p['addr']
 
             fw.write('// {0}\n'.format(desp))
             fw.write('NewState(m, {0}, {0}_BWID);\n'.format(name.upper()))
             fw.write('\n')
+
+
+def GenReadInstr(pairs, out_file):
+    with open('misc/reg_read_instr.in', 'r') as fr:
+        template_raw = fr.read()
+        template = Template(template_raw)
+
+    with open(out_file, 'w') as fw:
+        for p in pairs:
+            name = p['name']
+            addr = p['addr']
+
+            fw.write('\n')
+
+            d = {}
+            d['comment'] = 'read register {0}'.format(name.upper())
+            d['instr_name'] = 'REG_RD_{0}'.format(name.upper())
+            d['mmio_addr'] = '{0}_ADDR'.format(name.upper())
+            d['reg_name'] = name.upper()
+
+            instr_reg_rd = template.safe_substitute(d)
+            fw.write(instr_reg_rd)
+
+            fw.write('\n')
+
+
+def GenVarMap(pairs, out_file):
+    with open(out_file, 'w') as fw:
+        for p in pairs:
+            name = p['name']
+            fw.write('"{0}" : "m1.{0}",\n'.format(name.upper()))
+
+def GenInstrCond(pairs, out_file):
+    with open('misc/reg_read_cond.in', 'r') as fr:
+        template_raw = fr.read()
+        template = Template(template_raw)
+
+    with open(out_file, 'w') as fw:
+        for p in pairs:
+            name = p['name']
+
+            fw.write('\n')
+
+            d = {}
+            d['instr_name'] = 'REG_RD_{0}'.format(name.upper())
+
+            instr_reg_rd = template.safe_substitute(d)
+            fw.write(instr_reg_rd)
 
 
 if __name__ == '__main__':
@@ -83,6 +131,9 @@ if __name__ == '__main__':
     parser.add_argument('out_file', type=str, help='output file name')
     parser.add_argument('--macro', action='store_true', help='generate macro')
     parser.add_argument('--setup', action='store_true', help='geenrate setup')
+    parser.add_argument('--instr', action='store_true', help='generate instr')
+    parser.add_argument('--var', action='store_true', help='generate var map')
+    parser.add_argument('--cond', action='store_true', help='generate instr cond')
     args = parser.parse_args()
 
     pairs = ParseMmioText(args.mmio_file)
@@ -92,3 +143,12 @@ if __name__ == '__main__':
 
     if args.setup:
         GenSetup(pairs, args.out_file)
+
+    if args.instr:
+        GenReadInstr(pairs, args.out_file)
+
+    if args.var:
+        GenVarMap(pairs, args.out_file)
+
+    if args.cond:
+        GenInstrCond(pairs, args.out_file)
