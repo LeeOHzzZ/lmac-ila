@@ -17,6 +17,5 @@ make
 The output is an executable `lmac`, which can be used to generate the LMAC ILA and the verification target for equivalence checking. 
 
 ``` bash
-./lamc --d <DESIGN_PATH> --o <OUTPUT_PATH> --i <INSTR_COND> --v <VAR_MAP>
+./lamc -d <DESIGN_PATH> -o <OUTPUT_PATH> -i <INSTR_COND> -v <VAR_MAP>
 ```
-
