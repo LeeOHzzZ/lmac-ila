@@ -52,13 +52,8 @@ int main(int argc, const char** argv) {
   auto instr_map = parser.retrieve<std::string>("instr_map");
   auto var_map = parser.retrieve<std::string>("var_map");
 
-#ifndef NDEBUG
   design_path = (design_path == "") ? "../design/core2" : design_path;
   output_path = (output_path == "") ? "../verification/core2" : output_path;
-  instr_map =
-      (instr_map == "") ? "../refinement/core2/instr_cond_reg.json" : instr_map;
-  var_map = (var_map == "") ? "../refinement/core2/var_map.json" : var_map;
-#endif
 
   // generate verification target
   GenVerifTargetReg(core2, design_path, instr_map, var_map,
