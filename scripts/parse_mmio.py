@@ -84,7 +84,6 @@ def GenReadInstr(pairs, out_file):
     with open(out_file, 'w') as fw:
         for p in pairs:
             name = p['name']
-            addr = p['addr']
 
             fw.write('\n')
 
