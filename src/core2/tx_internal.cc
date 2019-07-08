@@ -31,6 +31,24 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   // write pointer
   NewState(m, TXFIFO_BUFF_WR_PTR, TXFIFO_BUFF_WR_PTR_BWID);
 
+  ///////////////// Modified by Yi Li //////////////
+
+  // operating mode, only 1G mode would have significant difference 
+  NewInput(m, MODE_1G, MODE_1G_BWID);
+
+  // register for result output, xgmii or gmii
+  NewState(m, XGMII_DOUT_REG, XGMII_DOUT_REG_BWID);
+
+  // register for output control, bytes valid information, 8bits signal for 8bytes(64bit) output
+  NewState(m, XGMII_COUT_REG, XGMII_COUT_REG_BWID);
+
+  // register for CRC, store the 4byte CRC
+  NewState(m, CRC, CRC_BWID);
+
+  // register for byte count, store at the reading the first QWord of ethernet package.
+  NewState(m, TX_PACKET_BYTE_CNT, TX_PACKET_BYTE_CNT_BWID);
+  
+
   return;
 }
 

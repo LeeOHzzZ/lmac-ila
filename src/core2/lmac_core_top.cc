@@ -50,7 +50,9 @@ Ila LmacCore2::New(const std::string& name) {
     auto rx_valid = true;
 
     // Reg interface
-    auto reg_itf_valid = true;
+    auto reg_itf_valid = (m.input(REG_RD_START) == REG_RD_START_V_BUSY) &
+                         (m.input(HOST_ADDR) >= FMAC_TX_PKT_CNT_ADDR) &
+                         (m.input(HOST_ADDR) <= FMAC_RX_PKT_CNT1518_HI_ADDR);
 
     // PHY
     auto phy_valid = true;
@@ -103,7 +105,9 @@ void LmacCore2::SetImplStateVar(Ila& m) {
   ILA_DLOG("LMAC") << "Setup state variables (impl. specific)";
 
   // TX FIFO internal states
+#if 0 // TODO
   SetupTxInternal(m);
+#endif
 
   // RX FIFO internal states
 
@@ -129,6 +133,7 @@ void LmacCore2::SetInstr(Ila& m) {
   // RX FIFO instructions
 
   // Register and configuration instructions
+  SetupRegInstr(m);
 
   // PHY instructions
 

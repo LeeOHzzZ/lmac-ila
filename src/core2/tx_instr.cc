@@ -37,7 +37,18 @@ void LmacCore2::SetupTxInstr(Ila& m) {
 }
 
 void WrPktByteCnt(Ila& m, const std::string& name) {
-  //
+  // handle the bytecount of the ethernet packet. The first QWord doesn't go to the output. only contain the byte count information for control and record
+
+  // This has two child instructions. One for 1G and one for the rest of the modes
+
+  { // handling the byte count for mode 1G
+    auto instr = m.NewInstr("WR_PKT_BYTE_CNT_1G")；
+
+    // decode
+    auto mode_config = 
+  }
+
+  
 
   return;
 }
