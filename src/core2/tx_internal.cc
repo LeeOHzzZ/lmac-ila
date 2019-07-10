@@ -33,7 +33,8 @@ void LmacCore2::SetupTxInternal(Ila& m) {
 
   ///////////////// Modified by Yi Li //////////////
 
-  // operating mode, only 1G mode would have significant difference 
+  // operating mode, only 1G mode would have significant difference.
+  // This input affect both the RX and TX. It is placed here temperally  
   NewInput(m, MODE_1G, MODE_1G_BWID);
 
   // register for result output, xgmii or gmii

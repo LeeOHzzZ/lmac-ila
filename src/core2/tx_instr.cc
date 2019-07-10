@@ -45,7 +45,8 @@ void WrPktByteCnt(Ila& m, const std::string& name) {
     auto instr = m.NewInstr("WR_PKT_BYTE_CNT_1G")；
 
     // decode
-    auto mode_config = 
+    auto mode_config = (m.input(MODE_1G) == 1);
+    
   }
 
   
