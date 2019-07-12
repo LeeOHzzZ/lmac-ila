@@ -54,13 +54,14 @@ void WrPktFIFO(Ila& m, const std::string& name) {
     instr.SetDecode(wr_enable && fifo_non_full);
 
     // update
-    instr.SetUpdate( storage, Store(storage, wptr(FIFO_IDX_WIDTH-1,0), w_data_in) );
-
     instr.SetUpdate(TXFIFO_BUFF, Store(TXFIFO_BUFF, TXFIFO_BUFF_WR_PTR, m.input(TX_DATA)) );
-    instr.SetUpdate(m.state(TXFIFO_BUFF_WR_PTR), m.state(TXFIFO_BUFF_WR_PTR) + 1);
-    instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) + 1);
+    instr.SetUpdate(m.state(TXFIFO_BUFF_WR_PTR), m.state(TXFIFO_BUFF_WR_PTR) + 0x1);
+    instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) + 0x1);
     instr.SetUpdate(m.state(TX_FIFO_FULL), Ite((m.state(TXFIFO_WUSED_QWD) == 1024), 1, 0));
   }
+
+  return;
+
 }
 
 
@@ -68,14 +69,32 @@ void WrPktFIFO(Ila& m, const std::string& name) {
 void WrPktByteCnt(Ila& m, const std::string& name) {
   // handle the bytecount of the ethernet packet. The first QWord doesn't go to the output. only contain the byte count information for control and record
 
-  // This has two child instructions. One for 1G and one for the rest of the modes
 
-  { // handling the byte count for mode 1G
-    auto instr = m.NewInstr("WR_PKT_BYTE_CNT_1G")；
+  { // handling recording the byte counts
+    auto instr = m.NewInstr("WR_PKT_BYTE_CNT");
 
-    // decode
-    auto mode_config = (m.input(MODE_1G) == 1);
-    
+    // decode 
+    auto remain_bytes_zero = (m.state(TX_PACKET_BYTES_REMAIN) <= 0x0);
+    auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0x0);
+    auto read_en = (m.input(TXFIFO_RD_EN) == 1);
+
+    instr.SetDecode(read_en & remain_bytes_zero & fifo_non_empty);
+
+    // state update
+
+    // Read FIFO
+    instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Load(TXFIFO_BUFF, TXFIFO_BUFF_RD_PTR));
+    instr.SetUpdate(m.state(TXFIFO_BUFF_RD_PTR), m.state(TXFIFO_BUFF_RD_PTR) + 1);
+    instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) - 1);
+
+    // Read the byte count information
+    instr.SetUpdate(m.state(TX_PACKET_BYTE_CNT), ilang::Extract(m.state(TXFIFO), 15, 0));
+    // update remaining bytes number. Not sure why subracted by 8.
+    instr.SetUpdate(m.state(TX_PACKET_BYTES_REMAIN), m.state(TX_PACKET_BYTE_CNT) - 0x8);
+
+    // Set the TX control signal. Different control signal for mode 1G and the others
+    instr.SetUpdate(m.state(XGMII_COUT_REG), Ite(m.input(MODE_1G), 0xFE, 0x01));
+
   }
 
   

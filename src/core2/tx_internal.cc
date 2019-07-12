@@ -37,6 +37,12 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   // This input affect both the RX and TX. It is placed here temperally  
   NewInput(m, MODE_1G, MODE_1G_BWID);
 
+  // Read Enable signal for TX FIFO
+  NewInput(m, TXFIFO_RD_EN, TXFIFO_RD_EN_BWID);
+
+  // Read output of the TX FIFO
+  NewState(m, TXFIFO_RD_OUTPUT, TXFIFO_RD_OUTPUTBWID);
+
   // register for result output, xgmii or gmii
   NewState(m, XGMII_DOUT_REG, XGMII_DOUT_REG_BWID);
 
@@ -49,6 +55,10 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   // register for byte count, store at the reading the first QWord of ethernet package.
   NewState(m, TX_PACKET_BYTE_CNT, TX_PACKET_BYTE_CNT_BWID);
   
+  // register the remaining bytes to transmit
+  NewState(m, TX_PACKET_BYTES_REMAIN, TX_PACKET_BYTES_REMAIN_CNT_BWID);
+
+
 
   return;
 }
