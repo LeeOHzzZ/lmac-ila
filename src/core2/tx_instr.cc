@@ -95,15 +95,37 @@ void WrPktByteCnt(Ila& m, const std::string& name) {
     // Set the TX control signal. Different control signal for mode 1G and the others
     instr.SetUpdate(m.state(XGMII_COUT_REG), Ite(m.input(MODE_1G), 0xFE, 0x01));
 
-  }
+    // Set initial value of the CRC
+    auto rb = ilang::Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0)); // rb stands for residual bytes
+    instr.SetUpdate(m.state(CRC), Ite((rb == 0x0), 0x00000000,
+                                  Ite((rb == 0x1), 0x56a579b9,
+                                  Ite((rb == 0x2), 0xe962b350,
+                                  Ite((rb == 0x3), 0x3306840b,
+                                  Ite((rb == 0x4), 0x9d0ad96d,
+                                  Ite((rb == 0x5), 0x7ed9d15c,
+                                  Ite((rb == 0x6), 0x6f62e365,
+                                  Ite((rb == 0x7), 0x26706a0f))))))))
+                    );
 
-  
+  }
 
   return;
 }
 
 void WrPktPayLoad(Ila& m, const std::string& name) {
-  //
+  //writing the payload of the frame
+  // different behaviour for mode_1G and the other.
+
+  {// handling the instruction for mode_1G
+    auto instr = m.NewInstr("WR_PKT_PAYLOAD_1G");
+
+    // decode 
+    auto mode_1G = (m.input(MODE_1G) == 1);
+    auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0);
+    auto read_en = (m.input(TXFIFO_RD_EN) == 1)；
+    auto remain
+    
+  }
 
   return;
 }
