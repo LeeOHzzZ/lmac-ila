@@ -37,6 +37,18 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   // This input affect both the RX and TX. It is placed here temperally  
   NewInput(m, MODE_1G, MODE_1G_BWID);
 
+
+  /* These are non-architectural states */
+  // State that indicate the tx path is busy and not ready for next packet read.
+  NewState(m, TX_BUSY, TX_BUSY_BWID);
+  // State that indicates that the number of frames to send.
+  NewState(m, TX_FRAME_CNTR, TX_FRAME_CNTT_BWID);
+  // State counter for sending payload at mode_1G
+  NewState(m, TX_1G_PAYLOAD_CNTR, 3);
+
+
+
+/****************** **********************************/
   // Read Enable signal for TX FIFO
   NewInput(m, TXFIFO_RD_EN, TXFIFO_RD_EN_BWID);
 
