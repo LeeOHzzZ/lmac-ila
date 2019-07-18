@@ -75,13 +75,13 @@ void WrPktByteCnt(Ila& m, const std::string& name) {
     auto instr = m.NewInstr("WR_PKT_BYTE_CNT");
 
     // decode 
-    auto remain_bytes_zero = (m.state(TX_PACKET_BYTES_REMAIN) <= 0);
+    // auto remain_bytes_zero = (m.state(TX_PACKET_BYTES_REMAIN) <= 0);
     auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0);
     auto tx_non_busy = (m.state(TX_BUSY) == 0);
     // auto read_en = (m.input(TXFIFO_RD_EN) == 1);
 
     // instr.SetDecode(read_en & remain_bytes_zero & fifo_non_empty);
-    instr.SetDecode(remain_bytes_zero & fifo_non_empty & tx_non_busy);
+    instr.SetDecode(fifo_non_empty & tx_non_busy);
 
     // state update
     instr.SetUpdate(m.state(TX_BUSY), 1);
@@ -99,6 +99,8 @@ void WrPktByteCnt(Ila& m, const std::string& name) {
     instr.SetUpdate(m.state(TX_FRAME_CNTR), (m.state(TX_PACKET_BYTE_CNT) >> 3) + 1);
     // Set 1G mode counter to zero
     instr.SetUpdate(m.state(TX_1G_PAYLOAD_CNTR), 0x0);
+    // Set the CRC counter for 1G to zero
+    instr.SetUpdate(m.state(TX_1G_CRC_CNTR), 0x0);
 
     // Set the TX control signal. Different control signal for mode 1G and the others
     instr.SetUpdate(m.state(XGMII_COUT_REG), Ite(m.input(MODE_1G), 0xFE, 0x01));
@@ -131,7 +133,8 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
     auto mode_1G = (m.input(MODE_1G) == 1);
     auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0);
     auto bytes_remained = (m.state(TX_PACKET_BYTES_REMAIN) > 0);
-    instr.SetDecode(mode_1G & fifo_non_empty & bytes_remained);
+    auto tx_busy = (m.state(TX_BUSY) == 1);
+    instr.SetDecode(mode_1G & fifo_non_empty & bytes_remained & tx_busy);
 
     // Read data from FIFO
     auto read_new_data == (m.state(TX_1G_PAYLOAD_CNTR) == 0);
@@ -163,7 +166,8 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
     auto non_mode_1G = (m.input(MODE_1G) == 0);
     auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0);
     auto frames_remained = (m.state(TX_FRAME_CNTR) > 1);
-    instr.SetDecode(non_mode_1G & fifo_non_empty & frames_remained);
+    auto tx_busy = (m.state(TX_BUSY) == 1);
+    instr.SetDecode(non_mode_1G & fifo_non_empty & frames_remained & tx_busy);
 
     // Read Data from FIFO
     instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Load(TXFIFO_BUFF, TXFIFO_BUFF_RD_PTR));
@@ -191,7 +195,70 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
 }
 
 void WrPktLastOne(Ila& m, const std::string& name) {
-  //
+  // Two instructions, one for mode 1G and one for the others 
+
+  {// instruction for mode 1G
+    auto instr = m.NewInstr("WR_PKT_LASTONE_1G");
+
+    // decode
+    auto mode_1G = (m.input(MODE_1G) == 1);
+    auto no_bytes = (m.state(TX_PACKET_BYTES_REMAIN) == 0);
+    auto tx_busy = (m.state(TX_BUSY) == 1);
+
+    instr.SetDecode(mode_1G & no_bytes & tx_busy);
+
+    // Update
+
+    // CRC code should be complete at this step; only need to update the result.
+
+    // update output
+    auto crc_finish = (m.state(TX_1G_CRC_CNTR) == 3);
+    auto h_idx = m.state(TX_1G_CRC_CNTR) * 8 + 7;
+    auto l_idx = m.state(TX_1G_CRC_CNTR) * 8;
+
+    instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFE);
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), Concat(0x07070707070707, Extract(m.state(CRC), h_idx, l_idx)));
+
+    // update control states
+    instr.SetUpdate(m.state(TX_1G_CRC_CNTR), m.state(TX_1G_CRC_CNTR) + 1);
+    instr.SetUpdate(m.state(TX_BUSY), Ite(crc_finish, 0, m.state(TX_BUSY)));
+    
+  }
+
+  {// instruction for the rest modes
+    auto instr = m.NewInstr("WR_PKT_LASTONE");
+
+    // decode 
+    auto non_mode_1G = (m.input(MODE_1G) == 0);
+    auto last_frame = (m.state(TX_FRAME_CNTR) == 1);
+    auto tx_busy = (m.state(TX_BUSY) == 1);
+
+    // Update
+    auto residue = ilang::Extract(TX_PACKET_BYTE_CNT, 2, 0);
+    auto dat = m.state(TXFIFO_RD_OUTPUT);
+    auto crc = m.state(CRC);
+
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), Ite((residue == 0), Concat(0xf7f7f7FD, crc),
+                                             Ite((residue == 1), Concat(0xf7f7FD, Concat(crc, Extract(dat, 7, 0))),
+                                             Ite((residue == 2), Concat(0xf7FD, Concat(crc, Extract(dat, 15, 0))),
+                                             Ite((residue == 3), Concat(0xFD, Concat(crc, Extract(dat, 23, 0))),
+                                             Ite((residue == 4), Concat(crc, dat),
+                                             Ite((residue == 5), Concat(0xf7f7f7f7f7f7FD, Extract(crc, 31, 24)),
+                                             Ite((residue == 6), Concat(0xf7f7f7f7f7FD, Extract(crc, 31, 16)),
+                                                                 Concat(0xf7f7f7f7FD, Extract(crc, 31, 8))))))))));
+    
+    instr.SetUpdate(m.state(XGMII_COUT_REG), Ite((residue == 0), 0xF0,
+                                             Ite((residue == 1), 0xE0,
+                                             Ite((residue == 2), 0xC0,
+                                             Ite((residue == 3), 0x80,
+                                             Ite((residue == 4), 0x00,
+                                             Ite((residue == 5), 0xFE,
+                                             Ite((residue == 6), 0xFC,
+                                                                 0xF8))))))));
+
+    instr.SetUpdate(m.state(TX_BUSY), 0);
+
+  }
 
   return;
 }

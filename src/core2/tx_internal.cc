@@ -45,6 +45,8 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   NewState(m, TX_FRAME_CNTR, TX_FRAME_CNTT_BWID);
   // State counter for sending payload at mode_1G
   NewState(m, TX_1G_PAYLOAD_CNTR, 3);
+  // State counter for sending the CRC code at mode_1G
+  NewState(m, TX_1G_CRC_CNTR, 2);
 
 
 
