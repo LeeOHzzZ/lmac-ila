@@ -46,6 +46,12 @@ void LmacCore2::SetupTxInstr(Ila& m) {
 /********** Added by Yi Li **************/
 auto crc_polynomial = ilang::BvConst(0xEDB88320, 32);
 
+// crc look up table for half-byte crc generation.
+unsigned CRC_Lut[16] = {
+  0x00000000,0x1DB71064,0x3B6E20C8,0x26D930AC,0x76DC4190,0x6B6B51F4,0x4DB26158,0x5005713C,
+  0xEDB88320,0xF00F9344,0xD6D6A3E8,0xCB61B38C,0x9B64C2B0,0x86D3D2D4,0xA00AE278,0xBDBDF21C
+};
+
 
 void WrPktFIFO(Ila& m, const std::string& name) {
   // This instruction model the writing data into FIFO of TX
@@ -179,6 +185,20 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
     // This buffer should be placed after the CRC update.
     instr.SetUpdate(m.state(TX_BUF), m.state(TXFIFO_RD_OUTPUT));
 
+    // CRC generation, using half_byte algorithm. reference: https://create.stephan-brumme.com/crc32/#half-byte
+    auto crc_g = m.state(CRC) ^ 0xFFFFFFFF;
+    auto data = m.state(CRC_IN);
+    
+    for (auto len = 8; len > 0; len--) {
+      crc_g = CRC_Lut[(crc_g ^ data) & 0x0F] & (crc_g >> 4);
+      crc_g = CRC_Lut[(crc_g ^ (data >> 4)) & 0x0F] & (crc_g >> 4);
+      data = Ite((len > 1), ilang::Extract(m.state(CRC_IN), (8*len - 9), 0), 0);
+    }
+
+    crc_g = crc_g ^ 0xFFFFFFFF;
+
+    instr.SetUpdate(m.state(CRC), crc_g);
+
 
 
 
@@ -258,6 +278,7 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
                                              m.state(TXFIFO_RD_OUTPUT))))));
     // update frame counts
     instr.SetUpdate(m.state(TX_FRAME_CNTR), m.state(TX_FRAME_CNTR) - 1);
+    // update the bytes_remain to for the first CRC code generation.
     instr.SetUpdate(m.state(TX_PACKET_BYTES_REMAIN), m.state(TX_PACKET_BYTES_REMAIN) - 8);
 
   }
