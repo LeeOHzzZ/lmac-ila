@@ -44,9 +44,14 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   // State that indicates that the number of frames to send.
   NewState(m, TX_FRAME_CNTR, TX_FRAME_CNTT_BWID);
   // State counter for sending payload at mode_1G
-  NewState(m, TX_1G_PAYLOAD_CNTR, 3);
+  // NewState(m, TX_1G_PAYLOAD_CNTR, 3); // using for loop should be fine.
   // State counter for sending the CRC code at mode_1G
   NewState(m, TX_1G_CRC_CNTR, 2);
+  // Buffer for CRC Code generation
+  NewState(m, TX_BUF, 64);
+  NewState(m, TX_BUF_1, 64);
+  // State for CRC input
+  NewState(m, CRC_IN, 64);
 
 
 

@@ -44,6 +44,9 @@ void LmacCore2::SetupTxInstr(Ila& m) {
 }
 
 /********** Added by Yi Li **************/
+auto crc_polynomial = ilang::BvConst(0xEDB88320, 32);
+
+
 void WrPktFIFO(Ila& m, const std::string& name) {
   // This instruction model the writing data into FIFO of TX
   {
@@ -117,6 +120,7 @@ void WrPktByteCnt(Ila& m, const std::string& name) {
                                   Ite((rb == 0x7), 0x26706a0f))))))))
                     );
 
+
   }
 
   return;
@@ -137,25 +141,65 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
     instr.SetDecode(mode_1G & fifo_non_empty & bytes_remained & tx_busy);
 
     // Read data from FIFO
-    auto read_new_data == (m.state(TX_1G_PAYLOAD_CNTR) == 0);
+    // assuming when counter overflow, it will return to 0.
+    // only read new data from fifo when finishing sending the existing qword.
+    auto read_new_data = (m.state(TX_1G_PAYLOAD_CNTR) == 0);
+
     instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Ite(read_new_data, Load(TXFIFO_BUFF, TXFIFO_BUFF_RD_PTR), m.state(TXFIFO_RD_OUTPUT)));
     instr.SetUpdate(m.state(TXFIFO_BUFF_RD_PTR), Ite(read_new_data, m.state(TXFIFO_BUFF_RD_PTR) + 1, m.state(TXFIFO_BUFF_RD_PTR)));
     instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), Ite(read_new_data, m.state(TXFIFO_WUSED_QWD) - 1, m.state(TXFIFO_WUSED_QWD)));
     
     // update
+
+    // fq stands for first qword of the whole packet.
+    auto fq = (m.state(TX_PACKET_BYTES_REMAIN) == m.state(TX_PACKET_BYTE_CNT));
+    auto rb = ilang::Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0));
+
     // CRC code update
+    instr.SetUpdate(m.state(CRC_IN), Ite(fq, Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
+                                              Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), 0x0000000),
+                                              Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), 0x000000),
+                                              Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), 0x00000),
+                                              Ite((rb == 0x4), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), 0x0000),
+                                              Ite((rb == 0x5), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), 0x000),
+                                              Ite((rb == 0x6), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), 0x00),
+                                              Ite((rb == 0x7), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), 0x0))))))))),
+
+                                              Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
+                                              Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), Extract(m.state(TX_BUF),  63, 8)),
+                                              Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), Extract(m.state(TX_BUF),  63, 16)),
+                                              Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), Extract(m.state(TX_BUF),  63, 24)),
+                                              Ite((rb == 0x4), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), Extract(m.state(TX_BUF),  63, 32)),
+                                              Ite((rb == 0x5), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), Extract(m.state(TX_BUF),  63, 40)),
+                                              Ite((rb == 0x6), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), Extract(m.state(TX_BUF),  63, 48)),
+                                              Ite((rb == 0x7), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), Extract(m.state(TX_BUF),  63, 56))))))))))
+                                  
+                                  ));
+    
+    // This buffer should be placed after the CRC update.
+    instr.SetUpdate(m.state(TX_BUF), m.state(TXFIFO_RD_OUTPUT));
+
+
 
 
     // update output and control
-    auto h_idx = m.state(TX_1G_PAYLOAD_CNTR) * 8 + 7;
-    auto l_idx = m.state(TX_1G_PAYLOAD_CNTR) * 8;
-    instr.SetUpdate(m.state(XGMII_DOUT_REG), ilang::Concat(0x07070707070707, ilang::Extract(m.state(TXFIFO_RD_OUTPUT), h_idx, l_idx)));
-    instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFE);
+    auto h_idx;
+    auto l_idx;
 
-    // update bytes counts and frame count
-    instr.SetUpdate(m.state(TX_PACKET_BYTES_REMAIN), m.state(TX_PACKET_BYTES_REMAIN) - 1);
-    // instr.SetUpdate(m.state(TX_FRAME_CNTR), Ite((m.state(TX_1G_PAYLOAD_CNTR) == 7), m.state(TX_FRAME_CNTR) - 1, m.state(TX_FRAME_CNTR)));
-    instr.SetUpdate(m.state(TX_1G_PAYLOAD_CNTR), m.state(TX_1G_PAYLOAD_CNTR) + 0x1);
+    for (auto cnt = 0; cnt < 8; cnt++) {
+      
+      h_idx = m.state(TX_1G_PAYLOAD_CNTR) * 8 + 7;
+      l_idx = m.state(TX_1G_PAYLOAD_CNTR) * 8;
+
+      instr.SetUpdate(m.state(XGMII_DOUT_REG), ilang::Concat(0x07070707070707, ilang::Extract(m.state(TXFIFO_RD_OUTPUT), h_idx, l_idx)));
+      instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFE);
+
+      // update bytes counts and frame count
+      instr.SetUpdate(m.state(TX_PACKET_BYTES_REMAIN), m.state(TX_PACKET_BYTES_REMAIN) - 1);
+      // instr.SetUpdate(m.state(TX_FRAME_CNTR), Ite((m.state(TX_1G_PAYLOAD_CNTR) == 7), m.state(TX_FRAME_CNTR) - 1, m.state(TX_FRAME_CNTR)));
+      // instr.SetUpdate(m.state(TX_1G_PAYLOAD_CNTR), m.state(TX_1G_PAYLOAD_CNTR) + 0x1);
+    }
+
 
   }
 
@@ -176,6 +220,32 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
   
     // Updates
     // update CRC code
+    auto fq = (m.state(TX_PACKET_BYTES_REMAIN) == m.state(TX_PACKET_BYTE_CNT));
+    auto rb = ilang::Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0));
+
+    // CRC code update
+    instr.SetUpdate(m.state(CRC_IN), Ite(fq, Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
+                                              Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), 0x0000000),
+                                              Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), 0x000000),
+                                              Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), 0x00000),
+                                              Ite((rb == 0x4), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), 0x0000),
+                                              Ite((rb == 0x5), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), 0x000),
+                                              Ite((rb == 0x6), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), 0x00),
+                                              Ite((rb == 0x7), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), 0x0))))))))),
+
+                                              Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
+                                              Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), Extract(m.state(TX_BUF),  63, 8)),
+                                              Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), Extract(m.state(TX_BUF),  63, 16)),
+                                              Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), Extract(m.state(TX_BUF),  63, 24)),
+                                              Ite((rb == 0x4), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), Extract(m.state(TX_BUF),  63, 32)),
+                                              Ite((rb == 0x5), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), Extract(m.state(TX_BUF),  63, 40)),
+                                              Ite((rb == 0x6), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), Extract(m.state(TX_BUF),  63, 48)),
+                                              Ite((rb == 0x7), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), Extract(m.state(TX_BUF),  63, 56))))))))))
+                                  
+                                  ));
+    
+    // This buffer should be placed after the CRC update.
+    instr.SetUpdate(m.state(TX_BUF), m.state(TXFIFO_RD_OUTPUT));
 
 
     // update output and control !!! doesn't use ilang:: namespace here. Caution for errors.
@@ -188,6 +258,7 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
                                              m.state(TXFIFO_RD_OUTPUT))))));
     // update frame counts
     instr.SetUpdate(m.state(TX_FRAME_CNTR), m.state(TX_FRAME_CNTR) - 1);
+    instr.SetUpdate(m.state(TX_PACKET_BYTES_REMAIN), m.state(TX_PACKET_BYTES_REMAIN) - 8);
 
   }
 
