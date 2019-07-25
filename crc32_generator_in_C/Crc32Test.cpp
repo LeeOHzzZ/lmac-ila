@@ -59,15 +59,44 @@ static double seconds()
 // byte 49 data:
 // 602caf4e00321200 00450008f0ffff32 12000b0419270008 a8c06408a8c02f64 0680004000005804 18507c0a773f7211 000058a3bc0cbc08 
 // real_input:  0000000000000000 32602caf4e003212 0800450008f0ffff 6412000b04192700 04a8c06408a8c02f 1106800040000058 0818507c0a773f72 00000058a3bc0cbc?
+
+// byte 50 data:
+// 602caf4e00321200 004500085bc8b40c 1200ffffffffffff 01000608f4ffff32 1200020004060008 a8c0f4ffff321200 5587ffffffff0000
+// real_input: 0xaf4e003212000000, 0x00085bc8b40c602c, 0xffffffffffff0045, 0x0608f4ffff321200, 0x0200040600080100, 0xf4ffff3212001200, 0xffffffff0000a8c0
+
+// byte 51 data:
+// 
 int main(int, char**)
 {
   printf("Please wait ...\n");
 
   uint32_t randomNumber = 0x27121978;
-  uint64_t data_in[7] = {0x0000000000000000, 0x32602caf4e003212, 0x0800450008f0ffff, 0x6412000b04192700, 0x04a8c06408a8c02f, 0x1106800040000058, 0x0818507c0a773f72};
+  uint64_t mask = 0xFFFFFFFFFFFF0000;
+  uint64_t raw_data[6] = {0x602caf4e00321200, 
+0x00450008f0ffff32,
+0x12000b0419270008 ,                      
+0xa8c06408a8c02f64,
+0x0680004000005804 ,               
+0x18507c0a773f7211};
+
+  uint64_t data_in[6];
+
+  for (int k = 0; k<6; k++) {
+    if (k==0) {
+      data_in[k] = (raw_data[k] << 16) & mask;
+    }
+    else {
+      data_in[k] = ((raw_data[k] << 16) & mask) |((raw_data[k-1] >> 48) & ~mask);
+    }
+    printf("data_in[%d] = %16llx\n", k, data_in[k]);
+  }
+
+  
+  
+  // uint64_t data_in[7] = {0xaf4e003212000000, 0x00085bc8b40c602c, 0xffffffffffff0045, 0x0608f4ffff321200, 0x0200040600080100, 0xf4ffff3212001200, 0xffffffff0000a8c0};
   // uint64_t data_in[6] = {0x2caf4e0032120000, 0x4500085bc8b40c60, 0x07a8c0f4ffff3200, 0xc0f4ffff321200c8, 0x0000000000c807a8, 0x0000000000000000};
 
-  uint32_t initial_crc[8] = {0x00000000, 0x56a579b9, 0xe962b350, 0xe962b350, 0x9d0ad96d, 0x7ed9d15c, 0x6f62e365, 0x26706a0f};
+  uint32_t initial_crc[8] = {0x00000000, 0x56a579b9, 0xe962b350, 0x3306840b, 0x9d0ad96d, 0x7ed9d15c, 0x6f62e365, 0x26706a0f};
   uint32_t initial_crc_translate;
 
   for (int i = 0; i < 8; i++) {
@@ -78,7 +107,7 @@ int main(int, char**)
   // initial_crc_translation  : bytes_remain = 0, initial_CRC =ffffffff
   // initial_crc_translation  : bytes_remain = 1, initial_CRC =46865aa9
   // initial_crc_translation  : bytes_remain = 2, initial_CRC =af4c9d16
-  // initial_crc_translation  : bytes_remain = 3, initial_CRC =af4c9d16
+  // initial_crc_translation  : bytes_remain = 3, initial_CRC =f47bf9cc
   // initial_crc_translation  : bytes_remain = 4, initial_CRC =9226f562
   // initial_crc_translation  : bytes_remain = 5, initial_CRC =a32e2681
   // initial_crc_translation  : bytes_remain = 6, initial_CRC =9a1c9d90
@@ -92,13 +121,13 @@ int main(int, char**)
   uint32_t previous_crc;
 
   // my initial crc code is different from the original design.
-  uint32_t original_crc = 0x46865aa9; 
+  uint32_t original_crc = 0x9a1c9d90; 
   uint32_t crc_out;
 
   uint32_t initial_crc_out = ~(((original_crc >> 24) & 0x000000FF) | ((original_crc >> 8) & 0x0000FF00) | ((original_crc << 8) & 0x00FF0000) | ((original_crc << 24) & 0xFF000000));
   printf("half_byte_initial_crc_out  :  CRC =%#08x\n", initial_crc_out);
 
-  for (int j = 0; j < 7; j++) {
+  for (int j = 0; j < 6; j++) {
 
   
     for (int i = 0; i < NumBytes; i++) {
