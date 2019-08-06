@@ -84,12 +84,8 @@ void WrPktByteCnt(Ila& m, const std::string& name) {
     auto instr = m.NewInstr("WR_PKT_BYTE_CNT");
 
     // decode 
-    // auto remain_bytes_zero = (m.state(TX_PACKET_BYTES_REMAIN) <= 0);
     auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0);
     auto tx_non_busy = (m.state(TX_BUSY) == 0);
-    // auto read_en = (m.input(TXFIFO_RD_EN) == 1);
-
-    // instr.SetDecode(read_en & remain_bytes_zero & fifo_non_empty);
     instr.SetDecode(fifo_non_empty & tx_non_busy);
 
     // state update
@@ -101,20 +97,15 @@ void WrPktByteCnt(Ila& m, const std::string& name) {
     instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) - 1);
 
     // Read the byte count information
-    instr.SetUpdate(m.state(TX_PACKET_BYTE_CNT), ilang::Extract(m.state(TXFIFO), 15, 0));
+    instr.SetUpdate(m.state(TX_PACKET_BYTE_CNT), ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0));
     // update remaining bytes number. Not sure why subracted by 8. (may not needed)
     instr.SetUpdate(m.state(TX_PACKET_BYTES_REMAIN), m.state(TX_PACKET_BYTE_CNT));
     // update the frame needed to transmit the packet.
     instr.SetUpdate(m.state(TX_FRAME_CNTR), (m.state(TX_PACKET_BYTE_CNT) >> 3) + 1);
-    // Set 1G mode counter to zero
-    instr.SetUpdate(m.state(TX_1G_PAYLOAD_CNTR), 0x0);
-    // Set the CRC counter for 1G to zero
-    instr.SetUpdate(m.state(TX_1G_CRC_CNTR), 0x0);
-
     // Set the TX control signal. Different control signal for mode 1G and the others
     instr.SetUpdate(m.state(XGMII_COUT_REG), Ite(m.input(MODE_1G), 0xFE, 0x01));
 
-    // Set initial value of the CRC
+    // Set initial value of the CRC. This initial value is the output data. However the one that participates in the generation is different.
     auto rb = ilang::Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0)); // rb stands for residual bytes
     instr.SetUpdate(m.state(CRC), Ite((rb == 0x0), 0x00000000,
                                   Ite((rb == 0x1), 0x56a579b9,
@@ -125,8 +116,16 @@ void WrPktByteCnt(Ila& m, const std::string& name) {
                                   Ite((rb == 0x6), 0x6f62e365,
                                   Ite((rb == 0x7), 0x26706a0f))))))))
                     );
-
-
+    
+    instr.SetUpdate(m.state(CRC_IN), Ite((rb == 0x0), 0xffffffff,
+                                  Ite((rb == 0x1), 0x46865aa9,
+                                  Ite((rb == 0x2), 0xaf4c9d16,
+                                  Ite((rb == 0x3), 0xf47bf9cc,
+                                  Ite((rb == 0x4), 0x9226f562,
+                                  Ite((rb == 0x5), 0xa32e2681,
+                                  Ite((rb == 0x6), 0x9a1c9d90,
+                                  Ite((rb == 0x7), 0xf0958fd9))))))))
+                    );
   }
 
   return;
@@ -142,27 +141,31 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
     // decode 
     auto mode_1G = (m.input(MODE_1G) == 1);
     auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0);
-    auto bytes_remained = (m.state(TX_PACKET_BYTES_REMAIN) > 0);
+    auto frames_remained = (m.state(TX_FRAME_CNTR) > 1);
     auto tx_busy = (m.state(TX_BUSY) == 1);
-    instr.SetDecode(mode_1G & fifo_non_empty & bytes_remained & tx_busy);
+    // using frame to determine when is the last qword of payload.
+    // auto bytes_remained = (m.state(TX_PACKET_BYTES_REMAIN) > 0);
+    // modified
+    instr.SetDecode(mode_1G & fifo_non_empty & frames_remained & tx_busy);
 
     // Read data from FIFO
     // assuming when counter overflow, it will return to 0.
     // only read new data from fifo when finishing sending the existing qword.
-    auto read_new_data = (m.state(TX_1G_PAYLOAD_CNTR) == 0);
 
-    instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Ite(read_new_data, Load(TXFIFO_BUFF, TXFIFO_BUFF_RD_PTR), m.state(TXFIFO_RD_OUTPUT)));
-    instr.SetUpdate(m.state(TXFIFO_BUFF_RD_PTR), Ite(read_new_data, m.state(TXFIFO_BUFF_RD_PTR) + 1, m.state(TXFIFO_BUFF_RD_PTR)));
-    instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), Ite(read_new_data, m.state(TXFIFO_WUSED_QWD) - 1, m.state(TXFIFO_WUSED_QWD)));
-    
+    instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Load(TXFIFO_BUFF, TXFIFO_BUFF_RD_PTR));
+    instr.SetUpdate(m.state(TXFIFO_BUFF_RD_PTR), m.state(TXFIFO_BUFF_RD_PTR) + 1);
+    instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) - 1);
+
     // update
 
-    // fq stands for first qword of the whole packet.
+    /******* CRC code update  start ***********/
+
+    // fq stands for first qword of the whole packet. When the remaining bytes equals to the byte count, it is the fisrt qword.
     auto fq = (m.state(TX_PACKET_BYTES_REMAIN) == m.state(TX_PACKET_BYTE_CNT));
     auto rb = ilang::Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0));
 
     // CRC code update
-    instr.SetUpdate(m.state(CRC_IN), Ite(fq, Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
+    instr.SetUpdate(m.state(CRC_DAT_IN), Ite(fq, Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
                                               Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), 0x0000000),
                                               Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), 0x000000),
                                               Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), 0x00000),
@@ -186,19 +189,23 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
     instr.SetUpdate(m.state(TX_BUF), m.state(TXFIFO_RD_OUTPUT));
 
     // CRC generation, using half_byte algorithm. reference: https://create.stephan-brumme.com/crc32/#half-byte
-    auto crc_g = m.state(CRC) ^ 0xFFFFFFFF;
-    auto data = m.state(CRC_IN);
+    auto crc_g = m.state(CRC_IN);
+    auto data = m.state(CRC_DAT_IN);
+    // The current stores the byte that generator takes. 
+    auto current;
     
-    for (auto len = 8; len > 0; len--) {
-      crc_g = CRC_Lut[(crc_g ^ data) & 0x0F] & (crc_g >> 4);
-      crc_g = CRC_Lut[(crc_g ^ (data >> 4)) & 0x0F] & (crc_g >> 4);
-      data = Ite((len > 1), ilang::Extract(m.state(CRC_IN), (8*len - 9), 0), 0);
+    for (auto len = 0; len < 8; len++) {
+      current = ilang::Extract(data, (8*len + 7), 8*len);
+      crc_g = CRC_Lut[(crc_g ^ current) & 0x0F] ^ (crc_g >> 4);
+      crc_g = CRC_Lut[(crc_g ^ (current >> 4)) & 0x0F] ^ (crc_g >> 4);
     }
 
-    crc_g = crc_g ^ 0xFFFFFFFF;
-
-    instr.SetUpdate(m.state(CRC), crc_g);
-
+    // update CRC code input for the generator;
+    instr.SetUpdate(m.state(CRC_IN), crc_g);
+    // update the CRC output. Needs transformation.
+    auto crc_output = ~(((crc_g >> 24) & 0x000000FF) | ((crc_g >> 8) & 0x0000FF00) | ((crc_g << 8) & 0x00FF0000) | ((crc_g << 24) & 0xFF000000));
+    instr.SetUpdate(m.state(CRC), crc_output);
+    /******* CRC code update  finished ***********/
 
 
 
@@ -206,19 +213,21 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
     auto h_idx;
     auto l_idx;
 
-    for (auto cnt = 0; cnt < 8; cnt++) {
+    auto bytes_to_send = Ite((m.state(TX_PACKET_BYTES_REMAIN) < 8), m.state(TX_PACKET_BYTES_REMAIN), 8);
+
+    for (auto i = 0; i < bytes_to_send; i++) {
       
-      h_idx = m.state(TX_1G_PAYLOAD_CNTR) * 8 + 7;
-      l_idx = m.state(TX_1G_PAYLOAD_CNTR) * 8;
+      h_idx = i * 8 + 7;
+      l_idx = i * 8;
 
       instr.SetUpdate(m.state(XGMII_DOUT_REG), ilang::Concat(0x07070707070707, ilang::Extract(m.state(TXFIFO_RD_OUTPUT), h_idx, l_idx)));
       instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFE);
 
       // update bytes counts and frame count
       instr.SetUpdate(m.state(TX_PACKET_BYTES_REMAIN), m.state(TX_PACKET_BYTES_REMAIN) - 1);
-      // instr.SetUpdate(m.state(TX_FRAME_CNTR), Ite((m.state(TX_1G_PAYLOAD_CNTR) == 7), m.state(TX_FRAME_CNTR) - 1, m.state(TX_FRAME_CNTR)));
-      // instr.SetUpdate(m.state(TX_1G_PAYLOAD_CNTR), m.state(TX_1G_PAYLOAD_CNTR) + 0x1);
     }
+  
+    instr.SetUpdate(m.state(TX_FRAME_CNTR), m.state(TX_FRAME_CNTR) - 1);
 
 
   }
@@ -239,12 +248,13 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
     instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) - 1);
   
     // Updates
-    // update CRC code
+
+    /******* CRC code update  start ***********/
     auto fq = (m.state(TX_PACKET_BYTES_REMAIN) == m.state(TX_PACKET_BYTE_CNT));
     auto rb = ilang::Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0));
 
     // CRC code update
-    instr.SetUpdate(m.state(CRC_IN), Ite(fq, Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
+    instr.SetUpdate(m.state(CRC_DAT_IN), Ite(fq, Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
                                               Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), 0x0000000),
                                               Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), 0x000000),
                                               Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), 0x00000),
@@ -266,6 +276,25 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
     
     // This buffer should be placed after the CRC update.
     instr.SetUpdate(m.state(TX_BUF), m.state(TXFIFO_RD_OUTPUT));
+
+    // CRC generation, using half_byte algorithm. reference: https://create.stephan-brumme.com/crc32/#half-byte
+    auto crc_g = m.state(CRC_IN);
+    auto data = m.state(CRC_DAT_IN);
+    // The current stores the byte that generator takes. 
+    auto current;
+    
+    for (auto len = 0; len < 8; len++) {
+      current = ilang::Extract(data, (8*len + 7), 8*len);
+      crc_g = CRC_Lut[(crc_g ^ current) & 0x0F] ^ (crc_g >> 4);
+      crc_g = CRC_Lut[(crc_g ^ (current >> 4)) & 0x0F] ^ (crc_g >> 4);
+    }
+
+    // update CRC code input for the generator;
+    instr.SetUpdate(m.state(CRC_IN), crc_g);
+    // update the CRC output. Needs transformation.
+    auto crc_output = ~(((crc_g >> 24) & 0x000000FF) | ((crc_g >> 8) & 0x0000FF00) | ((crc_g << 8) & 0x00FF0000) | ((crc_g << 24) & 0xFF000000));
+    instr.SetUpdate(m.state(CRC), crc_output);
+    /******* CRC code update  finished ***********/
 
 
     // update output and control !!! doesn't use ilang:: namespace here. Caution for errors.
@@ -304,16 +333,18 @@ void WrPktLastOne(Ila& m, const std::string& name) {
     // CRC code should be complete at this step; only need to update the result.
 
     // update output
-    auto crc_finish = (m.state(TX_1G_CRC_CNTR) == 3);
-    auto h_idx = m.state(TX_1G_CRC_CNTR) * 8 + 7;
-    auto l_idx = m.state(TX_1G_CRC_CNTR) * 8;
+    auto h_idx;
+    auto l_idx;
 
-    instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFE);
-    instr.SetUpdate(m.state(XGMII_DOUT_REG), Concat(0x07070707070707, Extract(m.state(CRC), h_idx, l_idx)));
-
+    for (auto i = 0; i < 4; i++) {
+      h_idx = i * 8 + 7;
+      l_idx = i * 8;
+      instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFE);
+      instr.SetUpdate(m.state(XGMII_DOUT_REG), Concat(0x07070707070707, Extract(m.state(CRC), h_idx, l_idx)));
+    }
+    
     // update control states
-    instr.SetUpdate(m.state(TX_1G_CRC_CNTR), m.state(TX_1G_CRC_CNTR) + 1);
-    instr.SetUpdate(m.state(TX_BUSY), Ite(crc_finish, 0, m.state(TX_BUSY)));
+    instr.SetUpdate(m.state(TX_BUSY), 0);
     
   }
 
