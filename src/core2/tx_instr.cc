@@ -203,8 +203,10 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
     // update CRC code input for the generator;
     instr.SetUpdate(m.state(CRC_IN), crc_g);
     // update the CRC output. Needs transformation.
-    auto crc_output = ~(((crc_g >> 24) & 0x000000FF) | ((crc_g >> 8) & 0x0000FF00) | ((crc_g << 8) & 0x00FF0000) | ((crc_g << 24) & 0xFF000000));
-    instr.SetUpdate(m.state(CRC), crc_output);
+    auto crc_code = ~(((crc_g >> 24) & 0x000000FF) | ((crc_g >> 8) & 0x0000FF00) | ((crc_g << 8) & 0x00FF0000) | ((crc_g << 24) & 0xFF000000));
+    instr.SetUpdate(m.state(CRC), crc_code);
+    // when output the crc code, we need to change the endian of the code.
+    auto crc_output = ((crc_code >> 24) & 0x000000FF) | ((crc_code >> 8) & 0x0000FF00) | ((crc_code << 8) & 0x00FF0000) | ((crc_code << 24) & 0xFF000000);
     /******* CRC code update  finished ***********/
 
 
@@ -292,8 +294,11 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
     // update CRC code input for the generator;
     instr.SetUpdate(m.state(CRC_IN), crc_g);
     // update the CRC output. Needs transformation.
-    auto crc_output = ~(((crc_g >> 24) & 0x000000FF) | ((crc_g >> 8) & 0x0000FF00) | ((crc_g << 8) & 0x00FF0000) | ((crc_g << 24) & 0xFF000000));
-    instr.SetUpdate(m.state(CRC), crc_output);
+    auto crc_code = ~(((crc_g >> 24) & 0x000000FF) | ((crc_g >> 8) & 0x0000FF00) | ((crc_g << 8) & 0x00FF0000) | ((crc_g << 24) & 0xFF000000));
+    instr.SetUpdate(m.state(CRC), crc_code);
+
+    // when output the crc code, we need to change the endian of the code.
+    auto crc_output = ((crc_code >> 24) & 0x000000FF) | ((crc_code >> 8) & 0x0000FF00) | ((crc_code << 8) & 0x00FF0000) | ((crc_code << 24) & 0xFF000000);
     /******* CRC code update  finished ***********/
 
 
@@ -301,9 +306,9 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
     auto residue = ilang::Extract(TX_PACKET_BYTE_CNT, 2, 0);
     instr.SetUpdate(m.state(XGMII_COUT_REG), 0x00);
     instr.SetUpdate(m.state(XGMII_DOUT_REG), Ite((m.state(TX_FRAME_CNTR) > 2), m.state(TXFIFO_RD_OUTPUT),
-                                             Ite((residue == 5),Concat(Extract(m.state(CRC), 23, 0), Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0)),
-                                             Ite((residue == 6),Concat(Extract(m.state(CRC), 15, 0), Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0)),
-                                             Ite((residue == 7),Concat(Extract(m.state(CRC), 7, 0), Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0)),
+                                             Ite((residue == 5),Concat(Extract(crc_output, 23, 0), Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0)),
+                                             Ite((residue == 6),Concat(Extract(crc_output, 15, 0), Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0)),
+                                             Ite((residue == 7),Concat(Extract(crc_output, 7, 0), Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0)),
                                              m.state(TXFIFO_RD_OUTPUT))))));
     // update frame counts
     instr.SetUpdate(m.state(TX_FRAME_CNTR), m.state(TX_FRAME_CNTR) - 1);
@@ -332,6 +337,9 @@ void WrPktLastOne(Ila& m, const std::string& name) {
 
     // CRC code should be complete at this step; only need to update the result.
 
+    // we need to change the endian of the crc code for the output.
+    auto crc_output = ((m.state(CRC) >> 24) & 0x000000FF) | ((m.state(CRC) >> 8) & 0x0000FF00) | ((m.state(CRC) << 8) & 0x00FF0000) | ((m.state(CRC) << 24) & 0xFF000000);
+
     // update output
     auto h_idx;
     auto l_idx;
@@ -340,7 +348,7 @@ void WrPktLastOne(Ila& m, const std::string& name) {
       h_idx = i * 8 + 7;
       l_idx = i * 8;
       instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFE);
-      instr.SetUpdate(m.state(XGMII_DOUT_REG), Concat(0x07070707070707, Extract(m.state(CRC), h_idx, l_idx)));
+      instr.SetUpdate(m.state(XGMII_DOUT_REG), Concat(0x07070707070707, Extract(crc_output, h_idx, l_idx)));
     }
     
     // update control states
@@ -359,16 +367,18 @@ void WrPktLastOne(Ila& m, const std::string& name) {
     // Update
     auto residue = ilang::Extract(TX_PACKET_BYTE_CNT, 2, 0);
     auto dat = m.state(TXFIFO_RD_OUTPUT);
-    auto crc = m.state(CRC);
+    
+    // we need to change the endian of the crc code for the output.
+    auto crc_output = ((m.state(CRC) >> 24) & 0x000000FF) | ((m.state(CRC) >> 8) & 0x0000FF00) | ((m.state(CRC) << 8) & 0x00FF0000) | ((m.state(CRC) << 24) & 0xFF000000);
 
-    instr.SetUpdate(m.state(XGMII_DOUT_REG), Ite((residue == 0), Concat(0xf7f7f7FD, crc),
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), Ite((residue == 0), Concat(0xf7f7f7FD, crc_output),
                                              Ite((residue == 1), Concat(0xf7f7FD, Concat(crc, Extract(dat, 7, 0))),
                                              Ite((residue == 2), Concat(0xf7FD, Concat(crc, Extract(dat, 15, 0))),
                                              Ite((residue == 3), Concat(0xFD, Concat(crc, Extract(dat, 23, 0))),
-                                             Ite((residue == 4), Concat(crc, dat),
-                                             Ite((residue == 5), Concat(0xf7f7f7f7f7f7FD, Extract(crc, 31, 24)),
-                                             Ite((residue == 6), Concat(0xf7f7f7f7f7FD, Extract(crc, 31, 16)),
-                                                                 Concat(0xf7f7f7f7FD, Extract(crc, 31, 8))))))))));
+                                             Ite((residue == 4), Concat(crc_output, dat),
+                                             Ite((residue == 5), Concat(0xf7f7f7f7f7f7FD, Extract(crc_output, 31, 24)),
+                                             Ite((residue == 6), Concat(0xf7f7f7f7f7FD, Extract(crc_output, 31, 16)),
+                                                                 Concat(0xf7f7f7f7FD, Extract(crc_output, 31, 8))))))))));
     
     instr.SetUpdate(m.state(XGMII_COUT_REG), Ite((residue == 0), 0xF0,
                                              Ite((residue == 1), 0xE0,
