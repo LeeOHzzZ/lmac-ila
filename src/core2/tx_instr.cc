@@ -14,6 +14,7 @@
 //  - write pay load (tail)
 
 #include <lmac/core2/lmac_core_top.h>
+#include <lmac/core2/configs.h>
 
 #include <ilang/util/log.h>
 
@@ -166,22 +167,22 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
 
     // CRC code update
     instr.SetUpdate(m.state(CRC_DAT_IN), Ite(fq, Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
-                                              Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), 0x0000000),
-                                              Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), 0x000000),
-                                              Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), 0x00000),
-                                              Ite((rb == 0x4), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), 0x0000),
-                                              Ite((rb == 0x5), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), 0x000),
-                                              Ite((rb == 0x6), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), 0x00),
-                                              Ite((rb == 0x7), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), 0x0))))))))),
+                                              Ite((rb == 0x1), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), 0x0000000),
+                                              Ite((rb == 0x2), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), 0x000000),
+                                              Ite((rb == 0x3), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), 0x00000),
+                                              Ite((rb == 0x4), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), 0x0000),
+                                              Ite((rb == 0x5), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), 0x000),
+                                              Ite((rb == 0x6), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), 0x00),
+                                              Ite((rb == 0x7), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), 0x0))))))))),
 
                                               Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
-                                              Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), Extract(m.state(TX_BUF),  63, 8)),
-                                              Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), Extract(m.state(TX_BUF),  63, 16)),
-                                              Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), Extract(m.state(TX_BUF),  63, 24)),
-                                              Ite((rb == 0x4), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), Extract(m.state(TX_BUF),  63, 32)),
-                                              Ite((rb == 0x5), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), Extract(m.state(TX_BUF),  63, 40)),
-                                              Ite((rb == 0x6), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), Extract(m.state(TX_BUF),  63, 48)),
-                                              Ite((rb == 0x7), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), Extract(m.state(TX_BUF),  63, 56))))))))))
+                                              Ite((rb == 0x1), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), ilang::Extract(m.state(TX_BUF),  63, 8)),
+                                              Ite((rb == 0x2), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), ilang::Extract(m.state(TX_BUF),  63, 16)),
+                                              Ite((rb == 0x3), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), ilang::Extract(m.state(TX_BUF),  63, 24)),
+                                              Ite((rb == 0x4), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), ilang::Extract(m.state(TX_BUF),  63, 32)),
+                                              Ite((rb == 0x5), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), ilang::Extract(m.state(TX_BUF),  63, 40)),
+                                              Ite((rb == 0x6), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), ilang::Extract(m.state(TX_BUF),  63, 48)),
+                                              Ite((rb == 0x7), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), ilang::Extract(m.state(TX_BUF),  63, 56))))))))))
                                   
                                   ));
     
@@ -257,22 +258,22 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
 
     // CRC code update
     instr.SetUpdate(m.state(CRC_DAT_IN), Ite(fq, Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
-                                              Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), 0x0000000),
-                                              Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), 0x000000),
-                                              Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), 0x00000),
-                                              Ite((rb == 0x4), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), 0x0000),
-                                              Ite((rb == 0x5), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), 0x000),
-                                              Ite((rb == 0x6), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), 0x00),
-                                              Ite((rb == 0x7), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), 0x0))))))))),
+                                              Ite((rb == 0x1), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), 0x0000000),
+                                              Ite((rb == 0x2), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), 0x000000),
+                                              Ite((rb == 0x3), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), 0x00000),
+                                              Ite((rb == 0x4), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), 0x0000),
+                                              Ite((rb == 0x5), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), 0x000),
+                                              Ite((rb == 0x6), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), 0x00),
+                                              Ite((rb == 0x7), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), 0x0))))))))),
 
                                               Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
-                                              Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), Extract(m.state(TX_BUF),  63, 8)),
-                                              Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), Extract(m.state(TX_BUF),  63, 16)),
-                                              Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), Extract(m.state(TX_BUF),  63, 24)),
-                                              Ite((rb == 0x4), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), Extract(m.state(TX_BUF),  63, 32)),
-                                              Ite((rb == 0x5), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), Extract(m.state(TX_BUF),  63, 40)),
-                                              Ite((rb == 0x6), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), Extract(m.state(TX_BUF),  63, 48)),
-                                              Ite((rb == 0x7), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), Extract(m.state(TX_BUF),  63, 56))))))))))
+                                              Ite((rb == 0x1), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), ilang::Extract(m.state(TX_BUF),  63, 8)),
+                                              Ite((rb == 0x2), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), ilang::Extract(m.state(TX_BUF),  63, 16)),
+                                              Ite((rb == 0x3), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), ilang::Extract(m.state(TX_BUF),  63, 24)),
+                                              Ite((rb == 0x4), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), ilang::Extract(m.state(TX_BUF),  63, 32)),
+                                              Ite((rb == 0x5), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), ilang::Extract(m.state(TX_BUF),  63, 40)),
+                                              Ite((rb == 0x6), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), ilang::Extract(m.state(TX_BUF),  63, 48)),
+                                              Ite((rb == 0x7), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), ilang::Extract(m.state(TX_BUF),  63, 56))))))))))
                                   
                                   ));
     
@@ -306,9 +307,9 @@ void WrPktPayLoad(Ila& m, const std::string& name) {
     auto residue = ilang::Extract(TX_PACKET_BYTE_CNT, 2, 0);
     instr.SetUpdate(m.state(XGMII_COUT_REG), 0x00);
     instr.SetUpdate(m.state(XGMII_DOUT_REG), Ite((m.state(TX_FRAME_CNTR) > 2), m.state(TXFIFO_RD_OUTPUT),
-                                             Ite((residue == 5),Concat(Extract(crc_output, 23, 0), Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0)),
-                                             Ite((residue == 6),Concat(Extract(crc_output, 15, 0), Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0)),
-                                             Ite((residue == 7),Concat(Extract(crc_output, 7, 0), Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0)),
+                                             Ite((residue == 5), ilang::Concat(ilang::Extract(crc_output, 23, 0), ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0)),
+                                             Ite((residue == 6), ilang::Concat(ilang::Extract(crc_output, 15, 0), ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0)),
+                                             Ite((residue == 7), ilang::Concat(ilang::Extract(crc_output, 7, 0), ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0)),
                                              m.state(TXFIFO_RD_OUTPUT))))));
     // update frame counts
     instr.SetUpdate(m.state(TX_FRAME_CNTR), m.state(TX_FRAME_CNTR) - 1);
@@ -348,7 +349,7 @@ void WrPktLastOne(Ila& m, const std::string& name) {
       h_idx = i * 8 + 7;
       l_idx = i * 8;
       instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFE);
-      instr.SetUpdate(m.state(XGMII_DOUT_REG), Concat(0x07070707070707, Extract(crc_output, h_idx, l_idx)));
+      instr.SetUpdate(m.state(XGMII_DOUT_REG), ilang::Concat(0x07070707070707, ilang::Extract(crc_output, h_idx, l_idx)));
     }
     
     // update control states
@@ -371,14 +372,14 @@ void WrPktLastOne(Ila& m, const std::string& name) {
     // we need to change the endian of the crc code for the output.
     auto crc_output = ((m.state(CRC) >> 24) & 0x000000FF) | ((m.state(CRC) >> 8) & 0x0000FF00) | ((m.state(CRC) << 8) & 0x00FF0000) | ((m.state(CRC) << 24) & 0xFF000000);
 
-    instr.SetUpdate(m.state(XGMII_DOUT_REG), Ite((residue == 0), Concat(0xf7f7f7FD, crc_output),
-                                             Ite((residue == 1), Concat(0xf7f7FD, Concat(crc, Extract(dat, 7, 0))),
-                                             Ite((residue == 2), Concat(0xf7FD, Concat(crc, Extract(dat, 15, 0))),
-                                             Ite((residue == 3), Concat(0xFD, Concat(crc, Extract(dat, 23, 0))),
-                                             Ite((residue == 4), Concat(crc_output, dat),
-                                             Ite((residue == 5), Concat(0xf7f7f7f7f7f7FD, Extract(crc_output, 31, 24)),
-                                             Ite((residue == 6), Concat(0xf7f7f7f7f7FD, Extract(crc_output, 31, 16)),
-                                                                 Concat(0xf7f7f7f7FD, Extract(crc_output, 31, 8))))))))));
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), Ite((residue == 0), ilang::Concat(0xf7f7f7FD, crc_output),
+                                             Ite((residue == 1), ilang::Concat(0xf7f7FD, ilang::Concat(crc, ilang::Extract(dat, 7, 0))),
+                                             Ite((residue == 2), ilang::Concat(0xf7FD, ilang::Concat(crc, ilang::Extract(dat, 15, 0))),
+                                             Ite((residue == 3), ilang::Concat(0xFD, ilang::Concat(crc, ilang::Extract(dat, 23, 0))),
+                                             Ite((residue == 4), ilang::Concat(crc_output, dat),
+                                             Ite((residue == 5), ilang::Concat(0xf7f7f7f7f7f7FD, ilang::Extract(crc_output, 31, 24)),
+                                             Ite((residue == 6), ilang::Concat(0xf7f7f7f7f7FD, ilang::Extract(crc_output, 31, 16)),
+                                                                 ilang::Concat(0xf7f7f7f7FD, ilang::Extract(crc_output, 31, 8))))))))));
     
     instr.SetUpdate(m.state(XGMII_COUT_REG), Ite((residue == 0), 0xF0,
                                              Ite((residue == 1), 0xE0,

@@ -42,25 +42,26 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   // State that indicate the tx path is busy and not ready for next packet read.
   NewState(m, TX_BUSY, TX_BUSY_BWID);
   // State that indicates that the number of frames to send.
-  NewState(m, TX_FRAME_CNTR, TX_FRAME_CNTT_BWID);
-  // State counter for sending the CRC code at mode_1G
-  NewState(m, TX_1G_CRC_CNTR, 2);
+  NewState(m, TX_FRAME_CNTR, TX_FRAME_CNTR_BWID);
+  // register for byte count, store at the reading the first QWord of ethernet package.
+  NewState(m, TX_PACKET_BYTE_CNT, TX_PACKET_BYTE_CNT_BWID);
+  // register the remaining bytes to transmit
+  NewState(m, TX_PACKET_BYTES_REMAIN, TX_PACKET_BYTES_REMAIN_BWID);
+  // Read output of the TX FIFO
+  NewState(m, TXFIFO_RD_OUTPUT, TXFIFO_RD_OUTPUT_BWID);
+  // register for CRC, store the 4byte CRC
+  NewState(m, CRC, CRC_BWID);
   // Buffer for CRC Code generation
-  NewState(m, TX_BUF, 64);
-  NewState(m, TX_BUF_1, 64);
+  NewState(m, TX_BUF, TX_BUF_BWID);
   // State for CRC data input
-  NewState(m, CRC_DAT_IN, 64);
+  NewState(m, CRC_DAT_IN, CRC_DAT_IN_BWID);
   // State for previous crc code input
-  NewState(m, CRC_IN, 64);
+  NewState(m, CRC_IN, CRC_DAT_IN_BWID);
 
 
 
 /****************** **********************************/
-  // Read Enable signal for TX FIFO
-  NewInput(m, TXFIFO_RD_EN, TXFIFO_RD_EN_BWID);
-
-  // Read output of the TX FIFO
-  NewState(m, TXFIFO_RD_OUTPUT, TXFIFO_RD_OUTPUTBWID);
+// These two architectural states are actually at the interface of PHY.
 
   // register for result output, xgmii or gmii
   NewState(m, XGMII_DOUT_REG, XGMII_DOUT_REG_BWID);
@@ -68,14 +69,6 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   // register for output control, bytes valid information, 8bits signal for 8bytes(64bit) output
   NewState(m, XGMII_COUT_REG, XGMII_COUT_REG_BWID);
 
-  // register for CRC, store the 4byte CRC
-  NewState(m, CRC, CRC_BWID);
-
-  // register for byte count, store at the reading the first QWord of ethernet package.
-  NewState(m, TX_PACKET_BYTE_CNT, TX_PACKET_BYTE_CNT_BWID);
-  
-  // register the remaining bytes to transmit
-  NewState(m, TX_PACKET_BYTES_REMAIN, TX_PACKET_BYTES_REMAIN_CNT_BWID);
 
 
 
