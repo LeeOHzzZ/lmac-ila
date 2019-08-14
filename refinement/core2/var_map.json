@@ -44,6 +44,8 @@
     "RX_IPCS_EMPTY"             : "m1.cs_fifo_empty",
     "RX_PKT_DATA"               : "m1.core.drx_pkt_data",
     "RX_PKT_EMPTY"              : "m1.rx_mac_empty"
+
+  
   },
 
   "interface mapping": {
