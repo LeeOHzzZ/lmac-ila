@@ -1,8 +1,19 @@
 {
     "instructions": [
+
+
         {
             "instruction"       :   "WR_PKT_DATA_FIFO",
-            "ready bound"
+            "ready bound"       :   1
         },
-    ],
+
+        {
+            "instruction"       :   "WR_PKT_BYTE_CNT",
+            "ready bound"       :   ?
+        },
+
+        
+
+
+    ]
 }

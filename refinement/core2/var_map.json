@@ -36,14 +36,26 @@
     "FMAC_RX_PKT_CNT1023_HI"    : "m1.FMAC_RX_PKT_CNT1023_HI",
     "FMAC_RX_PKT_CNT1518_LO"    : "m0.FMAC_RX_PKT_CNT1518_LO == m1.FMAC_RX_PKT_CNT1518_LO[31:0]",
     "FMAC_RX_PKT_CNT1518_HI"    : "m1.FMAC_RX_PKT_CNT1518_HI",
-    "TXFIFO_FULL"               : "m1.tx_mac_full",
-    "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw",
+    
 
     // XXX: double check
     "RX_IPCS_DATA"              : "m1.ipcs_fifo_dout",
     "RX_IPCS_EMPTY"             : "m1.cs_fifo_empty",
     "RX_PKT_DATA"               : "m1.core.drx_pkt_data",
-    "RX_PKT_EMPTY"              : "m1.rx_mac_empty"
+    "RX_PKT_EMPTY"              : "m1.rx_mac_empty",
+
+    // TX Path
+    "TX_WE"                     : "m1.tx_mac_wr",
+    "TX_DATA"                   : "m1.tx_mac_data",
+    "TXFIFO_FULL"               : "m1.tx_mac_full",
+    "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw",
+
+    "MODE_1G"                   : "m1.mode_1G",
+
+    // TX Path to PHY interface
+    "XGMII_DOUT_REG"            : "m1.xgmii_txd",
+    "XGMII_COUT_REG"            : "m1.xgmii_txc"
+    
 
   
   },

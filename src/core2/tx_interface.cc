@@ -43,7 +43,7 @@ void LmacCore2::SetupTxInterface(Ila& m) {
   // 1, means data is valid on TX_DATA[63:56]
   //
   // The internal logic of the LMAC generates its own byte enable.
-  NewInput(m, TX_BE, TX_BE_BWID);
+  // NewInput(m, TX_BE, TX_BE_BWID);
 
   // 1 = the internal TX FIFO is full and cannot accept any more packet.
   NewState(m, TXFIFO_FULL, TXFIFO_FULL_BWID);

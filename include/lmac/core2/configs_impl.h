@@ -88,6 +88,10 @@ namespace ilang {
 #define CRC_IN "CRC_IN"
 #define CRC_IN_BWID CRC_BWID
 
+// State for writing the EOF of the TX path
+#define TX_EOF "TX_EOF"
+#define TX_EOF_BWID 1
+
 // -------------------------------------------------------------------------- //
 // PHY Interface. Temperally placed here
 // -------------------------------------------------------------------------- //

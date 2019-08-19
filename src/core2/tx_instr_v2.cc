@@ -24,22 +24,28 @@ void WrPktFIFO(Ila& m, const std::string& name = "TX_WR_PKT_FIFO");
 void WrPktByteCnt(Ila& m, const std::string& name = "TX_WR_PKT_BYTE_CNT");
 void WrPktPayLoad(Ila& m, const std::string& name = "TX_WR_PKT_PAY_LOAD");
 void WrPktLastOne(Ila& m, const std::string& name = "TX_WR_PKT_LAST_ONE");
+void WrPktEOF(Ila& m, const std::string& name = "TX_WR_PKT_EOF");
+
+void WrPkt(Ila& m, const std::string& name = "TX_WR_PKT");
+
 
 void LmacCore2::SetupTxInstr(Ila& m) {
 
-  /********** Added by Yi Li **************/
-  // Write bytes into FIFO
-  WrPktFIFO(m);
-  /********** Added by Yi Li **************/
+//   /********** Added by Yi Li **************/
+//   // Write bytes into FIFO
+//   WrPktFIFO(m);
+//   /********** Added by Yi Li **************/
 
-  // send the byte count of the packet
-  WrPktByteCnt(m);
+//   // send the byte count of the packet
+//   WrPktByteCnt(m);
 
-  // send the payload (except the last one)
-  WrPktPayLoad(m);
+//   // send the payload (except the last one)
+//   WrPktPayLoad(m);
 
-  // send the last chunk in the payload
-  WrPktLastOne(m);
+//   // send the last chunk in the payload
+//   WrPktLastOne(m);
+
+  WrPkt(m);
 
   return;
 }
@@ -53,6 +59,26 @@ unsigned CRC_Lut[16] = {
   0xEDB88320,0xF00F9344,0xD6D6A3E8,0xCB61B38C,0x9B64C2B0,0x86D3D2D4,0xA00AE278,0xBDBDF21C
 };
 
+void WrPkt(Ila& m, const std::string& name) {
+  // Working at the 1G mode
+  {
+    auto instr = m.NewInstr("WR_PKT_1G");
+
+    // decode
+    auto mode_1G = (m.input(MODE_1G) == 1);
+    auto wr_enable = (m.input(TX_WE) == TX_WE_V_VALID);
+    auto fifo_non_full = (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
+
+    instr.SetDecode(mode_1g & wr_enable & fifo_non_full);
+
+    // Write packet into FIFO
+    WrPktFIFO(m);
+    // Write packet count
+    WrPktByteCnt(m);
+  }
+    
+}
+
 
 void WrPktFIFO(Ila& m, const std::string& name) {
   // This instruction model the writing data into FIFO of TX
@@ -60,9 +86,9 @@ void WrPktFIFO(Ila& m, const std::string& name) {
     auto instr = m.NewInstr("WR_PKT_DATA_FIFO");
 
     // decode
-    auto wr_enable = (m.input(TX_WE) == TX_WE_V_VALID);
-    auto fifo_non_full = (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
-    instr.SetDecode(wr_enable && fifo_non_full);
+    // auto wr_enable = (m.input(TX_WE) == TX_WE_V_VALID);
+    // auto fifo_non_full = (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
+    instr.SetDecode(BoolConst(true));
 
     // update
     instr.SetUpdate(TXFIFO_BUFF, Store(TXFIFO_BUFF, TXFIFO_BUFF_WR_PTR, m.input(TX_DATA)) );
@@ -81,16 +107,19 @@ void WrPktByteCnt(Ila& m, const std::string& name) {
   // handle the bytecount of the ethernet packet. The first QWord doesn't go to the output. only contain the byte count information for control and record
 
 
-  { // handling recording the byte counts
-    auto instr = m.NewInstr("WR_PKT_BYTE_CNT");
+  { // working at 1G mode is different from other modes
+    // handling recording the byte counts
+    auto instr = m.NewInstr("WR_PKT_BYTE_CNT_1G");
 
     // decode 
     auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0);
     auto tx_non_busy = (m.state(TX_BUSY) == 0);
-    instr.SetDecode(fifo_non_empty & tx_non_busy);
+    auto mode_1G = (m.input(MODE_1G) == 1);
+    instr.SetDecode(fifo_non_empty & tx_non_busy & mode_1G);
 
     // state update
     instr.SetUpdate(m.state(TX_BUSY), 1);
+    instr.SetUpdate(m.state(TX_EOF), 0);
 
     // Read FIFO
     instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Load(TXFIFO_BUFF, TXFIFO_BUFF_RD_PTR));
@@ -104,7 +133,62 @@ void WrPktByteCnt(Ila& m, const std::string& name) {
     // update the frame needed to transmit the packet.
     instr.SetUpdate(m.state(TX_FRAME_CNTR), (m.state(TX_PACKET_BYTE_CNT) >> 3) + 1);
     // Set the TX control signal. Different control signal for mode 1G and the others
-    instr.SetUpdate(m.state(XGMII_COUT_REG), Ite(m.input(MODE_1G), 0xFE, 0x01));
+    instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFE);
+
+
+    // Set initial value of the CRC. This initial value is the output data. However the one that participates in the generation is different.
+    auto rb = ilang::Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0)); // rb stands for residual bytes
+    instr.SetUpdate(m.state(CRC), Ite((rb == 0x0), 0x00000000,
+                                  Ite((rb == 0x1), 0x56a579b9,
+                                  Ite((rb == 0x2), 0xe962b350,
+                                  Ite((rb == 0x3), 0x3306840b,
+                                  Ite((rb == 0x4), 0x9d0ad96d,
+                                  Ite((rb == 0x5), 0x7ed9d15c,
+                                  Ite((rb == 0x6), 0x6f62e365,
+                                  Ite((rb == 0x7), 0x26706a0f))))))))
+                    );
+    
+    instr.SetUpdate(m.state(CRC_IN), Ite((rb == 0x0), 0xffffffff,
+                                  Ite((rb == 0x1), 0x46865aa9,
+                                  Ite((rb == 0x2), 0xaf4c9d16,
+                                  Ite((rb == 0x3), 0xf47bf9cc,
+                                  Ite((rb == 0x4), 0x9226f562,
+                                  Ite((rb == 0x5), 0xa32e2681,
+                                  Ite((rb == 0x6), 0x9a1c9d90,
+                                  Ite((rb == 0x7), 0xf0958fd9))))))))
+                    );
+  }
+
+  { // handling recording the byte counts
+    auto instr = m.NewInstr("WR_PKT_BYTE_CNT");
+
+    // decode 
+    auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0);
+    auto tx_non_busy = (m.state(TX_BUSY) == 0);
+    auto non_mode_1G = (m.input(MODE_1G) == 0);
+    
+    instr.SetDecode(fifo_non_empty & tx_non_busy & non_mode_1G);
+
+    // state update
+    instr.SetUpdate(m.state(TX_BUSY), 1);
+    instr.SetUpdate(m.state(TX_EOF), 0);
+
+    // Read FIFO
+    instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Load(TXFIFO_BUFF, TXFIFO_BUFF_RD_PTR));
+    instr.SetUpdate(m.state(TXFIFO_BUFF_RD_PTR), m.state(TXFIFO_BUFF_RD_PTR) + 1);
+    instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) - 1);
+
+    // Read the byte count information
+    instr.SetUpdate(m.state(TX_PACKET_BYTE_CNT), ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0));
+    // update remaining bytes number. Not sure why subracted by 8. (may not needed)
+    instr.SetUpdate(m.state(TX_PACKET_BYTES_REMAIN), m.state(TX_PACKET_BYTE_CNT));
+    // update the frame needed to transmit the packet.
+    instr.SetUpdate(m.state(TX_FRAME_CNTR), (m.state(TX_PACKET_BYTE_CNT) >> 3) + 1);
+    // Set the TX control signal. Different control signal for mode 1G and the others
+    instr.SetUpdate(m.state(XGMII_COUT_REG), 0x01);
+    // Set the TX data output signal. Inserting the preamble and SFD field.
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), 0xD5555555555555FB);
+
 
     // Set initial value of the CRC. This initial value is the output data. However the one that participates in the generation is different.
     auto rb = ilang::Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0)); // rb stands for residual bytes
@@ -331,8 +415,9 @@ void WrPktLastOne(Ila& m, const std::string& name) {
     auto mode_1G = (m.input(MODE_1G) == 1);
     auto no_bytes = (m.state(TX_PACKET_BYTES_REMAIN) == 0);
     auto tx_busy = (m.state(TX_BUSY) == 1);
+    auto non_eof = (m.state(TX_EOF) == 0);
 
-    instr.SetDecode(mode_1G & no_bytes & tx_busy);
+    instr.SetDecode(mode_1G & no_bytes & tx_busy & non_eof);
 
     // Update
 
@@ -353,7 +438,7 @@ void WrPktLastOne(Ila& m, const std::string& name) {
     }
     
     // update control states
-    instr.SetUpdate(m.state(TX_BUSY), 0);
+    instr.SetUpdate(m.state(TX_EOF), 1);
     
   }
 
@@ -364,6 +449,9 @@ void WrPktLastOne(Ila& m, const std::string& name) {
     auto non_mode_1G = (m.input(MODE_1G) == 0);
     auto last_frame = (m.state(TX_FRAME_CNTR) == 1);
     auto tx_busy = (m.state(TX_BUSY) == 1);
+    auto non_eof = (m.state(TX_EOF) == 0);
+
+    instr.SetDecode(non_mode_1G & last_frame & tx_busy & non_eof);
 
     // Update
     auto residue = ilang::Extract(TX_PACKET_BYTE_CNT, 2, 0);
@@ -372,14 +460,14 @@ void WrPktLastOne(Ila& m, const std::string& name) {
     // we need to change the endian of the crc code for the output.
     auto crc_output = ((m.state(CRC) >> 24) & 0x000000FF) | ((m.state(CRC) >> 8) & 0x0000FF00) | ((m.state(CRC) << 8) & 0x00FF0000) | ((m.state(CRC) << 24) & 0xFF000000);
 
-    instr.SetUpdate(m.state(XGMII_DOUT_REG), Ite((residue == 0), ilang::Concat(0xf7f7f7FD, crc_output),
-                                             Ite((residue == 1), ilang::Concat(0xf7f7FD, ilang::Concat(crc, ilang::Extract(dat, 7, 0))),
-                                             Ite((residue == 2), ilang::Concat(0xf7FD, ilang::Concat(crc, ilang::Extract(dat, 15, 0))),
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), Ite((residue == 0), ilang::Concat(0x070707FD, crc_output),
+                                             Ite((residue == 1), ilang::Concat(0x0707FD, ilang::Concat(crc, ilang::Extract(dat, 7, 0))),
+                                             Ite((residue == 2), ilang::Concat(0x07FD, ilang::Concat(crc, ilang::Extract(dat, 15, 0))),
                                              Ite((residue == 3), ilang::Concat(0xFD, ilang::Concat(crc, ilang::Extract(dat, 23, 0))),
                                              Ite((residue == 4), ilang::Concat(crc_output, dat),
-                                             Ite((residue == 5), ilang::Concat(0xf7f7f7f7f7f7FD, ilang::Extract(crc_output, 31, 24)),
-                                             Ite((residue == 6), ilang::Concat(0xf7f7f7f7f7FD, ilang::Extract(crc_output, 31, 16)),
-                                                                 ilang::Concat(0xf7f7f7f7FD, ilang::Extract(crc_output, 31, 8))))))))));
+                                             Ite((residue == 5), ilang::Concat(0x070707070707FD, ilang::Extract(crc_output, 31, 24)),
+                                             Ite((residue == 6), ilang::Concat(0x0707070707FD, ilang::Extract(crc_output, 31, 16)),
+                                                                 ilang::Concat(0x07070707FD, ilang::Extract(crc_output, 31, 8))))))))));
     
     instr.SetUpdate(m.state(XGMII_COUT_REG), Ite((residue == 0), 0xF0,
                                              Ite((residue == 1), 0xE0,
@@ -390,8 +478,51 @@ void WrPktLastOne(Ila& m, const std::string& name) {
                                              Ite((residue == 6), 0xFC,
                                                                  0xF8))))))));
 
-    instr.SetUpdate(m.state(TX_BUSY), 0);
+    instr.SetUpdate(m.state(TX_EOF), 1);
 
+  }
+
+  return;
+}
+
+void WrPktEOF(Ila& m, const std::string& name) {
+  
+  // writing EoF for mode 1G
+  {
+    auto instr = m.NewInstr("WR_PKT_EOF_1G");
+    // decode 
+    auto mode_1G = (m.input(MODE_1G) == 1);
+    auto tx_busy = (m.state(TX_BUSY) == 1);
+    auto tx_eof = (m.state(TX_EOF) == 1);
+
+    instr.SetDecode(mode_1G & tx_busy & tx_eof);
+
+    // state update. Only adding the eof at the output
+    instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFF);
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), 0x07070707070707fd);
+    instr.SetUpdate(m.state(TX_BUSY), 0);
+    instr.SetUpdate(m.state(TX_EOF), 0);
+
+  }
+
+  {
+    auto instr = m.NewInstr("WR_PKT_EOF");
+    
+    // Decode
+    auto non_mode_1G = (m.input(MODE_1G) == 0);
+    auto tx_busy = (m.state(TX_BUSY) == 1);
+    auto tx_eof = (m.state(TX_EOF) == 1);
+
+    instr.SetDecode(non_mode_1G & tx_busy & tx_eof);
+
+    // State Update.
+    auto residue = ilang::Extract(TX_PACKET_BYTE_CNT, 2, 0);
+
+    instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFF);
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), Ite((residue == 4), 0x07070707070707fd, 0x0707070707070707));
+    instr.SetUpdate(m.state(TX_BUSY), 0);
+    instr.SetUpdate(m.state(TX_EOF), 0);
+  
   }
 
   return;

@@ -57,6 +57,13 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   NewState(m, CRC_DAT_IN, CRC_DAT_IN_BWID);
   // State for previous crc code input
   NewState(m, CRC_IN, CRC_DAT_IN_BWID);
+  // State for heading to EOF state;
+  NewState(m, TX_EOF, TX_EOF_BWID);
+
+
+
+  // State counter for output data at mode 1G, 3bit
+  NewState(m, MODE_1G_CNTR, MODE_1G_CNTR_BWID);
 
 
 
