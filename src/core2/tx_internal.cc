@@ -33,9 +33,38 @@ void LmacCore2::SetupTxInternal(Ila& m) {
 
   ///////////////// Modified by Yi Li //////////////
 
-  // operating mode, only 1G mode would have significant difference.
+  // operating modes
   // This input affect both the RX and TX. It is placed here temperally  
   NewInput(m, MODE_1G, MODE_1G_BWID);
+  NewInput(m, MODE_2P5G, MODE_2P5G_BWID);
+  NewInput(m, MODE_5G, MODE_5G_BWID);
+  NewInput(m, MODE_10G, MODE_10G_BWID);
+
+  //////////////////////////////////
+  // Internal Architectual States
+  //////////////////////////////////
+  // TX state machine
+  NewState(m, TX_STATE, TX_STATE_BWID);
+  // TX B2B counter
+  NewState(m, TX_B2B_CNTR, TX_B2B_CNTR_BWID);
+  // State holding the packet byte count, which is in the first Qword of the packet.
+  NewState(m, TX_PACKET_BYTE_CNT, TX_PACKET_BYTE_CNT_BWID);
+  // State recording the frames needed to transmit the whole package in bytes. reg wcnt in xgmii
+  NewState(m, TX_WCNT, TX_WCNT_BWID);
+  // State for insert CRC and EOF
+  NewState(m, TX_INSERT_CRC, TX_INSERT_CRC_BWID);
+
+
+
+  //////////////////////////////////
+  // Internal Non Architectual States
+  //////////////////////////////////
+  // State holding the initial wcnt count, used for crc input
+  NewState(m, TX_WCNT_INI, TX_WCNT_INI_BWID);
+  // Buffer for CRC Code generation
+  NewState(m, TX_BUF, TX_BUF_BWID);
+
+
 
 
   /* These are non-architectural states */
@@ -51,8 +80,7 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   NewState(m, TXFIFO_RD_OUTPUT, TXFIFO_RD_OUTPUT_BWID);
   // register for CRC, store the 4byte CRC
   NewState(m, CRC, CRC_BWID);
-  // Buffer for CRC Code generation
-  NewState(m, TX_BUF, TX_BUF_BWID);
+
   // State for CRC data input
   NewState(m, CRC_DAT_IN, CRC_DAT_IN_BWID);
   // State for previous crc code input

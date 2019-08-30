@@ -44,8 +44,16 @@ Ila LmacCore2::New(const std::string& name) {
 
   { // valid
     // TX FIFO
-    auto tx_valid = (m.input(TX_WE) == TX_WE_V_VALID) &
-                    (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
+    // auto tx_valid = (m.input(TX_WE) == TX_WE_V_VALID) &
+    //                 (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
+
+    /* When using the TX_WE as valid function would have a problem. Writing FIFO and transimiting the packet is at
+    different time. In other words, when the TX path is actually transmitting the packet, the TX in ILA may not be valid */
+
+    // TX FIFO
+    // Set the TX valid to always true.
+    auto tx_valid = true;
+
     // RX FIFO
     auto rx_valid = true;
 

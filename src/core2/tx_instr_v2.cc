@@ -26,26 +26,25 @@ void WrPktPayLoad(Ila& m, const std::string& name = "TX_WR_PKT_PAY_LOAD");
 void WrPktLastOne(Ila& m, const std::string& name = "TX_WR_PKT_LAST_ONE");
 void WrPktEOF(Ila& m, const std::string& name = "TX_WR_PKT_EOF");
 
-void WrPkt(Ila& m, const std::string& name = "TX_WR_PKT");
+// void WrPkt(Ila& m, const std::string& name = "TX_WR_PKT");
 
 
 void LmacCore2::SetupTxInstr(Ila& m) {
 
-//   /********** Added by Yi Li **************/
-//   // Write bytes into FIFO
-//   WrPktFIFO(m);
-//   /********** Added by Yi Li **************/
+  /********** Added by Yi Li **************/
+  // Write bytes into FIFO
+  WrPktFIFO(m);
+  /********** Added by Yi Li **************/
 
-//   // send the byte count of the packet
-//   WrPktByteCnt(m);
+  // send the byte count of the packet
+  WrPktByteCnt(m);
 
-//   // send the payload (except the last one)
-//   WrPktPayLoad(m);
+  // send the payload (except the last one)
+  WrPktPayLoad(m);
 
-//   // send the last chunk in the payload
-//   WrPktLastOne(m);
+  // send the last chunk in the payload
+  WrPktLastOne(m);
 
-  WrPkt(m);
 
   return;
 }
@@ -59,25 +58,25 @@ unsigned CRC_Lut[16] = {
   0xEDB88320,0xF00F9344,0xD6D6A3E8,0xCB61B38C,0x9B64C2B0,0x86D3D2D4,0xA00AE278,0xBDBDF21C
 };
 
-void WrPkt(Ila& m, const std::string& name) {
-  // Working at the 1G mode
-  {
-    auto instr = m.NewInstr("WR_PKT_1G");
+// void WrPkt(Ila& m, const std::string& name) {
+//   // Working at the 1G mode
+//   {
+//     auto instr = m.NewInstr("WR_PKT_1G");
 
-    // decode
-    auto mode_1G = (m.input(MODE_1G) == 1);
-    auto wr_enable = (m.input(TX_WE) == TX_WE_V_VALID);
-    auto fifo_non_full = (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
+//     // decode
+//     auto mode_1G = (m.input(MODE_1G) == 1);
+//     auto wr_enable = (m.input(TX_WE) == TX_WE_V_VALID);
+//     auto fifo_non_full = (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
 
-    instr.SetDecode(mode_1g & wr_enable & fifo_non_full);
+//     instr.SetDecode(mode_1g & wr_enable & fifo_non_full);
 
-    // Write packet into FIFO
-    WrPktFIFO(m);
-    // Write packet count
-    WrPktByteCnt(m);
-  }
+//     // Write packet into FIFO
+//     WrPktFIFO(m);
+//     // Write packet count
+//     WrPktByteCnt(m);
+//   }
     
-}
+// }
 
 
 void WrPktFIFO(Ila& m, const std::string& name) {
@@ -86,9 +85,9 @@ void WrPktFIFO(Ila& m, const std::string& name) {
     auto instr = m.NewInstr("WR_PKT_DATA_FIFO");
 
     // decode
-    // auto wr_enable = (m.input(TX_WE) == TX_WE_V_VALID);
-    // auto fifo_non_full = (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
-    instr.SetDecode(BoolConst(true));
+    auto wr_enable = (m.input(TX_WE) == TX_WE_V_VALID);
+    auto fifo_non_full = (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
+    // instr.SetDecode(BoolConst(true));
 
     // update
     instr.SetUpdate(TXFIFO_BUFF, Store(TXFIFO_BUFF, TXFIFO_BUFF_WR_PTR, m.input(TX_DATA)) );
@@ -176,18 +175,25 @@ void WrPktByteCnt(Ila& m, const std::string& name) {
     // Read FIFO
     instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Load(TXFIFO_BUFF, TXFIFO_BUFF_RD_PTR));
     instr.SetUpdate(m.state(TXFIFO_BUFF_RD_PTR), m.state(TXFIFO_BUFF_RD_PTR) + 1);
-    instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) - 1);
 
+    // Update Achitectual States
+    // update TXFIFO inteface
+    instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) - 1);
+    // Set the TX control signal. Different control signal for mode 1G and the others
+    instr.SetUpdate(m.state(XGMII_COUT_REG), 0x01);
+    // Set the TX data output signal. Inserting the preamble and SFD field.
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), 0xD5555555555555FB);
+
+    // Update Internal states
     // Read the byte count information
     instr.SetUpdate(m.state(TX_PACKET_BYTE_CNT), ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0));
     // update remaining bytes number. Not sure why subracted by 8. (may not needed)
     instr.SetUpdate(m.state(TX_PACKET_BYTES_REMAIN), m.state(TX_PACKET_BYTE_CNT));
     // update the frame needed to transmit the packet.
     instr.SetUpdate(m.state(TX_FRAME_CNTR), (m.state(TX_PACKET_BYTE_CNT) >> 3) + 1);
-    // Set the TX control signal. Different control signal for mode 1G and the others
-    instr.SetUpdate(m.state(XGMII_COUT_REG), 0x01);
-    // Set the TX data output signal. Inserting the preamble and SFD field.
-    instr.SetUpdate(m.state(XGMII_DOUT_REG), 0xD5555555555555FB);
+
+
+
 
 
     // Set initial value of the CRC. This initial value is the output data. However the one that participates in the generation is different.
