@@ -51,6 +51,11 @@
     "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw",
 
     "MODE_1G"                   : "m1.mode_1G",
+    "MODE_2P5G"                 : "m1.mode_2p5G",
+    "MODE_5G"                   : "m1.mode_5G",
+    "MODE_10G"                  : "m1.mode_10G",
+
+    "TX_STATE"                  : "m1.tcore_fmac_core."
 
     // TX Path to PHY interface
     "XGMII_DOUT_REG"            : "m1.xgmii_txd",

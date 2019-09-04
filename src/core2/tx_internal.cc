@@ -51,8 +51,22 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   NewState(m, TX_PACKET_BYTE_CNT, TX_PACKET_BYTE_CNT_BWID);
   // State recording the frames needed to transmit the whole package in bytes. reg wcnt in xgmii
   NewState(m, TX_WCNT, TX_WCNT_BWID);
-  // State for insert CRC and EOF
-  NewState(m, TX_INSERT_CRC, TX_INSERT_CRC_BWID);
+  // register for byte count, store at the reading the first QWord of ethernet package.
+  NewState(m, TX_PACKET_BYTE_CNT, TX_PACKET_BYTE_CNT_BWID);
+  // register the remaining bytes to transmit
+  NewState(m, TX_PACKET_BYTES_REMAIN, TX_PACKET_BYTES_REMAIN_BWID);
+  // Read output of the TX FIFO
+  NewState(m, TXFIFO_RD_OUTPUT, TXFIFO_RD_OUTPUT_BWID);
+  // register for CRC, store the 4byte CRC
+  NewState(m, CRC, CRC_BWID);
+  // State for CRC data input
+  NewState(m, CRC_DAT_IN, CRC_DAT_IN_BWID);
+  // State for previous crc code input
+  NewState(m, CRC_IN, CRC_DAT_IN_BWID);
+  // State for recording the packet count
+  NewState(m, TX_PKT_SENT, TX_PKT_SENT_BWID);
+  // State for recording the bytes count
+  NewState(m, TX_BYTE_SENT, TX_BYTE_SENT_BWID);
 
 
 
@@ -70,28 +84,9 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   /* These are non-architectural states */
   // State that indicate the tx path is busy and not ready for next packet read.
   NewState(m, TX_BUSY, TX_BUSY_BWID);
-  // State that indicates that the number of frames to send.
-  NewState(m, TX_FRAME_CNTR, TX_FRAME_CNTR_BWID);
-  // register for byte count, store at the reading the first QWord of ethernet package.
-  NewState(m, TX_PACKET_BYTE_CNT, TX_PACKET_BYTE_CNT_BWID);
-  // register the remaining bytes to transmit
-  NewState(m, TX_PACKET_BYTES_REMAIN, TX_PACKET_BYTES_REMAIN_BWID);
-  // Read output of the TX FIFO
-  NewState(m, TXFIFO_RD_OUTPUT, TXFIFO_RD_OUTPUT_BWID);
-  // register for CRC, store the 4byte CRC
-  NewState(m, CRC, CRC_BWID);
-
-  // State for CRC data input
-  NewState(m, CRC_DAT_IN, CRC_DAT_IN_BWID);
-  // State for previous crc code input
-  NewState(m, CRC_IN, CRC_DAT_IN_BWID);
-  // State for heading to EOF state;
-  NewState(m, TX_EOF, TX_EOF_BWID);
 
 
 
-  // State counter for output data at mode 1G, 3bit
-  NewState(m, MODE_1G_CNTR, MODE_1G_CNTR_BWID);
 
 
 

@@ -46,19 +46,48 @@ namespace ilang {
 // TX Path Internal States
 // -------------------------------------------------------------------------- //
 
-// operating mode, only 1G mode would have significant difference.
+// operating mode
 // This input affect both the RX and TX. It is placed here temperally  
 #define MODE_1G "MODE_1G"
 #define MODE_1G_BWID 1
+
+#define MODE_2P5G "MODE_2P5G"
+#define MODE_2P5G_BWID 1
+
+#define MODE_5G "MODE_5G"
+#define MODE_5G_BWID 1
+
+#define MODE_10G "MODE_10G"
+#define MODE_10G_BWID 1
 
 // State that indicate the tx path is busy and not ready for next packet read.
 #define TX_BUSY "TX_BUSY"
 #define TX_BUSY_BWID 1
 
-// State that indicates that the number of QWords to send.
-// At most 1130 qwords in a single frame.
-#define TX_FRAME_CNTR "TX_FRAME_CNTR"
-#define TX_FRAME_CNTR_BWID 12
+// TX state machine
+#define TX_STATE "TX_STATE"
+#define TX_STATE_BWID 5
+#define TX_STATE_IDLE 0x1
+#define TX_STATE_DAT 0x8
+#define TX_STATE_CRC 0x10
+
+// TX B2B Counter
+#define TX_B2B_CNTR "TX_B2B_CNTR"
+#define TX_B2B_CNTR_BWID 6
+
+// TX word counter
+#define TX_WCNT "TX_WCNT"
+#define TX_WCNT_BWID 16
+#define TX_WCNT_INI "TX_WCNT_INI"
+#define TX_WCNT_INI_BWID 16
+
+// TX counter for sent packet count
+#define TX_PKT_SENT "TX_PKT_SENT"
+#define TX_PKT_SENT_BWID 32
+
+// TX counter for sent bytes count
+#define TX_BYTE_SENT "TX_BYTE_SENT"
+#define TX_BYTE_SENT_BWID 32
 
 // Buffer for CRC Code generation, supporting non consecutive clock data.
 #define TX_BUF "TX_BUF"
@@ -88,9 +117,6 @@ namespace ilang {
 #define CRC_IN "CRC_IN"
 #define CRC_IN_BWID CRC_BWID
 
-// State for writing the EOF of the TX path
-#define TX_EOF "TX_EOF"
-#define TX_EOF_BWID 1
 
 // -------------------------------------------------------------------------- //
 // PHY Interface. Temperally placed here
