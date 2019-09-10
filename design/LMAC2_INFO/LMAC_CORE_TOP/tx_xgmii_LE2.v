@@ -91,6 +91,7 @@ wire	[15:0] nbytes;
 reg  	[15:0] nbytes_reg;
 reg 	[15:0] rbytes_reg;
 
+
 reg    [63:0] txd;				  //output data
 reg    [07:0] txc;				  // control output
 reg    [07:0] txc_int;

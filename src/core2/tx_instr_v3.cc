@@ -103,7 +103,6 @@ void SetB2BCntr(Ila& m, const std::string& name) {
   return;
 }
 
-    instr.SetUpdate(m.state(TX_STATE), Ite((m.state(Tx_B2B_CNTR) == 0), TX_STATE_RD_SIZE, m.state(TX_STATE));
 
 void RdByteCnt(Ila& m, const std::string& name) {
   // This instruction is to read the first qword of the packet from user, which contains the size of the packet
@@ -129,7 +128,7 @@ void RdByteCnt(Ila& m, const std::string& name) {
     // Updating the qword count in bytes
     auto bcnt_h = Extract(m.state(TX_PACKET_BYTE_CNT), 15, 3);
     auto bcnt_l = Extract(m.state(TX_PACKET_BYTE_CNT), 2, 0);
-    auto wcnt = Ite((bcnt_l > 0), Concat((bcnt_h + 1), BvConst(0x0, 3)), Concat(bcnt_h, BvConst(0x0, 3)));
+    auto nbytes = Ite((bcnt_l > 0), Concat((bcnt_h + 1), BvConst(0x0, 3)), Concat(bcnt_h, BvConst(0x0, 3)));
 
     instr.SetUpdate(m.state(TX_PACKET_BYTE_CNT), Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0));
     instr.SetUpdate(m.state(TX_WCNT), (wcnt - 1));
@@ -187,11 +186,13 @@ void WrPktPayload(Ila& m, const std::string& name) {
     instr.SetDecode(mode_10G & state_dat);
 
     // Set Update
+    // when wcnt < 0, we have taken all the data. No need to fetch from the fifo and update the crc output.
+    auto wcnt = m.state(TX_WCNT);
 
     // Read data from FIFO
-    instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Load(TXFIFO_BUFF, TXFIFO_BUFF_RD_PTR));
-    instr.SetUpdate(m.state(TXFIFO_BUFF_RD_PTR), m.state(TXFIFO_BUFF_RD_PTR) + 1);
-    instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) - 1);
+    instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Ite((wcnt > 0), Load(TXFIFO_BUFF, TXFIFO_BUFF_RD_PTR), m.state(TXFIFO_RD_OUTPUT)));
+    instr.SetUpdate(m.state(TXFIFO_BUFF_RD_PTR), Ite((wcnt > 0), m.state(TXFIFO_BUFF_RD_PTR) + 1, m.state(TXFIFO_BUFF_RD_PTR)));
+    instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), Ite((wcnt > 0), m.state(TXFIFO_WUSED_QWD) - 1, m.state(TXFIFO_WUSED_QWD)));
 
     // CRC code Update
 
@@ -207,7 +208,7 @@ void WrPktPayload(Ila& m, const std::string& name) {
                                               Ite((rb == 0x4), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), BvConst(0x0, 32)),
                                               Ite((rb == 0x5), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), BvConst(0x0, 24)),
                                               Ite((rb == 0x6), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), BvConst(0x0, 16)),
-                                              Ite((rb == 0x7), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), BvConst(0x0, 8)))))))))),
+                                                             , ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), BvConst(0x0, 8))))))))),
 
                                               Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
                                               Ite((rb == 0x1), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), ilang::Extract(m.state(TX_BUF),  63, 8)),
@@ -216,9 +217,8 @@ void WrPktPayload(Ila& m, const std::string& name) {
                                               Ite((rb == 0x4), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), ilang::Extract(m.state(TX_BUF),  63, 32)),
                                               Ite((rb == 0x5), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), ilang::Extract(m.state(TX_BUF),  63, 40)),
                                               Ite((rb == 0x6), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), ilang::Extract(m.state(TX_BUF),  63, 48)),
-                                              Ite((rb == 0x7), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), ilang::Extract(m.state(TX_BUF),  63, 56))))))))))
-                                  
-                                  ));
+                                                             , ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), ilang::Extract(m.state(TX_BUF),  63, 56))))))))))
+                    );
     
     // This buffer should be placed after the CRC update.
     instr.SetUpdate(m.state(TX_BUF), m.state(TXFIFO_RD_OUTPUT));
@@ -236,59 +236,64 @@ void WrPktPayload(Ila& m, const std::string& name) {
     }
 
     // update CRC code input for the generator;
-    instr.SetUpdate(m.state(CRC_IN), crc_g);
+    instr.SetUpdate(m.state(CRC_IN), Ite((wcnt > 0), crc_g, m.state(CRC_IN)));
     // update the CRC output. Needs transformation.
     auto crc_code = ~(((crc_g >> 24) & 0x000000FF) | ((crc_g >> 8) & 0x0000FF00) | ((crc_g << 8) & 0x00FF0000) | ((crc_g << 24) & 0xFF000000));
-    instr.SetUpdate(m.state(CRC), crc_code);
+    instr.SetUpdate(m.state(CRC), Ite((wcnt > 0), crc_code, m.state(CRC)));
+
     // when output the crc code, we need to change the endian of the code.
-    auto crc_output = ((crc_code >> 24) & 0x000000FF) | ((crc_code >> 8) & 0x0000FF00) | ((crc_code << 8) & 0x00FF0000) | ((crc_code << 24) & 0xFF000000);
+    auto crc_output = ((m.state(CRC) >> 24) & 0x000000FF) | ((m.state(CRC) >> 8) & 0x0000FF00) | ((m.state(CRC) << 8) & 0x00FF0000) | ((m.state(CRC) << 24) & 0xFF000000);
+
+    // difference between crc_code and crc_output is that crc_code is the value in the crc register, however, when
+    // outputing the value to txd, we need to change the endian. crc_output is for txd.
     /******* CRC code update  finished ***********/
 
     // Update output
-    auto wcnt = m.state(TX_WCNT);
-    instr.SetUpdate(m.state(XGMII_COUT_REG), Ite((wcnt >= 0), 0x00,
-                                             Ite((wcnt < 0), Ite((rb == 0), 0x00,
-                                                              Ite((rb == 1), 0xE0,
-                                                              Ite((rb == 2), 0xC0,
-                                                              Ite((rb == 3), 0x80,
-                                                              Ite((rb == 4), 0x00,
-                                                              Ite((rb == 5), 0x00,
-                                                              Ite((rb == 6), 0x00,
-                                                                             0x00))))))), 0x00)));
-                                                              
-                                                              
-                                                              Ite((rb == 0), 0xF0,
-                                                              Ite((rb == 1), 0xFF,
-                                                              Ite((rb == 2), 0xFF,
-                                                              Ite((rb == 3), 0xFF,
-                                                              Ite((rb == 4), 0xFF,
-                                                              Ite((rb == 5), 0xFE,
-                                                              Ite((rb == 6), 0xFC,
-                                                                             0xF8))))))))));
 
+    instr.SetUpdate(m.state(XGMII_COUT_REG),  Ite((wcnt > 7),   0x00,
+                                              Ite((wcnt <= 7),  Ite((rb == 0), 0x00,
+                                                                Ite((rb == 1), 0xE0,
+                                                                Ite((rb == 2), 0xC0,
+                                                                Ite((rb == 3), 0x80,
+                                                                Ite((rb == 4), 0x00,
+                                                                Ite((rb == 5), 0x00,
+                                                                Ite((rb == 6), 0x00,
+                                                                               0x00))))))), 
+                                              Ite((wcnt < 0),   Ite((rb == 0), 0xF0,
+                                                                Ite((rb == 1), 0xFF,
+                                                                Ite((rb == 2), 0xFF,
+                                                                Ite((rb == 3), 0xFF,
+                                                                Ite((rb == 4), 0xFF,
+                                                                Ite((rb == 5), 0xFE,
+                                                                Ite((rb == 6), 0xFC,
+                                                                               0xF8))))))),  
+                                              0xFF))));
+                                                              
+                                                              
     auto dat = m.state(TXFIFO_RD_OUTPUT);
-    instr.SetUpdate(m.state(XGMII_DOUT_REG), Ite((wcnt >= 0), dat,
-                                             Ite((wcnt < 0), Ite((rb == 0), m.state(TXFIFO_RD_OUTPUT),
-                                                              Ite((rb == 1), Concat(BvConst(0x0707FD, 24), Concat(crc_output, Extract(dat, 7, 0))),
-                                                              Ite((rb == 2), Concat(BvConst(0x07FD, 16), Concat(crc_output, Extract(dat, 15, 0))),
-                                                              Ite((rb == 3), Concat(BvConst(0xFD, 8), Concat(crc_output, Extract(dat, 23, 0))),
-                                                              Ite((rb == 4), Concat(crc_output, dat),
-                                                              Ite((rb == 5), Concat(Extract(crc_output, 23, 0), Extract(dat, 39, 0)),
-                                                              Ite((rb == 6), Concat(Extract(crc_output, 15, 0), Extract(dat, 47, 0)),
-                                                                             Concat(Extract(crc_output, 7, 0), Extract(dat, 55, 0))))))))), dat)));
+    instr.SetUpdate(m.state(XGMII_DOUT_REG),  Ite((wcnt > 7), dat,
+                                              Ite((wcnt <= 7),  Ite((rb == 0), m.state(TXFIFO_RD_OUTPUT),
+                                                                Ite((rb == 1), Concat(BvConst(0x0707FD, 24), Concat(crc_output, Extract(dat, 7, 0))),
+                                                                Ite((rb == 2), Concat(BvConst(0x07FD, 16), Concat(crc_output, Extract(dat, 15, 0))),
+                                                                Ite((rb == 3), Concat(BvConst(0xFD, 8), Concat(crc_output, Extract(dat, 23, 0))),
+                                                                Ite((rb == 4), Concat(crc_output, dat),
+                                                                Ite((rb == 5), Concat(Extract(crc_output, 23, 0), Extract(dat, 39, 0)),
+                                                                Ite((rb == 6), Concat(Extract(crc_output, 15, 0), Extract(dat, 47, 0)),
+                                                                              Concat(Extract(crc_output, 7, 0), Extract(dat, 55, 0))))))))),
+
+                                              Ite((wcnt < 0),   Ite((rb == 0), Concat(BvConst(0x070707FD, 32), crc_output),
+                                                                Ite((rb == 1), BvConst(0x0707070707070707, 64),
+                                                                Ite((rb == 2), BvConst(0x0707070707070707, 64),
+                                                                Ite((rb == 3), BvConst(0x0707070707070707, 64),
+                                                                Ite((rb == 4), BvConst(0x07070707070707FD, 64),
+                                                                Ite((rb == 5), Concat(BvConst(0x070707070707FD, 56), Extract(crc_output, 31, 24)),
+                                                                Ite((rb == 6), Concat(BvConst(0x0707070707FD, 48), Extract(crc_output, 31, 16)),
+                                                                                Concat(BvConst(0x07070707FD, 40), Extract(crc_output, 31, 8))))))))), 
+                                                                             
+                                              0x0707070707070707))));
                                                               
-                                                              
-                                                              Ite((rb == 0), Concat(BvConst(0x070707FD, 32), crc_output),
-                                                              Ite((rb == 1), BvConst(0x0707070707070707, 64),
-                                                              Ite((rb == 2), BvConst(0x0707070707070707, 64),
-                                                              Ite((rb == 3), BvConst(0x0707070707070707, 64),
-                                                              Ite((rb == 4), BvConst(0x07070707070707FD, 64),
-                                                              Ite((rb == 5), Concat(BvConst(0x070707070707FD, 56), Extract(crc_output, 31, 24)),
-                                                              Ite((rb == 6), Concat(BvConst(0x0707070707FD, 48), Extract(crc_output, 31, 16)),
-                                                                             Concat(BvConst(0x07070707FD, 40), Extract(crc_output, 31, 8))))))))))));
-                                                                            
     // Update the wcnt
-    instr.SetUpdate(m.state(TX_STATE), Ite((wcnt < 0), TX_STATE_CRC, TX_STATE_DAT));
+    instr.SetUpdate(m.state(TX_STATE), Ite((wcnt < 0), TX_STATE_IDLE, TX_STATE_CRC));
     instr.SetUpdate(m.state(TX_WCNT), wcnt - 8);
   }
   
@@ -302,6 +307,38 @@ void WrPktLastOne(Ila& m, const std::string& name) {
     auto instr = m.NewInstr("WR_PKT_LASTONE_10G");
 
     // decode 
-    auto 
+    auto mode_10G = (m.input(MODE_10G) == 1);
+    auto state_crc = (m.state(TX_STATE) == TX_STATE_CRC);
+
+    instr.SetDecode(mode_10G & state_crc);
+
+    // State Update
+    // auto rb = ilang::Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0));
+
+    // instr.SetUpdate(m.state(XGMII_COUT_REG), Ite((rb == 0), 0xF0,
+    //                                          Ite((rb == 1), 0xFF,
+    //                                          Ite((rb == 2), 0xFF,
+    //                                          Ite((rb == 3), 0xFF,
+    //                                          Ite((rb == 4), 0xFF,
+    //                                          Ite((rb == 5), 0xFE,
+    //                                          Ite((rb == 6), 0xFC,
+    //                                                         0xF8))))))));
+    
+    // instr.SetUpdate(m.state(XGMII_DOUT_REG), Ite((rb == 0), Concat(BvConst(0x070707FD, 32), crc_output),
+    //                                          Ite((rb == 1), BvConst(0x0707070707070707, 64),
+    //                                          Ite((rb == 2), BvConst(0x0707070707070707, 64),
+    //                                          Ite((rb == 3), BvConst(0x0707070707070707, 64),
+    //                                          Ite((rb == 4), BvConst(0x07070707070707FD, 64),
+    //                                          Ite((rb == 5), Concat(BvConst(0x070707070707FD, 56), Extract(crc_output, 31, 24)),
+    //                                          Ite((rb == 6), Concat(BvConst(0x0707070707FD, 48), Extract(crc_output, 31, 16)),
+    //                                                         Concat(BvConst(0x07070707FD, 40), Extract(crc_output, 31, 8))))))))));
+
+    instr.SetUpdate(m.state(TX_PKT_SENT), m.state(TX_PKT_SENT) + 1);
+    instr.SetUpdate(m.state(TX_BYTE_SENT), m.state(TX_BYTE_SENT) + m.state(TX_PACKET_BYTE_CNT));
+    instr.SetUpdate(m.state(TX_STATE), TX_STATE_IDLE);
+
   }
+
+  return;
+}
 }
