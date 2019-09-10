@@ -90,9 +90,8 @@ void SetB2BCntr(Ila& m, const std::string& name) {
     auto mode_10G = (m.input(MODE_10G) == 1);
     auto state_idle = (m.state(TX_STATE) == TX_STATE_IDLE);
     auto cntr_non_zero = (m.state(TX_B2B_CNTR) > 0);
-    auto non_insert_crc = (m.state(TX_INSERT_CRC) == 0);
 
-    instr.SetDecode(mode_10G & state_idle & cntr_non_zero & non_insert_crc);
+    instr.SetDecode(mode_10G & state_idle & cntr_non_zero);
 
     // State Update
     instr.SetUpdate(m.state(TX_B2B_CNTR), m.state(TX_B2B_CNTR) - 1);
@@ -126,13 +125,13 @@ void RdByteCnt(Ila& m, const std::string& name) {
     instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) - 1);
 
     // states update
-    instr.SetUpdate(m.state(TX_PACKET_BYTE_CNT), Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0));
 
     // Updating the qword count in bytes
     auto bcnt_h = Extract(m.state(TX_PACKET_BYTE_CNT), 15, 3);
     auto bcnt_l = Extract(m.state(TX_PACKET_BYTE_CNT), 2, 0);
     auto wcnt = Ite((bcnt_l > 0), Concat((bcnt_h + 1), BvConst(0x0, 3)), Concat(bcnt_h, BvConst(0x0, 3)));
 
+    instr.SetUpdate(m.state(TX_PACKET_BYTE_CNT), Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0));
     instr.SetUpdate(m.state(TX_WCNT), (wcnt - 1));
     instr.SetUpdate(m.state(TX_WCNT_INI), (wcnt - 1));
 
@@ -141,6 +140,7 @@ void RdByteCnt(Ila& m, const std::string& name) {
 
     // Output Update 
     // Be Careful!!! The output state is actually 1 clk behind the other arch states in this step!
+
     // I put the B2B CNTR here 
     instr.SetUpdate(m.state(XGMII_DOUT_REG), 0xD5555555555555FB);
     instr.SetUpdate(m.state(XGMII_COUT_REG), 0x01);

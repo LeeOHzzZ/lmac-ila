@@ -53,7 +53,12 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   NewState(m, TX_WCNT, TX_WCNT_BWID);
   // State for insert CRC and EOF
   NewState(m, TX_INSERT_CRC, TX_INSERT_CRC_BWID);
-
+  // register for result output, xgmii or gmii, for verification at the same cycle, this 
+  // state is actually the txd in the design
+  NewState(m, XGMII_DOUT_REG, XGMII_DOUT_REG_BWID);
+  // register for output control, bytes valid information, 8bits signal for 8bytes(64bit) output
+  // corresponding to the txc in the design
+  NewState(m, XGMII_COUT_REG, XGMII_COUT_REG_BWID);
 
 
   //////////////////////////////////
@@ -98,11 +103,7 @@ void LmacCore2::SetupTxInternal(Ila& m) {
 /****************** **********************************/
 // These two architectural states are actually at the interface of PHY.
 
-  // register for result output, xgmii or gmii
-  NewState(m, XGMII_DOUT_REG, XGMII_DOUT_REG_BWID);
 
-  // register for output control, bytes valid information, 8bits signal for 8bytes(64bit) output
-  NewState(m, XGMII_COUT_REG, XGMII_COUT_REG_BWID);
 
 
 
