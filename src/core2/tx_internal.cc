@@ -45,6 +45,8 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   //////////////////////////////////
   // TX state machine
   NewState(m, TX_STATE, TX_STATE_BWID);
+  // TX state machine. auxiliary state machine. Mapping to the state machine at tx_encap
+  NewState(m, TX_STATE_ENCAP, TX_STATE_ENCAP_BWID);
   // TX B2B counter
   NewState(m, TX_B2B_CNTR, TX_B2B_CNTR_BWID);
   // State holding the packet byte count, which is in the first Qword of the packet.
@@ -57,10 +59,14 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   // register for output control, bytes valid information, 8bits signal for 8bytes(64bit) output
   // corresponding to the txc in the design
   NewState(m, XGMII_COUT_REG, XGMII_COUT_REG_BWID);
-  // register for byte count, store at the reading the first QWord of ethernet package.
-  NewState(m, TX_PACKET_BYTE_CNT, TX_PACKET_BYTE_CNT_BWID);
-  // register the remaining bytes to transmit
-  NewState(m, TX_PACKET_BYTES_REMAIN, TX_PACKET_BYTES_REMAIN_BWID);
+  // State for recording the packet count
+  NewState(m, TX_PKT_SENT, TX_PKT_SENT_BWID);
+  // State for recording the bytes count
+  NewState(m, TX_BYTE_SENT, TX_BYTE_SENT_BWID);
+
+
+
+
   // Read output of the TX FIFO
   NewState(m, TXFIFO_RD_OUTPUT, TXFIFO_RD_OUTPUT_BWID);
   // register for CRC, store the 4byte CRC
@@ -69,11 +75,6 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   NewState(m, CRC_DAT_IN, CRC_DAT_IN_BWID);
   // State for previous crc code input
   NewState(m, CRC_IN, CRC_DAT_IN_BWID);
-  // State for recording the packet count
-  NewState(m, TX_PKT_SENT, TX_PKT_SENT_BWID);
-  // State for recording the bytes count
-  NewState(m, TX_BYTE_SENT, TX_BYTE_SENT_BWID);
-
 
 
   //////////////////////////////////
@@ -90,19 +91,6 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   /* These are non-architectural states */
   // State that indicate the tx path is busy and not ready for next packet read.
   NewState(m, TX_BUSY, TX_BUSY_BWID);
-
-
-
-
-
-
-/****************** **********************************/
-// These two architectural states are actually at the interface of PHY.
-
-
-
-
-
 
   return;
 }

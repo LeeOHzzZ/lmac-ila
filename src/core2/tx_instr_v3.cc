@@ -88,14 +88,15 @@ void SetB2BCntr(Ila& m, const std::string& name) {
     // decode 
     auto mode_10G = (m.input(MODE_10G) == 1);
     auto state_idle = (m.state(TX_STATE) == TX_STATE_IDLE);
+    auto state_encap_idle = (m.state(TX_STATE_ENCAP) == TX_STATE_ENCAP_IDLE);
     auto cntr_non_zero = (m.state(TX_B2B_CNTR) > 0);
 
-    instr.SetDecode(mode_10G & state_idle & cntr_non_zero);
+    instr.SetDecode(mode_10G & state_idle & state_encap_idle & cntr_non_zero);
 
     // State Update
-    instr.SetUpdate(m.state(TX_B2B_CNTR), m.state(TX_B2B_CNTR) - 1);
-    instr.SetUpdate(m.state(XGMII_DOUT_REG), 0x0707070707070707);
-    instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFF);
+    instr.SetUpdate(m.state(TX_B2B_CNTR), m.state(TX_B2B_CNTR) - 1); // 1 clk
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), 0x0707070707070707); // 1 clk
+    instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFF); // 1 clk
 
   }
 
@@ -112,10 +113,11 @@ void RdByteCnt(Ila& m, const std::string& name) {
     // decode 
     auto mode_10G = (m.input(MODE_10G) == 1);
     auto state_idle = (m.state(TX_STATE) == TX_STATE_IDLE);
+    auto state_encap_idle = (m.state(TX_STATE_ENCAP) == TX_STATE_ENCAP_IDLE);
     auto b2b_ok = (m.state(TX_B2B_CNTR) == 0);
     auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0);
 
-    instr.SetDecode(mode_10G & b2b_ok & state_idle & fifo_non_empty);
+    instr.SetDecode(mode_10G & b2b_ok & state_idle & state_encap_idle & fifo_non_empty);
 
     // State Update
     // read FIFO
@@ -130,19 +132,20 @@ void RdByteCnt(Ila& m, const std::string& name) {
     auto bcnt_l = Extract(m.state(TX_PACKET_BYTE_CNT), 2, 0);
     auto nbytes = Ite((bcnt_l > 0), Concat((bcnt_h + 1), BvConst(0x0, 3)), Concat(bcnt_h, BvConst(0x0, 3)));
 
-    instr.SetUpdate(m.state(TX_PACKET_BYTE_CNT), Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0));
-    instr.SetUpdate(m.state(TX_WCNT), (wcnt - 1));
+    instr.SetUpdate(m.state(TX_PACKET_BYTE_CNT), Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0)); // 4 clk
+    instr.SetUpdate(m.state(TX_WCNT), (wcnt - 1)); // 5 clk
     instr.SetUpdate(m.state(TX_WCNT_INI), (wcnt - 1));
 
     // State machine update
-    instr.SetUpdate(m.state(TX_STATE), TX_STATE_DAT);
+    instr.SetUpdate(m.state(TX_STATE), TX_STATE_DAT); // 5 clk
+    instr.SetUpdate(m.state(TX_STATE_ENCAP), TX_STATE_ENCAP_DAT); // 4 clk
 
     // Output Update 
     // Be Careful!!! The output state is actually 1 clk behind the other arch states in this step!
 
     // I put the B2B CNTR here 
-    instr.SetUpdate(m.state(XGMII_DOUT_REG), 0xD5555555555555FB);
-    instr.SetUpdate(m.state(XGMII_COUT_REG), 0x01);
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), 0xD5555555555555FB); // 6 clk
+    instr.SetUpdate(m.state(XGMII_COUT_REG), 0x01); // 6 clk
     instr.SetUpdate(m.state(TX_B2B_CNTR), TX_B2B_CNTR_INITIAL);
 
 
@@ -249,7 +252,7 @@ void WrPktPayload(Ila& m, const std::string& name) {
     /******* CRC code update  finished ***********/
 
     // Update output
-
+    // txd & txc take 2 clk to update
     instr.SetUpdate(m.state(XGMII_COUT_REG),  Ite((wcnt > 7),   0x00,
                                               Ite((wcnt <= 7),  Ite((rb == 0), 0x00,
                                                                 Ite((rb == 1), 0xE0,
@@ -293,8 +296,13 @@ void WrPktPayload(Ila& m, const std::string& name) {
                                               0x0707070707070707))));
                                                               
     // Update the wcnt
-    instr.SetUpdate(m.state(TX_STATE), Ite((wcnt < 0), TX_STATE_DAT, TX_STATE_CRC));
-    instr.SetUpdate(m.state(TX_WCNT), wcnt - 8);
+    auto b2b_cnt = m.state(TX_B2B_CNTR);
+    auto st_encap = m.state(TX_STATE_ENCAP);
+
+    instr.SetUpdate(m.state(TX_B2B_CNTR), Ite((st_encap == TX_STATE_ENCAP_IDLE), b2b_cnt - 1, b2b_cnt)); // 1 clk
+    instr.SetUpdate(m.state(TX_STATE), Ite((wcnt < 0), TX_STATE_DAT, TX_STATE_CRC)); // 1 clk
+    instr.SetUpdate(m.state(TX_STATE_ENCAP), Ite((wcnt < 16), TX_STATE_ENCAP_IDLE, st_encap)); // 1 clk
+    instr.SetUpdate(m.state(TX_WCNT), wcnt - 8); // 1 clk
   }
   
   
@@ -333,10 +341,10 @@ void WrPktLastOne(Ila& m, const std::string& name) {
     //                                          Ite((rb == 6), Concat(BvConst(0x0707070707FD, 48), Extract(crc_output, 31, 16)),
     //                                                         Concat(BvConst(0x07070707FD, 40), Extract(crc_output, 31, 8))))))))));
 
-    instr.SetUpdate(m.state(TX_PKT_SENT), m.state(TX_PKT_SENT) + 1);
-    instr.SetUpdate(m.state(TX_BYTE_SENT), m.state(TX_BYTE_SENT) + m.state(TX_PACKET_BYTE_CNT));
-    instr.SetUpdate(m.state(TX_STATE), TX_STATE_IDLE);
-
+    instr.SetUpdate(m.state(TX_PKT_SENT), m.state(TX_PKT_SENT) + 1); // 2 clk
+    instr.SetUpdate(m.state(TX_BYTE_SENT), m.state(TX_BYTE_SENT) + m.state(TX_PACKET_BYTE_CNT)); // 2 clk
+    instr.SetUpdate(m.state(TX_STATE), TX_STATE_IDLE); // 1 clk
+    instr.SetUpdate(m.state(TX_B2B_CNTR), Ite((m.state(TX_STATE_ENCAP) == TX_STATE_ENCAP_IDLE), m.state(TX_B2B_CNTR) - 1, m.state(TX_B2B_CNTR))); // 1 clk
   }
 
   return;

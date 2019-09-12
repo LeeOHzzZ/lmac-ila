@@ -36,7 +36,7 @@ add_executable(${MyTarget}
   src/core2/reg_instr.cc
   src/core2/reg_interface.cc
   src/core2/rx_interface.cc
-  src/core2/tx_instr.cc
+  src/core2/tx_instr_v3.cc
   src/core2/tx_interface.cc
   src/core2/tx_internal.cc
   src/utils.cc

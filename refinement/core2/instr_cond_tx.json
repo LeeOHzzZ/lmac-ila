@@ -8,12 +8,24 @@
         },
 
         {
-            "instruction"       :   "WR_PKT_BYTE_CNT",
-            "ready bound"       :   ?
+            "instruction"       :   "SET_B2B_CNTR_10G",
+            "ready bound"       :   1
         },
 
-        
+        {
+            "instruction"       :   "READ_BYTE_CNT_10G",
+            "ready bound"       :   5
+        },
 
+        {
+            "instruction"       :   "WR_PKT_PAYLOAD_10G",
+            "ready bound"       :   1
+        },
+
+        {
+            "instruction"       :   "WR_PKT_LASTONE_10G",
+            "ready bound"       :   1
+        }
 
     ]
 }
