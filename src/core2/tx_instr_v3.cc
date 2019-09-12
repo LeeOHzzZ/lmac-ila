@@ -66,7 +66,6 @@ void WrPktFIFO(Ila& m, const std::string& name) {
     // decode
     auto wr_enable = (m.input(TX_WE) == TX_WE_V_VALID);
     auto fifo_non_full = (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
-    // instr.SetDecode(BoolConst(true));
 
     // update
     instr.SetUpdate(TXFIFO_BUFF, Store(TXFIFO_BUFF, TXFIFO_BUFF_WR_PTR, m.input(TX_DATA)) );
@@ -294,7 +293,7 @@ void WrPktPayload(Ila& m, const std::string& name) {
                                               0x0707070707070707))));
                                                               
     // Update the wcnt
-    instr.SetUpdate(m.state(TX_STATE), Ite((wcnt < 0), TX_STATE_IDLE, TX_STATE_CRC));
+    instr.SetUpdate(m.state(TX_STATE), Ite((wcnt < 0), TX_STATE_DAT, TX_STATE_CRC));
     instr.SetUpdate(m.state(TX_WCNT), wcnt - 8);
   }
   

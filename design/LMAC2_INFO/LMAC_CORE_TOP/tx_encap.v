@@ -216,7 +216,7 @@ begin
 	else
 	begin
 		p_cnt <= st_p_pkt? (p_cnt - 3'd1) : 3'd7;
-		p_1 <= st_p_req;
+		p_1 <= st_p_req; // The state machine will never enter the state p_req. 
 		p_done <= p_cnt == 3'h0;
 		p_send <= p_1? 1'b1 : (p_done? 1'b0 : p_send);
 		xdone  <= p_cnt == 3'h1;
@@ -239,9 +239,10 @@ begin
 		wdata <= 64'hd5555555555555FB;
 	
 	else
+	// The p_send will always stay 0, thus the output cannot be the p_data.
 		wdata	<=	mode_10G? (p_send? p_data : (wsel? 64'hd5555555555555FB : txfifo_dout)) :
 	            	(p_send? p_data : 
-	            	(wsel? ((st_idle & pulse_0)? 64'hd5555555555555FB : wdata) : (( (st_mac_hdr | st_mac_dat) & pulse_0)? txfifo_dout : wdata)));
+	            	(wsel? ((st_idle & pulse_0)? 64'hd5555555555555FB : wdata) : (( (st_mac_hdr | st_mac_dat) & pulse_0)? txfifo_dout : wdata))); 
 	            	
 end
 
@@ -288,7 +289,7 @@ begin
 	begin
 		wsel  <= 1'b1;
 		
-		if (b2b_ok && xreq)
+		if (b2b_ok && xreq) // Notice: For now, the xreq is assigned to zero all the time. Thus, the state machine will never go in the state P_REQ.
 		begin
 			state <= P_REQ;
 			txfifo_rd_en <= 1'b0;
