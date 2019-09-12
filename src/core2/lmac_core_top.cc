@@ -71,7 +71,7 @@ Ila LmacCore2::New(const std::string& name) {
 
   { // fetch
     // TX FIFO
-    auto tx_fetch = (m.input(TX_WE));
+    auto tx_fetch = BoolConst(true);
 
     // RX FIFO
     auto rx_fetch = BoolConst(true);

@@ -112,10 +112,11 @@ void RdByteCnt(Ila& m, const std::string& name) {
 
     // decode 
     auto mode_10G = (m.input(MODE_10G) == 1);
+    auto state_idle = (m.state(TX_STATE) == TX_STATE_IDLE);
     auto b2b_ok = (m.state(TX_B2B_CNTR) == 0);
     auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0);
 
-    instr.SetDecode(mode_10G & b2b_ok & fifo_non_empty);
+    instr.SetDecode(mode_10G & b2b_ok & state_idle & fifo_non_empty);
 
     // State Update
     // read FIFO

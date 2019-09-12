@@ -51,8 +51,6 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   NewState(m, TX_PACKET_BYTE_CNT, TX_PACKET_BYTE_CNT_BWID);
   // State recording the frames needed to transmit the whole package in bytes. reg wcnt in xgmii
   NewState(m, TX_WCNT, TX_WCNT_BWID);
-  // State for insert CRC and EOF
-  NewState(m, TX_INSERT_CRC, TX_INSERT_CRC_BWID);
   // register for result output, xgmii or gmii, for verification at the same cycle, this 
   // state is actually the txd in the design
   NewState(m, XGMII_DOUT_REG, XGMII_DOUT_REG_BWID);

@@ -55,7 +55,8 @@
     "MODE_5G"                   : "m1.mode_5G",
     "MODE_10G"                  : "m1.mode_10G",
 
-    "TX_STATE"                  : "m1.tcore_fmac_core."
+    "TX_STATE"                  : "m1.core.tx_10G_wrap.tx_xgmii.state",
+    "TX_B2B_CNTR"
 
     // TX Path to PHY interface
     "XGMII_DOUT_REG"            : "m1.xgmii_txd",
