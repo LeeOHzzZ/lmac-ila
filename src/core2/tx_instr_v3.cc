@@ -71,7 +71,7 @@ void WrPktFIFO(Ila& m, const std::string& name) {
     instr.SetUpdate(TXFIFO_BUFF, Store(TXFIFO_BUFF, TXFIFO_BUFF_WR_PTR, m.input(TX_DATA)) );
     instr.SetUpdate(m.state(TXFIFO_BUFF_WR_PTR), m.state(TXFIFO_BUFF_WR_PTR) + 0x1);
     instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) + 0x1);
-    instr.SetUpdate(m.state(TXFIFO_FULL), Ite((m.state(TXFIFO_WUSED_QWD) == 1024), 1, 0));
+    instr.SetUpdate(m.state(TXFIFO_FULL), Ite((m.state(TXFIFO_WUSED_QWD) == 1024), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID)));
   }
 
   return;
@@ -95,8 +95,8 @@ void SetB2BCntr(Ila& m, const std::string& name) {
 
     // State Update
     instr.SetUpdate(m.state(TX_B2B_CNTR), m.state(TX_B2B_CNTR) - 1); // 1 clk
-    instr.SetUpdate(m.state(XGMII_DOUT_REG), 0x0707070707070707); // 1 clk
-    instr.SetUpdate(m.state(XGMII_COUT_REG), 0xFF); // 1 clk
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), BvConst(0x0707070707070707, XGMII_DOUT_REG_BWID)); // 1 clk
+    instr.SetUpdate(m.state(XGMII_COUT_REG), BvConst(0xFF, XGMII_COUT_REG_BWID)); // 1 clk
 
   }
 
@@ -144,32 +144,32 @@ void RdByteCnt(Ila& m, const std::string& name) {
     // Be Careful!!! The output state is actually 1 clk behind the other arch states in this step!
 
     // I put the B2B CNTR here 
-    instr.SetUpdate(m.state(XGMII_DOUT_REG), 0xD5555555555555FB); // 6 clk
-    instr.SetUpdate(m.state(XGMII_COUT_REG), 0x01); // 6 clk
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), BvConst(0xD5555555555555FB, XGMII_DOUT_REG_BWID)); // 6 clk
+    instr.SetUpdate(m.state(XGMII_COUT_REG), BvConst(0x01, XGMII_COUT_REG_BWID)); // 6 clk 
     instr.SetUpdate(m.state(TX_B2B_CNTR), TX_B2B_CNTR_INITIAL);
 
 
 
     // Set initial value of the CRC. This initial value is the output data. However the one that participates in the generation is different.
     auto rb = ilang::Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0)); // rb stands for residual bytes
-    instr.SetUpdate(m.state(CRC), Ite((rb == 0x0), 0x00000000,
-                                  Ite((rb == 0x1), 0x56a579b9,
-                                  Ite((rb == 0x2), 0xe962b350,
-                                  Ite((rb == 0x3), 0x3306840b,
-                                  Ite((rb == 0x4), 0x9d0ad96d,
-                                  Ite((rb == 0x5), 0x7ed9d15c,
-                                  Ite((rb == 0x6), 0x6f62e365,
-                                  Ite((rb == 0x7), 0x26706a0f))))))))
+    instr.SetUpdate(m.state(CRC), Ite((rb == 0x0), BvConst(0x00000000, CRC_BWID), 
+                                  Ite((rb == 0x1), BvConst(0x56a579b9, CRC_BWID),
+                                  Ite((rb == 0x2), BvConst(0xe962b350, CRC_BWID),
+                                  Ite((rb == 0x3), BvConst(0x3306840b, CRC_BWID),
+                                  Ite((rb == 0x4), BvConst(0x9d0ad96d, CRC_BWID),
+                                  Ite((rb == 0x5), BvConst(0x7ed9d15c, CRC_BWID),
+                                  Ite((rb == 0x6), BvConst(0x6f62e365, CRC_BWID),
+                                  Ite((rb == 0x7), BvConst(0x26706a0f, CRC_BWID)))))))))
                     );
     
-    instr.SetUpdate(m.state(CRC_IN), Ite((rb == 0x0), 0xffffffff,
-                                  Ite((rb == 0x1), 0x46865aa9,
-                                  Ite((rb == 0x2), 0xaf4c9d16,
-                                  Ite((rb == 0x3), 0xf47bf9cc,
-                                  Ite((rb == 0x4), 0x9226f562,
-                                  Ite((rb == 0x5), 0xa32e2681,
-                                  Ite((rb == 0x6), 0x9a1c9d90,
-                                  Ite((rb == 0x7), 0xf0958fd9))))))))
+    instr.SetUpdate(m.state(CRC_IN), Ite((rb == 0x0), BvConst(0xffffffff, CRC_IN_BWID),
+                                  Ite((rb == 0x1), BvConst(0x46865aa9, CRC_IN_BWID),
+                                  Ite((rb == 0x2), BvConst(0xaf4c9d16, CRC_IN_BWID),
+                                  Ite((rb == 0x3), BvConst(0xf47bf9cc, CRC_IN_BWID),
+                                  Ite((rb == 0x4), BvConst(0x9226f562, CRC_IN_BWID),
+                                  Ite((rb == 0x5), BvConst(0xa32e2681, CRC_IN_BWID),
+                                  Ite((rb == 0x6), BvConst(0x9a1c9d90, CRC_IN_BWID),
+                                  Ite((rb == 0x7), BvConst(0xf0958fd9, CRC_IN_BWID)))))))))
                     );
   }
 
@@ -253,23 +253,23 @@ void WrPktPayload(Ila& m, const std::string& name) {
 
     // Update output
     // txd & txc take 2 clk to update
-    instr.SetUpdate(m.state(XGMII_COUT_REG),  Ite((wcnt > 7),   0x00,
-                                              Ite((wcnt <= 7),  Ite((rb == 0), 0x00,
-                                                                Ite((rb == 1), 0xE0,
-                                                                Ite((rb == 2), 0xC0,
-                                                                Ite((rb == 3), 0x80,
-                                                                Ite((rb == 4), 0x00,
-                                                                Ite((rb == 5), 0x00,
-                                                                Ite((rb == 6), 0x00,
-                                                                               0x00))))))), 
-                                              Ite((wcnt < 0),   Ite((rb == 0), 0xF0,
-                                                                Ite((rb == 1), 0xFF,
-                                                                Ite((rb == 2), 0xFF,
-                                                                Ite((rb == 3), 0xFF,
-                                                                Ite((rb == 4), 0xFF,
-                                                                Ite((rb == 5), 0xFE,
-                                                                Ite((rb == 6), 0xFC,
-                                                                               0xF8))))))),  
+    instr.SetUpdate(m.state(XGMII_COUT_REG),  Ite((wcnt > 7),   BvConst(0x00, XGMII_COUT_REG_BWID),
+                                              Ite((wcnt <= 7),  Ite((rb == 0), BvConst(0x00, XGMII_COUT_REG_BWID),
+                                                                Ite((rb == 1), BvConst(0xE0, XGMII_COUT_REG_BWID),
+                                                                Ite((rb == 2), BvConst(0xC0, XGMII_COUT_REG_BWID),
+                                                                Ite((rb == 3), BvConst(0x80, XGMII_COUT_REG_BWID),
+                                                                Ite((rb == 4), BvConst(0x00, XGMII_COUT_REG_BWID),
+                                                                Ite((rb == 5), BvConst(0x00, XGMII_COUT_REG_BWID),
+                                                                Ite((rb == 6), BvConst(0x00, XGMII_COUT_REG_BWID),
+                                                                               BvConst(0x00, XGMII_COUT_REG_BWID)))))))), 
+                                              Ite((wcnt < 0),   Ite((rb == 0), BvConst(0xF0, XGMII_COUT_REG_BWID),
+                                                                Ite((rb == 1), BvConst(0xFF, XGMII_COUT_REG_BWID),
+                                                                Ite((rb == 2), BvConst(0xFF, XGMII_COUT_REG_BWID),
+                                                                Ite((rb == 3), BvConst(0xFF, XGMII_COUT_REG_BWID),
+                                                                Ite((rb == 4), BvConst(0xFF, XGMII_COUT_REG_BWID),
+                                                                Ite((rb == 5), BvConst(0xFE, XGMII_COUT_REG_BWID),
+                                                                Ite((rb == 6), BvConst(0xFC, XGMII_COUT_REG_BWID),
+                                                                               BvConst(0xF8, XGMII_COUT_REG_BWID)))))))),  
                                               0xFF))));
                                                               
                                                               

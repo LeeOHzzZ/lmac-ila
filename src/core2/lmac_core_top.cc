@@ -65,7 +65,7 @@ Ila LmacCore2::New(const std::string& name) {
     // PHY
     auto phy_valid = true;
 
-    auto valid = tx_valid | rx_valid | reg_itf_valid | phy_valid;
+    auto valid = reg_itf_valid | tx_valid | rx_valid | phy_valid;
     m.SetValid(valid);
   }
 

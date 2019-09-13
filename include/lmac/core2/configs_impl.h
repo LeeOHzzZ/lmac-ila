@@ -67,20 +67,20 @@ namespace ilang {
 // TX state machine
 #define TX_STATE "TX_STATE"
 #define TX_STATE_BWID 5
-#define TX_STATE_IDLE 0x1
-#define TX_STATE_DAT 0x8
-#define TX_STATE_CRC 0x10
+#define TX_STATE_IDLE BvConst(0x1, TX_STATE_BWID)
+#define TX_STATE_DAT BvConst(0x8, TX_STATE_BWID)
+#define TX_STATE_CRC BvConst(0x10, TX_STATE_BWID)
 
 // TX auxiliary state machine. State machine in tx_encap in verilog
 #define TX_STATE_ENCAP "TX_STATE_ENCAP"
 #define TX_STATE_ENCAP_BWID 8
-#define TX_STATE_ENCAP_IDLE 0x1
-#define TX_STATE_ENCAP_DAT 0x10
+#define TX_STATE_ENCAP_IDLE BvConst(0x1, TX_STATE_ENCAP_BWID)
+#define TX_STATE_ENCAP_DAT BvConst(0x10, TX_STATE_ENCAP_BWID)
 
 // TX B2B Counter
 #define TX_B2B_CNTR "TX_B2B_CNTR"
 #define TX_B2B_CNTR_BWID 6
-#define TX_B2B_CNTR_INITIAL 5
+#define TX_B2B_CNTR_INITIAL BvConst(0x5, TX_B2B_CNTR_BWID)
 
 // TX word counter
 #define TX_WCNT "TX_WCNT"
