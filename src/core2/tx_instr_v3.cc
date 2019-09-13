@@ -50,7 +50,7 @@ void LmacCore2::SetupTxInstr(Ila& m) {
 }
 
 /********** Added by Yi Li **************/
-auto crc_polynomial = ilang::BvConst(0xEDB88320, 32);
+auto crc_polynomial = BvConst(0xEDB88320, 32);
 
 // crc look up table for half-byte crc generation.
 unsigned CRC_Lut[16] = {
@@ -151,7 +151,7 @@ void RdByteCnt(Ila& m, const std::string& name) {
 
 
     // Set initial value of the CRC. This initial value is the output data. However the one that participates in the generation is different.
-    auto rb = ilang::Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0)); // rb stands for residual bytes
+    auto rb = Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0)); // rb stands for residual bytes
     instr.SetUpdate(m.state(CRC), Ite((rb == 0x0), BvConst(0x00000000, CRC_BWID), 
                                   Ite((rb == 0x1), BvConst(0x56a579b9, CRC_BWID),
                                   Ite((rb == 0x2), BvConst(0xe962b350, CRC_BWID),
@@ -201,26 +201,26 @@ void WrPktPayload(Ila& m, const std::string& name) {
 
     // fq stands for first qword of the whole packet. When the remaining bytes equals to the byte count, it is the fisrt qword.
     auto fq = (m.state(TX_WCNT) == m.state(TX_WCNT_INI));
-    auto rb = ilang::Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0));
+    auto rb = Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0));
 
     // CRC code update
     instr.SetUpdate(m.state(CRC_DAT_IN), Ite(fq, Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
-                                              Ite((rb == 0x1), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), BvConst(0x0, 56)),
-                                              Ite((rb == 0x2), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), BvConst(0x0, 48)),
-                                              Ite((rb == 0x3), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), BvConst(0x0, 40)),
-                                              Ite((rb == 0x4), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), BvConst(0x0, 32)),
-                                              Ite((rb == 0x5), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), BvConst(0x0, 24)),
-                                              Ite((rb == 0x6), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), BvConst(0x0, 16)),
-                                                             , ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), BvConst(0x0, 8))))))))),
+                                              Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), BvConst(0x0, 56)),
+                                              Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), BvConst(0x0, 48)),
+                                              Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), BvConst(0x0, 40)),
+                                              Ite((rb == 0x4), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), BvConst(0x0, 32)),
+                                              Ite((rb == 0x5), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), BvConst(0x0, 24)),
+                                              Ite((rb == 0x6), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), BvConst(0x0, 16)),
+                                                             , Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), BvConst(0x0, 8))))))))),
 
                                               Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
-                                              Ite((rb == 0x1), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), ilang::Extract(m.state(TX_BUF),  63, 8)),
-                                              Ite((rb == 0x2), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), ilang::Extract(m.state(TX_BUF),  63, 16)),
-                                              Ite((rb == 0x3), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), ilang::Extract(m.state(TX_BUF),  63, 24)),
-                                              Ite((rb == 0x4), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), ilang::Extract(m.state(TX_BUF),  63, 32)),
-                                              Ite((rb == 0x5), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), ilang::Extract(m.state(TX_BUF),  63, 40)),
-                                              Ite((rb == 0x6), ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), ilang::Extract(m.state(TX_BUF),  63, 48)),
-                                                             , ilang::Concat(ilang::Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), ilang::Extract(m.state(TX_BUF),  63, 56))))))))))
+                                              Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), Extract(m.state(TX_BUF),  63, 8)),
+                                              Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), Extract(m.state(TX_BUF),  63, 16)),
+                                              Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), Extract(m.state(TX_BUF),  63, 24)),
+                                              Ite((rb == 0x4), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), Extract(m.state(TX_BUF),  63, 32)),
+                                              Ite((rb == 0x5), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), Extract(m.state(TX_BUF),  63, 40)),
+                                              Ite((rb == 0x6), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), Extract(m.state(TX_BUF),  63, 48)),
+                                                             , Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), Extract(m.state(TX_BUF),  63, 56))))))))))
                     );
     
     // This buffer should be placed after the CRC update.
@@ -233,7 +233,7 @@ void WrPktPayload(Ila& m, const std::string& name) {
     auto current;
     
     for (auto len = 0; len < 8; len++) {
-      current = ilang::Extract(data, (8*len + 7), 8*len);
+      current = Extract(data, (8*len + 7), 8*len);
       crc_g = CRC_Lut[(crc_g ^ current) & 0x0F] ^ (crc_g >> 4);
       crc_g = CRC_Lut[(crc_g ^ (current >> 4)) & 0x0F] ^ (crc_g >> 4);
     }
@@ -321,7 +321,7 @@ void WrPktLastOne(Ila& m, const std::string& name) {
     instr.SetDecode(mode_10G & state_crc);
 
     // State Update
-    // auto rb = ilang::Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0));
+    // auto rb = Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0));
 
     // instr.SetUpdate(m.state(XGMII_COUT_REG), Ite((rb == 0), 0xF0,
     //                                          Ite((rb == 1), 0xFF,
