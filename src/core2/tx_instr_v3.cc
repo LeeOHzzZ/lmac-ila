@@ -29,7 +29,7 @@ void WrPktFIFO(Ila& m, const std::string& name = "TX_WR_PKT_FIFO");
 void SetB2BCntr(Ila& m, const std::string& name = "TX_SET_B2B_CNTR");
 void RdByteCnt(Ila& m, const std::string& name = "TX_Rd_BYTE_CNT");
 void WrPktPayload(Ila& m, const std::string& name = "TX_WR_PKT_PAYLOAD");
-void WrLastOne(Ila& m, const std::string& name = "TX_WR_LAST_ONE");
+void WrPktLastOne(Ila& m, const std::string& name = "TX_WR_LAST_ONE");
 
 
 void LmacCore2::SetupTxInstr(Ila& m) {
