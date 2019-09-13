@@ -58,6 +58,16 @@ unsigned CRC_Lut[16] = {
   0xEDB88320,0xF00F9344,0xD6D6A3E8,0xCB61B38C,0x9B64C2B0,0x86D3D2D4,0xA00AE278,0xBDBDF21C
 };
 
+ExprRef lut_read(const ExprRef& idx) {
+  assert(idx.bit_width() == 4);
+
+  ExprRef ret = BvConst(CRC_Lut[0], 32);
+  for (int i = 1; i < 16; i++) {
+    ret = Ite(idx == i, BvConst(CRC_Lut[i], 32), ret);
+  }
+  return ret;
+}
+
 void WrPktFIFO(Ila& m, const std::string& name) {
   // This instruction model the writing data into FIFO of TX
   {
@@ -95,7 +105,7 @@ void SetB2BCntr(Ila& m, const std::string& name) {
 
     // State Update
     instr.SetUpdate(m.state(TX_B2B_CNTR), m.state(TX_B2B_CNTR) - 1); // 1 clk
-    instr.SetUpdate(m.state(XGMII_DOUT_REG), BvConst(0x0707070707070707, XGMII_DOUT_REG_BWID)); // 1 clk
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32))); // 1 clk
     instr.SetUpdate(m.state(XGMII_COUT_REG), BvConst(0xFF, XGMII_COUT_REG_BWID)); // 1 clk
 
   }
@@ -144,7 +154,7 @@ void RdByteCnt(Ila& m, const std::string& name) {
     // Be Careful!!! The output state is actually 1 clk behind the other arch states in this step!
 
     // I put the B2B CNTR here 
-    instr.SetUpdate(m.state(XGMII_DOUT_REG), BvConst(0xD5555555555555FB, XGMII_DOUT_REG_BWID)); // 6 clk
+    instr.SetUpdate(m.state(XGMII_DOUT_REG), Concat(BvConst(0xD5555555, 32), BvConst(0x555555FB, 32))); // 6 clk
     instr.SetUpdate(m.state(XGMII_COUT_REG), BvConst(0x01, XGMII_COUT_REG_BWID)); // 6 clk 
     instr.SetUpdate(m.state(TX_B2B_CNTR), TX_B2B_CNTR_INITIAL);
 
@@ -205,9 +215,9 @@ void WrPktPayload(Ila& m, const std::string& name) {
 
     // CRC code update
     instr.SetUpdate(m.state(CRC_DAT_IN), Ite(fq, Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
-                                              Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), BvConst(0x0, 56)),
-                                              Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), BvConst(0x0, 48)),
-                                              Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), BvConst(0x0, 40)),
+                                              Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 24))),
+                                              Ite((rb == 0x2), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 16))),
+                                              Ite((rb == 0x3), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 23, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 8))),
                                               Ite((rb == 0x4), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), BvConst(0x0, 32)),
                                               Ite((rb == 0x5), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), BvConst(0x0, 24)),
                                               Ite((rb == 0x6), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), BvConst(0x0, 16)),
@@ -233,8 +243,8 @@ void WrPktPayload(Ila& m, const std::string& name) {
     
     for (auto len = 0; len < 8; len++) {
       auto current = Extract(data, (8*len + 7), 8*len);
-      crc_g = CRC_Lut[(crc_g ^ current) & 0x0F] ^ (crc_g >> 4);
-      crc_g = CRC_Lut[(crc_g ^ (current >> 4)) & 0x0F] ^ (crc_g >> 4);
+      crc_g = lut_read((crc_g ^ current) & BvConst(0x0F, 8)) ^ (crc_g >> 4);
+      crc_g = lut_read((crc_g ^ (current >> 4)) & BvConst(0x0F, 8)) ^ (crc_g >> 4);
     }
 
     // update CRC code input for the generator;
@@ -269,7 +279,7 @@ void WrPktPayload(Ila& m, const std::string& name) {
                                                                 Ite((rb == 5), BvConst(0xFE, XGMII_COUT_REG_BWID),
                                                                 Ite((rb == 6), BvConst(0xFC, XGMII_COUT_REG_BWID),
                                                                                BvConst(0xF8, XGMII_COUT_REG_BWID)))))))),  
-                                              0xFF))));
+                                              BvConst(0xFF, 8)))));
                                                               
                                                               
     auto dat = m.state(TXFIFO_RD_OUTPUT);
@@ -284,15 +294,15 @@ void WrPktPayload(Ila& m, const std::string& name) {
                                                                               Concat(Extract(crc_output, 7, 0), Extract(dat, 55, 0))))))))),
 
                                               Ite((wcnt < 0),   Ite((rb == 0), Concat(BvConst(0x070707FD, 32), crc_output),
-                                                                Ite((rb == 1), BvConst(0x0707070707070707, 64),
-                                                                Ite((rb == 2), BvConst(0x0707070707070707, 64),
-                                                                Ite((rb == 3), BvConst(0x0707070707070707, 64),
-                                                                Ite((rb == 4), BvConst(0x07070707070707FD, 64),
-                                                                Ite((rb == 5), Concat(BvConst(0x070707070707FD, 56), Extract(crc_output, 31, 24)),
-                                                                Ite((rb == 6), Concat(BvConst(0x0707070707FD, 48), Extract(crc_output, 31, 16)),
-                                                                                Concat(BvConst(0x07070707FD, 40), Extract(crc_output, 31, 8))))))))), 
+                                                                Ite((rb == 1), Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32)),
+                                                                Ite((rb == 2), Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32)),
+                                                                Ite((rb == 3), Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32)),
+                                                                Ite((rb == 4), Concat(BvConst(0x07070707, 32), BvConst(0x070707FD, 32)),
+                                                                Ite((rb == 5), Concat(Concat(BvConst(0x07070707, 32), BvConst(0x0707FD, 24)), Extract(crc_output, 31, 24)),
+                                                                Ite((rb == 6), Concat(Concat(BvConst(0x07070707, 32), BvConst(0x07FD, 16)), Extract(crc_output, 31, 16)),
+                                                                                Concat(Concat(BvConst(0x07070707, 32), BvConst(0xFD, 8)), Extract(crc_output, 31, 8))))))))), 
                                                                              
-                                              0x0707070707070707))));
+                                              Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32))))));
                                                               
     // Update the wcnt
     auto b2b_cnt = m.state(TX_B2B_CNTR);
