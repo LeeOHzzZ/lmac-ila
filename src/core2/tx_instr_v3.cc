@@ -43,7 +43,7 @@ void LmacCore2::SetupTxInstr(Ila& m) {
 // 4. Write the payload
   WrPktPayload(m);
 // 5. Write the last QWord of the packet -- CRC code and EOF
-  WrLastOne(m);
+  WrPktLastOne(m);
 
 
   return;
