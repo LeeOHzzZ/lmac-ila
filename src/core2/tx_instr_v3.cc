@@ -43,7 +43,7 @@ void LmacCore2::SetupTxInstr(Ila& m) {
 // 4. Write the payload
   WrPktPayload(m);
 // 5. Write the last QWord of the packet -- CRC code and EOF
-  WrLastOne(m;)
+  WrLastOne(m);
 
 
   return;
@@ -68,7 +68,7 @@ void WrPktFIFO(Ila& m, const std::string& name) {
     auto fifo_non_full = (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
 
     // update
-    instr.SetUpdate(TXFIFO_BUFF, Store(TXFIFO_BUFF, TXFIFO_BUFF_WR_PTR, m.input(TX_DATA)) );
+    instr.SetUpdate(m.state(TXFIFO_BUFF), Store(m.state(TXFIFO_BUFF), m.state(TXFIFO_BUFF_WR_PTR), m.input(TX_DATA)) );
     instr.SetUpdate(m.state(TXFIFO_BUFF_WR_PTR), m.state(TXFIFO_BUFF_WR_PTR) + 0x1);
     instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) + 0x1);
     instr.SetUpdate(m.state(TXFIFO_FULL), Ite((m.state(TXFIFO_WUSED_QWD) == 1024), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID)));
@@ -121,7 +121,7 @@ void RdByteCnt(Ila& m, const std::string& name) {
 
     // State Update
     // read FIFO
-    instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Load(TXFIFO_BUFF, TXFIFO_BUFF_RD_PTR));
+    instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Load(m.state(TXFIFO_BUFF), m.state(TXFIFO_BUFF_RD_PTR)));
     instr.SetUpdate(m.state(TXFIFO_BUFF_RD_PTR), m.state(TXFIFO_BUFF_RD_PTR) + 1);
     instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) - 1);
 
@@ -193,7 +193,7 @@ void WrPktPayload(Ila& m, const std::string& name) {
     auto wcnt = m.state(TX_WCNT);
 
     // Read data from FIFO
-    instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Ite((wcnt > 0), Load(TXFIFO_BUFF, TXFIFO_BUFF_RD_PTR), m.state(TXFIFO_RD_OUTPUT)));
+    instr.SetUpdate(m.state(TXFIFO_RD_OUTPUT), Ite((wcnt > 0), Load(m.state(TXFIFO_BUFF), m.state(TXFIFO_BUFF_RD_PTR)), m.state(TXFIFO_RD_OUTPUT)));
     instr.SetUpdate(m.state(TXFIFO_BUFF_RD_PTR), Ite((wcnt > 0), m.state(TXFIFO_BUFF_RD_PTR) + 1, m.state(TXFIFO_BUFF_RD_PTR)));
     instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), Ite((wcnt > 0), m.state(TXFIFO_WUSED_QWD) - 1, m.state(TXFIFO_WUSED_QWD)));
 
