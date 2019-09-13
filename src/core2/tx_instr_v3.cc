@@ -133,8 +133,8 @@ void RdByteCnt(Ila& m, const std::string& name) {
     auto nbytes = Ite((bcnt_l > 0), Concat((bcnt_h + 1), BvConst(0x0, 3)), Concat(bcnt_h, BvConst(0x0, 3)));
 
     instr.SetUpdate(m.state(TX_PACKET_BYTE_CNT), Extract(m.state(TXFIFO_RD_OUTPUT), 15, 0)); // 4 clk
-    instr.SetUpdate(m.state(TX_WCNT), (wcnt - 1)); // 5 clk
-    instr.SetUpdate(m.state(TX_WCNT_INI), (wcnt - 1));
+    instr.SetUpdate(m.state(TX_WCNT), (nbytes - 1)); // 5 clk
+    instr.SetUpdate(m.state(TX_WCNT_INI), (nbytes - 1));
 
     // State machine update
     instr.SetUpdate(m.state(TX_STATE), TX_STATE_DAT); // 5 clk
@@ -151,7 +151,7 @@ void RdByteCnt(Ila& m, const std::string& name) {
 
 
     // Set initial value of the CRC. This initial value is the output data. However the one that participates in the generation is different.
-    auto rb = Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0)); // rb stands for residual bytes
+    auto rb = Extract(m.state(TX_PACKET_BYTE_CNT), 2, 0); // rb stands for residual bytes
     instr.SetUpdate(m.state(CRC), Ite((rb == 0x0), BvConst(0x00000000, CRC_BWID), 
                                   Ite((rb == 0x1), BvConst(0x56a579b9, CRC_BWID),
                                   Ite((rb == 0x2), BvConst(0xe962b350, CRC_BWID),
@@ -211,7 +211,7 @@ void WrPktPayload(Ila& m, const std::string& name) {
                                               Ite((rb == 0x4), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), BvConst(0x0, 32)),
                                               Ite((rb == 0x5), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), BvConst(0x0, 24)),
                                               Ite((rb == 0x6), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), BvConst(0x0, 16)),
-                                                             , Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), BvConst(0x0, 8))))))))),
+                                                               Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), BvConst(0x0, 8))))))))),
 
                                               Ite((rb == 0x0), m.state(TXFIFO_RD_OUTPUT),
                                               Ite((rb == 0x1), Concat(Extract(m.state(TXFIFO_RD_OUTPUT),  7, 0), Extract(m.state(TX_BUF),  63, 8)),
@@ -220,7 +220,7 @@ void WrPktPayload(Ila& m, const std::string& name) {
                                               Ite((rb == 0x4), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 31, 0), Extract(m.state(TX_BUF),  63, 32)),
                                               Ite((rb == 0x5), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 39, 0), Extract(m.state(TX_BUF),  63, 40)),
                                               Ite((rb == 0x6), Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 47, 0), Extract(m.state(TX_BUF),  63, 48)),
-                                                             , Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), Extract(m.state(TX_BUF),  63, 56))))))))))
+                                                               Concat(Extract(m.state(TXFIFO_RD_OUTPUT), 55, 0), Extract(m.state(TX_BUF),  63, 56))))))))))
                     );
     
     // This buffer should be placed after the CRC update.
@@ -230,10 +230,9 @@ void WrPktPayload(Ila& m, const std::string& name) {
     auto crc_g = m.state(CRC_IN);
     auto data = m.state(CRC_DAT_IN);
     // The current stores the byte that generator takes. 
-    auto current;
     
     for (auto len = 0; len < 8; len++) {
-      current = Extract(data, (8*len + 7), 8*len);
+      auto current = Extract(data, (8*len + 7), 8*len);
       crc_g = CRC_Lut[(crc_g ^ current) & 0x0F] ^ (crc_g >> 4);
       crc_g = CRC_Lut[(crc_g ^ (current >> 4)) & 0x0F] ^ (crc_g >> 4);
     }
