@@ -169,7 +169,7 @@ void RdByteCnt(Ila& m, const std::string& name) {
                                   Ite((rb == 0x4), BvConst(0x9d0ad96d, CRC_BWID),
                                   Ite((rb == 0x5), BvConst(0x7ed9d15c, CRC_BWID),
                                   Ite((rb == 0x6), BvConst(0x6f62e365, CRC_BWID),
-                                                   BvConst(0x26706a0f, CRC_BWID)))))))))
+                                                   BvConst(0x26706a0f, CRC_BWID))))))))
                     );
     
     instr.SetUpdate(m.state(CRC_IN), Ite((rb == 0x0), BvConst(0xffffffff, CRC_IN_BWID),
@@ -179,7 +179,7 @@ void RdByteCnt(Ila& m, const std::string& name) {
                                   Ite((rb == 0x4), BvConst(0x9226f562, CRC_IN_BWID),
                                   Ite((rb == 0x5), BvConst(0xa32e2681, CRC_IN_BWID),
                                   Ite((rb == 0x6), BvConst(0x9a1c9d90, CRC_IN_BWID),
-                                                   BvConst(0xf0958fd9, CRC_IN_BWID)))))))))
+                                                   BvConst(0xf0958fd9, CRC_IN_BWID))))))))
                     );
   }
 
