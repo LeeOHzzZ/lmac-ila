@@ -54,7 +54,7 @@ int main(int argc, const char** argv) {
 
   design_path = (design_path == "") ? "../design/core2" : design_path;
   output_path = (output_path == "") ? "../verification/core2" : output_path;
-  var_map = "../refinement/core2/var_map.json";
+  // var_map = "../refinement/core2/var_map.json";
 
 
   // generate verification target
