@@ -59,7 +59,7 @@ int main(int argc, const char** argv) {
 
   // generate verification target
   //GenVerifTargetReg(core2, design_path, instr_map, var_map,
-                    output_path + "/reg");
+                    // output_path + "/reg");
   
   GenVerifTargetTX(core2, design_path, instr_map, var_map,
                     output_path + "/TX");
