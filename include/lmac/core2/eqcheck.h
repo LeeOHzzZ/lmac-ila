@@ -31,6 +31,11 @@ void GenVerifTargetReg(Ila& model, const std::string& design_path,
                        const std::string& instr_map, const std::string& var_map,
                        const std::string& output_path);
 
+// generate Verilog verification target for tx instr
+void GenVerifTargetTX(Ila& model, const std::string& design_path,
+                      const std::string& instr_map, const std::string& var_map,
+                      const std::string& output_path);
+
 }; // namespace ilang
 
 #endif // LMAC_CORE2_EQCHECK_H__
