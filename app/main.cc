@@ -29,6 +29,7 @@ int main(int argc, const char** argv) {
   // EnableDebug("LMAC");
 
   // create LMac Core 2 ILA
+  ILA_INFO << "before creating ILA";
   auto core2 = LmacCore2::New();
 
   // export json target (ILA Portable)
