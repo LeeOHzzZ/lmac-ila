@@ -35,14 +35,19 @@ void WrPktLastOne(Ila& m, const std::string& name = "TX_WR_LAST_ONE");
 void LmacCore2::SetupTxInstr(Ila& m) {
 
 // 1. Write the FIFO of the TX path
+  ILA_INFO << "before setting WrFIFO instr";
   WrPktFIFO(m);
 // 2. Set the TX path back-to-back counter. (interval between two packets)
+  ILA_INFO << "before setting B2Bcounter instr";
   SetB2BCntr(m);
 // 3. Read the package byte count
+  ILA_INFO << "before setting RdByteCnt instr";
   RdByteCnt(m);
 // 4. Write the payload
+  ILA_INFO << "before setting WrPktPayload instr";
   WrPktPayload(m);
 // 5. Write the last QWord of the packet -- CRC code and EOF
+  ILA_INFO << "before setting WrPktLastOne instr";
   WrPktLastOne(m);
 
 
