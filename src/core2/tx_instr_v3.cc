@@ -308,26 +308,49 @@ void WrPktPayload(Ila& m, const std::string& name) {
                                                               
     ILA_INFO << "ite test";
     auto dat = m.state(TXFIFO_RD_OUTPUT);
-    instr.SetUpdate(m.state(XGMII_DOUT_REG),  Ite((wcnt > 7), dat,
-                                              Ite((wcnt <= 7),  Ite((rb == 0), m.state(TXFIFO_RD_OUTPUT),
-                                                                Ite((rb == 1), Concat(BvConst(0x0707FD, 24), Concat(crc_output, Extract(dat, 7, 0))),
-                                                                Ite((rb == 2), Concat(BvConst(0x07FD, 16), Concat(crc_output, Extract(dat, 15, 0))),
-                                                                Ite((rb == 3), Concat(BvConst(0xFD, 8), Concat(crc_output, Extract(dat, 23, 0))),
-                                                                Ite((rb == 4), Concat(crc_output, dat),
-                                                                Ite((rb == 5), Concat(Extract(crc_output, 23, 0), Extract(dat, 39, 0)),
-                                                                Ite((rb == 6), Concat(Extract(crc_output, 15, 0), Extract(dat, 47, 0)),
-                                                                              Concat(Extract(crc_output, 7, 0), Extract(dat, 55, 0))))))))),
 
-                                              Ite((wcnt < 0),   Ite((rb == 0), Concat(BvConst(0x070707FD, 32), crc_output),
-                                                                Ite((rb == 1), Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32)),
-                                                                Ite((rb == 2), Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32)),
-                                                                Ite((rb == 3), Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32)),
-                                                                Ite((rb == 4), Concat(BvConst(0x07070707, 32), BvConst(0x070707FD, 32)),
-                                                                Ite((rb == 5), Concat(Concat(BvConst(0x07070707, 32), BvConst(0x0707FD, 24)), Extract(crc_output, 31, 24)),
-                                                                Ite((rb == 6), Concat(Concat(BvConst(0x07070707, 32), BvConst(0x07FD, 16)), Extract(crc_output, 31, 16)),
-                                                                                Concat(Concat(BvConst(0x07070707, 32), BvConst(0xFD, 8)), Extract(crc_output, 31, 8))))))))), 
+    auto crc_0 = dat;
+    auto crc_1 = Concat(BvConst(0x0707FD, 24), Concat(crc_output, Extract(dat, 7, 0)));
+    auto crc_2 = Concat(BvConst(0x07FD, 16), Concat(crc_output, Extract(dat, 15, 0)));
+    auto crc_3 = Concat(BvConst(0xFD, 8), Concat(crc_output, Extract(dat, 23, 0)));
+    auto crc_4 = Concat(crc_output, dat);
+    auto crc_5 = Concat(Extract(crc_output, 23, 0), Extract(dat, 39, 0));
+    auto crc_6 = Concat(Extract(crc_output, 15, 0), Extract(dat, 47, 0));
+    auto crc_7 = Concat(Extract(crc_output, 7, 0), Extract(dat, 55, 0)))))))));
+
+    auto eof_0 = Concat(BvConst(0x070707FD, 32), crc_output);
+    auto eof_1 = Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32));
+    auto eof_2 = Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32));
+    auto eof_3 = Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32));
+    auto eof_4 = Concat(BvConst(0x07070707, 32), BvConst(0x070707FD, 32));
+    auto eof_5 = Concat(Concat(BvConst(0x07070707, 32), BvConst(0x0707FD, 24)), Extract(crc_output, 31, 24));
+    auto eof_6 = Concat(Concat(BvConst(0x07070707, 32), BvConst(0x07FD, 16)), Extract(crc_output, 31, 16));
+    auto eof_7 = Concat(Concat(BvConst(0x07070707, 32), BvConst(0xFD, 8)), Extract(crc_output, 31, 8));
+
+    auto dout_idle = Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32));
+
+    ILA_INFO << "test parameter";
+
+
+    instr.SetUpdate(m.state(XGMII_DOUT_REG),  Ite((wcnt > 7), dat,
+                                              Ite((wcnt <= 7),  Ite((rb == 0), crc_0,
+                                                                Ite((rb == 1), crc_1,
+                                                                Ite((rb == 2), crc_2,
+                                                                Ite((rb == 3), crc_3,
+                                                                Ite((rb == 4), crc_4,
+                                                                Ite((rb == 5), crc_5,
+                                                                Ite((rb == 6), crc_6,
+                                                                               crc_7))))))),
+                                              Ite((wcnt < 0),   Ite((rb == 0), eof_0,
+                                                                Ite((rb == 1), eof_1,
+                                                                Ite((rb == 2), eof_2,
+                                                                Ite((rb == 3), eof_3,
+                                                                Ite((rb == 4), eof_4,
+                                                                Ite((rb == 5), eof_5,
+                                                                Ite((rb == 6), eof_6,
+                                                                               eof_7))))))), 
                                                                              
-                                              Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32))))));
+                                              dout_idle))));
                                                               
     // Update the wcnt
     auto b2b_cnt = m.state(TX_B2B_CNTR);
