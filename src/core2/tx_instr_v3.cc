@@ -373,31 +373,11 @@ void WrPktLastOne(Ila& m, const std::string& name) {
 
     instr.SetDecode(mode_10G & state_crc);
 
-    // State Update
-    // auto rb = Extract(m.state(TX_PACKET_BYTE_CNT, 2, 0));
-
-    // instr.SetUpdate(m.state(XGMII_COUT_REG), Ite((rb == 0), 0xF0,
-    //                                          Ite((rb == 1), 0xFF,
-    //                                          Ite((rb == 2), 0xFF,
-    //                                          Ite((rb == 3), 0xFF,
-    //                                          Ite((rb == 4), 0xFF,
-    //                                          Ite((rb == 5), 0xFE,
-    //                                          Ite((rb == 6), 0xFC,
-    //                                                         0xF8))))))));
-    
-    // instr.SetUpdate(m.state(XGMII_DOUT_REG), Ite((rb == 0), Concat(BvConst(0x070707FD, 32), crc_output),
-    //                                          Ite((rb == 1), BvConst(0x0707070707070707, 64),
-    //                                          Ite((rb == 2), BvConst(0x0707070707070707, 64),
-    //                                          Ite((rb == 3), BvConst(0x0707070707070707, 64),
-    //                                          Ite((rb == 4), BvConst(0x07070707070707FD, 64),
-    //                                          Ite((rb == 5), Concat(BvConst(0x070707070707FD, 56), Extract(crc_output, 31, 24)),
-    //                                          Ite((rb == 6), Concat(BvConst(0x0707070707FD, 48), Extract(crc_output, 31, 16)),
-    //                                                         Concat(BvConst(0x07070707FD, 40), Extract(crc_output, 31, 8))))))))));
-
-    instr.SetUpdate(m.state(TX_PKT_SENT), m.state(TX_PKT_SENT) + 1); // 2 clk
+    // state updates
+    instr.SetUpdate(m.state(TX_PKT_SENT), m.state(TX_PKT_SENT) + 0x1); // 2 clk
     instr.SetUpdate(m.state(TX_BYTE_SENT), m.state(TX_BYTE_SENT) + m.state(TX_PACKET_BYTE_CNT)); // 2 clk
     instr.SetUpdate(m.state(TX_STATE), TX_STATE_IDLE); // 1 clk
-    instr.SetUpdate(m.state(TX_B2B_CNTR), Ite((m.state(TX_STATE_ENCAP) == TX_STATE_ENCAP_IDLE), m.state(TX_B2B_CNTR) - 1, m.state(TX_B2B_CNTR))); // 1 clk
+    instr.SetUpdate(m.state(TX_B2B_CNTR), Ite((m.state(TX_STATE_ENCAP) == TX_STATE_ENCAP_IDLE), m.state(TX_B2B_CNTR) - 0x1, m.state(TX_B2B_CNTR))); // 1 clk
   }
 
   return;
