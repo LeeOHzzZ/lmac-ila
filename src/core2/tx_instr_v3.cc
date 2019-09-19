@@ -20,7 +20,6 @@
 
 #include <lmac/core2/lmac_core_top.h>
 #include <lmac/core2/configs.h>
-
 #include <iostream>
 
 #include <ilang/util/log.h>
@@ -66,7 +65,7 @@ unsigned CRC_Lut[16] = {
 };
 
 ExprRef lut_read(const ExprRef& idx) {
-  assert(idx.bit_width() == 4);
+  assert(idx.bit_width() == 8);
 
   ExprRef ret = BvConst(CRC_Lut[0], 32);
   for (int i = 1; i < 16; i++) {
@@ -97,6 +96,7 @@ void WrPktFIFO(Ila& m, const std::string& name) {
     //for (auto i = 0; i != m.state_num(); i++) {
 //	    ILA_INFO << m.state(i);
   //  }
+    //ILA_INFO << "buff " << m.state(TXFIFO_BUFF);
     // ILA_NOT_NULL(fifo);
     ILA_INFO << fifo << wr_ptr << data_in;
     // update
@@ -267,8 +267,12 @@ void WrPktPayload(Ila& m, const std::string& name) {
     
     for (auto len = 0; len < 8; len++) {
       auto current = Extract(data, (8*len + 7), 8*len);
-      crc_g = lut_read((crc_g ^ current) & BvConst(0x0F, 8)) ^ (crc_g >> 4);
-      crc_g = lut_read((crc_g ^ (current >> 4)) & BvConst(0x0F, 8)) ^ (crc_g >> 4);
+      
+      ILA_INFO << m.state(CRC_IN).bit_width; 
+      ILA_INFO << (lut_read((Extract(crc_g, 7, 0) ^ current) & BvConst(0x0F, 8))).bit_width() << crc_g.bit_width() << (crc_g >> 4).bit_width();
+
+      crc_g = lut_read((Extract(crc_g, 7, 0) ^ current) & BvConst(0x0F, 8)) ^ (crc_g >> 4);
+      crc_g = lut_read((Extract(crc_g, 7, 0) ^ (current >> 4)) & BvConst(0x0F, 8)) ^ (crc_g >> 4);
     }
 
     // update CRC code input for the generator;

@@ -122,7 +122,7 @@ namespace ilang {
 
 // State for previous crc code input
 #define CRC_IN "CRC_IN"
-#define CRC_IN_BWID CRC_BWID
+#define CRC_IN_BWID 32 
 
 
 // -------------------------------------------------------------------------- //
