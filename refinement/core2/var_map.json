@@ -83,8 +83,8 @@
 
     "tx_mac_wr"         : "TX_WE",
     "tx_mac_data"       : "TX_DATA",		
-    "tx_mac_full"       : "TXFIFO_FULL",		
-    "tx_mac_usedw"      : "TXFIFO_WUSED_QWD",	
+    "tx_mac_full"       : "**KEEP**",		
+    "tx_mac_usedw"      : "**KEEP**",	
 
     "rx_mac_data"       : "**KEEP**",
     "rx_mac_ctrl"       : "**KEEP**",
