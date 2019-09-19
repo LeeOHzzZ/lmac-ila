@@ -26,25 +26,19 @@ LmacCore2::LmacCore2() {}
 LmacCore2::~LmacCore2() {}
 
 Ila LmacCore2::New(const std::string& name) {
-  ILA_DLOG("LMAC") << "Create ILA with name " << name;
-  ILA_INFO << "before create ILA at core_top";
   auto m = Ila(name);
 
   // state vars
-  ILA_INFO << "before setting up state vars";
   SetArchStateVar(m);
   SetImplStateVar(m);
 
   // model hierarchy
-  ILA_INFO << "before setting up childs";
   SetChild(m);
 
   // instruction decode & updates
-  ILA_INFO << "before setting up instructions";
   SetInstr(m);
 
   // initial condition
-  ILA_INFO << "before setting up initial conditions";
   SetInit(m);
 
   { // valid

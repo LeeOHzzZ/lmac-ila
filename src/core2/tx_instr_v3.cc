@@ -375,7 +375,7 @@ void WrPktLastOne(Ila& m, const std::string& name) {
 
     // state updates
     instr.SetUpdate(m.state(TX_PKT_SENT), m.state(TX_PKT_SENT) + 0x1); // 2 clk
-    instr.SetUpdate(m.state(TX_BYTE_SENT), m.state(TX_BYTE_SENT) + m.state(TX_PACKET_BYTE_CNT)); // 2 clk
+    instr.SetUpdate(m.state(TX_BYTE_SENT), m.state(TX_BYTE_SENT) + Concat(BvConst(0x0, 16), m.state(TX_PACKET_BYTE_CNT))); // 2 clk
     instr.SetUpdate(m.state(TX_STATE), TX_STATE_IDLE); // 1 clk
     instr.SetUpdate(m.state(TX_B2B_CNTR), Ite((m.state(TX_STATE_ENCAP) == TX_STATE_ENCAP_IDLE), m.state(TX_B2B_CNTR) - 0x1, m.state(TX_B2B_CNTR))); // 1 clk
   }
