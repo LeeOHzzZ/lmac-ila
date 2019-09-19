@@ -120,7 +120,7 @@ void LmacCore2::SetImplStateVar(Ila& m) {
   ILA_DLOG("LMAC") << "Setup state variables (impl. specific)";
 
   // TX FIFO internal states
-#if 0 // TODO
+#if 1 // TODO
   SetupTxInternal(m);
 #endif
 

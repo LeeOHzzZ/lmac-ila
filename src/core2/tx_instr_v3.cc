@@ -21,6 +21,8 @@
 #include <lmac/core2/lmac_core_top.h>
 #include <lmac/core2/configs.h>
 
+#include <iostream>
+
 #include <ilang/util/log.h>
 
 namespace ilang {
@@ -85,17 +87,26 @@ void WrPktFIFO(Ila& m, const std::string& name) {
     auto fifo_non_full = (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
     
     instr.SetDecode(wr_enable & fifo_non_full);
+    ILA_INFO << "decode " << instr.GetDecode();
     
 
     auto fifo = m.state(TXFIFO_BUFF);
     auto wr_ptr = m.state(TXFIFO_BUFF_WR_PTR);
     auto data_in = m.input(TX_DATA);
     ILA_INFO << "before writing fifo";
+    for (auto i = 0; i != m.state_num(); i++) {
+	    ILA_INFO << m.state(i);
+    }
+    ILA_INFO << "buff " << m.state(TXFIFO_BUFF);
+    ILA_INFO << wr_ptr;
+    ILA_INFO << fifo;
+    // ILA_NOT_NULL(fifo);
+    ILA_INFO << fifo << wr_ptr << data_in;
     // update
     instr.SetUpdate(fifo, Store(fifo, wr_ptr, data_in) );
     ILA_INFO << "before updating wr_ptr";
     instr.SetUpdate(m.state(TXFIFO_BUFF_WR_PTR), m.state(TXFIFO_BUFF_WR_PTR) + 0x1);
-    ILA_INFO << "before updating wused_qwd"
+    ILA_INFO << "before updating wused_qwd";
     instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) + 0x1);
     instr.SetUpdate(m.state(TXFIFO_FULL), Ite((m.state(TXFIFO_WUSED_QWD) == 1024), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID)));
   }
