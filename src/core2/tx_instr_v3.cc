@@ -92,10 +92,10 @@ void WrPktFIFO(Ila& m, const std::string& name) {
     auto data_in = m.input(TX_DATA);
     ILA_INFO << "before writing fifo";
     // update
-    instr.SetUpdate(tx_fifo_buff, Store(fifo, wr_ptr, data_in) );
+    instr.SetUpdate(fifo, Store(fifo, wr_ptr, data_in) );
     ILA_INFO << "before updating wr_ptr";
     instr.SetUpdate(m.state(TXFIFO_BUFF_WR_PTR), m.state(TXFIFO_BUFF_WR_PTR) + 0x1);
-    ILA_INFO << "before updating wused_qwd";
+    ILA_INFO << "before updating wused_qwd"
     instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) + 0x1);
     instr.SetUpdate(m.state(TXFIFO_FULL), Ite((m.state(TXFIFO_WUSED_QWD) == 1024), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID)));
   }
