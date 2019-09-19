@@ -306,17 +306,16 @@ void WrPktPayload(Ila& m, const std::string& name) {
                                               BvConst(0xFF, 8)))));
                                                               
                                                               
-    ILA_INFO << "ite test";
     auto dat = m.state(TXFIFO_RD_OUTPUT);
 
     auto crc_0 = dat;
     auto crc_1 = Concat(BvConst(0x0707FD, 24), Concat(crc_output, Extract(dat, 7, 0)));
     auto crc_2 = Concat(BvConst(0x07FD, 16), Concat(crc_output, Extract(dat, 15, 0)));
     auto crc_3 = Concat(BvConst(0xFD, 8), Concat(crc_output, Extract(dat, 23, 0)));
-    auto crc_4 = Concat(crc_output, dat);
+    auto crc_4 = Concat(crc_output, Extract(dat, 31, 0));
     auto crc_5 = Concat(Extract(crc_output, 23, 0), Extract(dat, 39, 0));
     auto crc_6 = Concat(Extract(crc_output, 15, 0), Extract(dat, 47, 0));
-    auto crc_7 = Concat(Extract(crc_output, 7, 0), Extract(dat, 55, 0)))))))));
+    auto crc_7 = Concat(Extract(crc_output, 7, 0), Extract(dat, 55, 0));
 
     auto eof_0 = Concat(BvConst(0x070707FD, 32), crc_output);
     auto eof_1 = Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32));
@@ -328,9 +327,6 @@ void WrPktPayload(Ila& m, const std::string& name) {
     auto eof_7 = Concat(Concat(BvConst(0x07070707, 32), BvConst(0xFD, 8)), Extract(crc_output, 31, 8));
 
     auto dout_idle = Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32));
-
-    ILA_INFO << "test parameter";
-
 
     instr.SetUpdate(m.state(XGMII_DOUT_REG),  Ite((wcnt > 7), dat,
                                               Ite((wcnt <= 7),  Ite((rb == 0), crc_0,
