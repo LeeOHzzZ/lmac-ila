@@ -27,5 +27,7 @@
             "ready bound"       :   1
         }
 
-    ]
+    ],
+
+    "global invariants" : []
 }

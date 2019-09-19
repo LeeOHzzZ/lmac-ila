@@ -12,7 +12,7 @@
 //  - GenVerifTargetTX
 
 #include <lmac/core2/eqcheck.h>
-
+#include <ilang/util/log.h>
 #include <ilang/util/fs.h>
 
 namespace ilang {
@@ -59,12 +59,15 @@ void GenVerifTargetTX(Ila& model, const std::string& design_path,
       "txfifo_1024x64.v",
   };
 
+  ILA_INFO << "before adding full path";
   for (auto i = 0; i < design_files.size(); i++) {
     auto full_path = os_portable_append_dir(design_path, design_files.at(i));
     design_files[i] = full_path;
   }
 
+  ILA_INFO << "before setting VlgGenConfig";
   auto vlg_cfg = SetVlgGenConfig();
+  ILA_INFO << "before setting verifGenConfig";
   auto vtg_cfg = SetVerifGenConfig();
 
   VerilogVerificationTargetGenerator vg(
@@ -81,6 +84,7 @@ void GenVerifTargetTX(Ila& model, const std::string& design_path,
       vlg_cfg  // verilog generator configuration
   );
 
+  ILA_INFO << "before generating targets";
   vg.GenerateTargets();
 
   return;

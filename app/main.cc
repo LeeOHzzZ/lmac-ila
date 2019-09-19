@@ -31,10 +31,12 @@ int main(int argc, const char** argv) {
   // create LMac Core 2 ILA
   auto core2 = LmacCore2::New();
 
+  ILA_INFO << "before export ILA portable";
   // export json target (ILA Portable)
-  ExportIlaPortable(core2, "LmacCore2.json");
+  // ExportIlaPortable(core2, "LmacCore2.json");
 
   // export verilog target (w/o child program)
+  ILA_INFO << "before exporting verilog target";
   std::string verilog_file_name = "LmacCore2.v";
   std::ofstream fw_verilog(verilog_file_name);
   core2.ExportToVerilog(fw_verilog);
@@ -61,6 +63,7 @@ int main(int argc, const char** argv) {
   //GenVerifTargetReg(core2, design_path, instr_map, var_map,
                     // output_path + "/reg");
   
+  ILA_INFO << "before generating verification target";
   GenVerifTargetTX(core2, design_path, instr_map, var_map,
                     output_path + "/TX");
 
