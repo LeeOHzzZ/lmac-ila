@@ -76,11 +76,15 @@ ExprRef lut_read(const ExprRef& idx) {
 void WrPktFIFO(Ila& m, const std::string& name) {
   // This instruction model the writing data into FIFO of TX
   {
+    ILA_INFO << "WrFIFO: before new instr";
     auto instr = m.NewInstr("WR_PKT_DATA_FIFO");
 
     // decode
+    ILA_INFO << "WrFIFO: before decode";
     auto wr_enable = (m.input(TX_WE) == TX_WE_V_VALID);
     auto fifo_non_full = (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
+    
+    instr.SetDecode(wr_enable & fifo_non_full);
 
     // update
     instr.SetUpdate(m.state(TXFIFO_BUFF), Store(m.state(TXFIFO_BUFF), m.state(TXFIFO_BUFF_WR_PTR), m.input(TX_DATA)) );
