@@ -186,24 +186,24 @@ void RdByteCnt(Ila& m, const std::string& name) {
 
     // Set initial value of the CRC. This initial value is the output data. However the one that participates in the generation is different.
     auto rb = Extract(m.state(TX_PACKET_BYTE_CNT), 2, 0); // rb stands for residual bytes
-    instr.SetUpdate(m.state(CRC), Ite((rb == 0x0), BvConst(0x00000000, CRC_BWID), 
-                                  Ite((rb == 0x1), BvConst(0x56a579b9, CRC_BWID),
-                                  Ite((rb == 0x2), BvConst(0xe962b350, CRC_BWID),
-                                  Ite((rb == 0x3), BvConst(0x3306840b, CRC_BWID),
-                                  Ite((rb == 0x4), BvConst(0x9d0ad96d, CRC_BWID),
-                                  Ite((rb == 0x5), BvConst(0x7ed9d15c, CRC_BWID),
-                                  Ite((rb == 0x6), BvConst(0x6f62e365, CRC_BWID),
-                                                   BvConst(0x26706a0f, CRC_BWID))))))))
+    instr.SetUpdate(m.state(CRC), Ite((rb == 0x0), BvConst(0x00000000, 32), 
+                                  Ite((rb == 0x1), BvConst(0x56a579b9, 32),
+                                  Ite((rb == 0x2), BvConst(0xe962b350, 32),
+                                  Ite((rb == 0x3), BvConst(0x3306840b, 32),
+                                  Ite((rb == 0x4), BvConst(0x9d0ad96d, 32),
+                                  Ite((rb == 0x5), BvConst(0x7ed9d15c, 32),
+                                  Ite((rb == 0x6), BvConst(0x6f62e365, 32),
+                                                   BvConst(0x26706a0f, 32))))))))
                     );
     
-    instr.SetUpdate(m.state(CRC_IN), Ite((rb == 0x0), BvConst(0xffffffff, CRC_IN_BWID),
-                                  Ite((rb == 0x1), BvConst(0x46865aa9, CRC_IN_BWID),
-                                  Ite((rb == 0x2), BvConst(0xaf4c9d16, CRC_IN_BWID),
-                                  Ite((rb == 0x3), BvConst(0xf47bf9cc, CRC_IN_BWID),
-                                  Ite((rb == 0x4), BvConst(0x9226f562, CRC_IN_BWID),
-                                  Ite((rb == 0x5), BvConst(0xa32e2681, CRC_IN_BWID),
-                                  Ite((rb == 0x6), BvConst(0x9a1c9d90, CRC_IN_BWID),
-                                                   BvConst(0xf0958fd9, CRC_IN_BWID))))))))
+    instr.SetUpdate(m.state(CRC_IN), Ite((rb == 0x0), BvConst(0xffffffff, 32),
+                                  Ite((rb == 0x1), BvConst(0x46865aa9, 32),
+                                  Ite((rb == 0x2), BvConst(0xaf4c9d16, 32),
+                                  Ite((rb == 0x3), BvConst(0xf47bf9cc, 32),
+                                  Ite((rb == 0x4), BvConst(0x9226f562, 32),
+                                  Ite((rb == 0x5), BvConst(0xa32e2681, 32),
+                                  Ite((rb == 0x6), BvConst(0x9a1c9d90, 32),
+                                                   BvConst(0xf0958fd9, 32))))))))
                     );
   }
 
