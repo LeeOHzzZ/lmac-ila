@@ -267,10 +267,6 @@ void WrPktPayload(Ila& m, const std::string& name) {
     
     for (auto len = 0; len < 8; len++) {
       auto current = Extract(data, (8*len + 7), 8*len);
-      
-      ILA_INFO << m.state(CRC_IN).bit_width; 
-      ILA_INFO << (lut_read((Extract(crc_g, 7, 0) ^ current) & BvConst(0x0F, 8))).bit_width() << crc_g.bit_width() << (crc_g >> 4).bit_width();
-
       crc_g = lut_read((Extract(crc_g, 7, 0) ^ current) & BvConst(0x0F, 8)) ^ (crc_g >> 4);
       crc_g = lut_read((Extract(crc_g, 7, 0) ^ (current >> 4)) & BvConst(0x0F, 8)) ^ (crc_g >> 4);
     }
@@ -278,11 +274,11 @@ void WrPktPayload(Ila& m, const std::string& name) {
     // update CRC code input for the generator;
     instr.SetUpdate(m.state(CRC_IN), Ite((wcnt > 0), crc_g, m.state(CRC_IN)));
     // update the CRC output. Needs transformation.
-    auto crc_code = ~(((crc_g >> 24) & 0x000000FF) | ((crc_g >> 8) & 0x0000FF00) | ((crc_g << 8) & 0x00FF0000) | ((crc_g << 24) & 0xFF000000));
+    auto crc_code = ~(((crc_g >> 24) & BvConst(0xFF, 32)) | ((crc_g >> 8) & BvConst(0xFF00, 32)) | ((crc_g << 8) & BvConst(0xFF0000, 32)) | ((crc_g << 24) & BvConst(0xFF000000, 32)));
     instr.SetUpdate(m.state(CRC), Ite((wcnt > 0), crc_code, m.state(CRC)));
 
     // when output the crc code, we need to change the endian of the code.
-    auto crc_output = ((m.state(CRC) >> 24) & 0x000000FF) | ((m.state(CRC) >> 8) & 0x0000FF00) | ((m.state(CRC) << 8) & 0x00FF0000) | ((m.state(CRC) << 24) & 0xFF000000);
+    auto crc_output = ((m.state(CRC) >> 24) & BvConst(0xFF, 32)) | ((m.state(CRC) >> 8) & BvConst(0xFF00, 32)) | ((m.state(CRC) << 8) & BvConst(0xFF0000, 32)) | ((m.state(CRC) << 24) & BvConst(0xFF000000, 32));
 
     // difference between crc_code and crc_output is that crc_code is the value in the crc register, however, when
     // outputing the value to txd, we need to change the endian. crc_output is for txd.
@@ -310,6 +306,7 @@ void WrPktPayload(Ila& m, const std::string& name) {
                                               BvConst(0xFF, 8)))));
                                                               
                                                               
+    ILA_INFO << "ite test";
     auto dat = m.state(TXFIFO_RD_OUTPUT);
     instr.SetUpdate(m.state(XGMII_DOUT_REG),  Ite((wcnt > 7), dat,
                                               Ite((wcnt <= 7),  Ite((rb == 0), m.state(TXFIFO_RD_OUTPUT),

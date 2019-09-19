@@ -74,7 +74,7 @@ void LmacCore2::SetupTxInternal(Ila& m) {
   // State for CRC data input
   NewState(m, CRC_DAT_IN, CRC_DAT_IN_BWID);
   // State for previous crc code input
-  NewState(m, CRC_IN, CRC_DAT_IN_BWID);
+  NewState(m, CRC_IN, CRC_IN_BWID);
 
 
   //////////////////////////////////
