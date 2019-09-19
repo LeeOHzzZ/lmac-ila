@@ -85,10 +85,17 @@ void WrPktFIFO(Ila& m, const std::string& name) {
     auto fifo_non_full = (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
     
     instr.SetDecode(wr_enable & fifo_non_full);
+    
 
+    auto fifo = m.state(TXFIFO_BUFF);
+    auto wr_ptr = m.state(TXFIFO_BUFF_WR_PTR);
+    auto data_in = m.input(TX_DATA);
+    ILA_INFO << "before writing fifo";
     // update
-    instr.SetUpdate(m.state(TXFIFO_BUFF), Store(m.state(TXFIFO_BUFF), m.state(TXFIFO_BUFF_WR_PTR), m.input(TX_DATA)) );
+    instr.SetUpdate(fifo, Store(fifo, wr_ptr, data_in) );
+    ILA_INFO << "before updating wr_ptr";
     instr.SetUpdate(m.state(TXFIFO_BUFF_WR_PTR), m.state(TXFIFO_BUFF_WR_PTR) + 0x1);
+    ILA_INFO << "before updating wused_qwd";
     instr.SetUpdate(m.state(TXFIFO_WUSED_QWD), m.state(TXFIFO_WUSED_QWD) + 0x1);
     instr.SetUpdate(m.state(TXFIFO_FULL), Ite((m.state(TXFIFO_WUSED_QWD) == 1024), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID)));
   }
