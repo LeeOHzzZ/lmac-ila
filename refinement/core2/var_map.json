@@ -45,8 +45,6 @@
     "RX_PKT_EMPTY"              : "m1.rx_mac_empty",
 
     // TX Path
-    "TX_WE"                     : "m1.tx_mac_wr",
-    "TX_DATA"                   : "m1.tx_mac_data",
     "TXFIFO_FULL"               : "m1.tx_mac_full",
     "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw",
 
