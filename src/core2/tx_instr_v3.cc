@@ -37,19 +37,19 @@ void WrPktLastOne(Ila& m, const std::string& name = "TX_WR_LAST_ONE");
 void LmacCore2::SetupTxInstr(Ila& m) {
 
 // 1. Write the FIFO of the TX path
-  ILA_INFO << "before setting WrFIFO instr";
+  //ILA_INFO << "before setting WrFIFO instr";
   WrPktFIFO(m);
 // 2. Set the TX path back-to-back counter. (interval between two packets)
-  ILA_INFO << "before setting B2Bcounter instr";
+  //ILA_INFO << "before setting B2Bcounter instr";
   SetB2BCntr(m);
 // 3. Read the package byte count
-  ILA_INFO << "before setting RdByteCnt instr";
+  //ILA_INFO << "before setting RdByteCnt instr";
   RdByteCnt(m);
 // 4. Write the payload
-  ILA_INFO << "before setting WrPktPayload instr";
+  //ILA_INFO << "before setting WrPktPayload instr";
   WrPktPayload(m);
 // 5. Write the last QWord of the packet -- CRC code and EOF
-  ILA_INFO << "before setting WrPktLastOne instr";
+  //ILA_INFO << "before setting WrPktLastOne instr";
   WrPktLastOne(m);
 
 
@@ -78,28 +78,25 @@ ExprRef lut_read(const ExprRef& idx) {
 void WrPktFIFO(Ila& m, const std::string& name) {
   // This instruction model the writing data into FIFO of TX
   {
-    ILA_INFO << "WrFIFO: before new instr";
+    //ILA_INFO << "WrFIFO: before new instr";
     auto instr = m.NewInstr("WR_PKT_DATA_FIFO");
 
     // decode
-    ILA_INFO << "WrFIFO: before decode";
+    //ILA_INFO << "WrFIFO: before decode";
     auto wr_enable = (m.input(TX_WE) == TX_WE_V_VALID);
     auto fifo_non_full = (m.state(TXFIFO_FULL) != TXFIFO_FULL_V_FULL);
     
     instr.SetDecode(wr_enable & fifo_non_full);
-    ILA_INFO << "decode " << instr.GetDecode();
+    //ILA_INFO << "decode " << instr.GetDecode();
     
 
     auto fifo = m.state(TXFIFO_BUFF);
     auto wr_ptr = m.state(TXFIFO_BUFF_WR_PTR);
     auto data_in = m.input(TX_DATA);
-    ILA_INFO << "before writing fifo";
-    for (auto i = 0; i != m.state_num(); i++) {
-	    ILA_INFO << m.state(i);
-    }
-    ILA_INFO << "buff " << m.state(TXFIFO_BUFF);
-    ILA_INFO << wr_ptr;
-    ILA_INFO << fifo;
+    //ILA_INFO << "before writing fifo";
+    //for (auto i = 0; i != m.state_num(); i++) {
+//	    ILA_INFO << m.state(i);
+  //  }
     // ILA_NOT_NULL(fifo);
     ILA_INFO << fifo << wr_ptr << data_in;
     // update
