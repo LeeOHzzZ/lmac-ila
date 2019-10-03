@@ -17,6 +17,10 @@
 #ifndef LMAC_CORE2_LMAC_CORE_TOP_H__
 #define LMAC_CORE2_LMAC_CORE_TOP_H__
 
+#define RESETN "RESTN"
+#define RESETN_BWID 1
+#define RESET_VALID 0x0
+
 #include <string>
 
 #include <ilang/ilang++.h>
@@ -44,6 +48,7 @@ private:
   static void SetImplStateVar(Ila& m);
   // set child ila
   static void SetChild(Ila& m);
+  static void SetupTxChild(Ila& m);
   // set instruction
   static void SetInstr(Ila& m);
   // set initial conditions
@@ -53,6 +58,7 @@ private:
   static void SetupTxInterface(Ila& m);
   static void SetupTxInternal(Ila& m);
   static void SetupTxInstr(Ila& m);
+ 
 
   // RX FIFO
   static void SetupRxInterface(Ila& m);
@@ -73,5 +79,6 @@ private:
 }; // class LmacCore2
 
 }; // namespace ilang
+
 
 #endif // LMAC_CORE2_LMAC_CORE_TOP_H__

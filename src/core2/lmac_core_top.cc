@@ -28,6 +28,9 @@ LmacCore2::~LmacCore2() {}
 Ila LmacCore2::New(const std::string& name) {
   auto m = Ila(name);
 
+  // The reset signal of the of module. It is put here temporally
+  NewInput(m, RESETN, RESETN_BWID);
+
   // state vars
   SetArchStateVar(m);
   SetImplStateVar(m);
@@ -127,8 +130,27 @@ void LmacCore2::SetImplStateVar(Ila& m) {
   return;
 }
 
+// Hierachy of the LMAC model
+// ************************************
+// |             LMAC                 |    
+// | ***************  *************** |
+// | |     TX      |  |      RX     | |
+// | | *********** |  | *********** | |
+// | | | TX_FIFO | |  | | RX_FIFO | | |
+// | | *********** |  | *********** | |
+// | |             |  |             | |
+// | | *********** |  | *********** | |
+// | | | TX_FUNC | |  | | RX_FUNC | | |
+// | | *********** |  | *********** | |
+// | |             |  |             | |
+// | ***************  *************** |
+// ************************************
+
 void LmacCore2::SetChild(Ila& m) {
   ILA_DLOG("LMAC") << "Setup child ILAs";
+  
+  SetupTxChild(m);
+  
 
   return;
 }
@@ -137,7 +159,7 @@ void LmacCore2::SetInstr(Ila& m) {
   ILA_DLOG("LMAC") << "Setup instructions";
 
   // TX FIFO instructions
-  SetupTxInstr(m);
+  // SetupTxInstr(m);
 
   // RX FIFO instructions
 

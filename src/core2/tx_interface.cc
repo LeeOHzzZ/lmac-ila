@@ -53,6 +53,8 @@ void LmacCore2::SetupTxInterface(Ila& m) {
   // uses bits [9:0] for FIFO size 1Kx64)
   NewState(m, TXFIFO_WUSED_QWD, TXFIFO_WUSED_QWD_BWID);
 
+
+
   return;
 }
 
