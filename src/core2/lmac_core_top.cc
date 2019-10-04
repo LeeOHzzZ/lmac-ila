@@ -98,6 +98,9 @@ Ila LmacCore2::New(const std::string& name) {
 void LmacCore2::SetArchStateVar(Ila& m) {
   ILA_DLOG("LMAC") << "Setup state variables from spec.";
 
+  // top module signals
+  SetupTopInterface(m);
+
   // TX interface signals
   SetupTxInterface(m);
 

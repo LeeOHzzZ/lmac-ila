@@ -54,6 +54,8 @@ private:
   // set initial conditions
   static void SetInit(Ila& m);
 
+  static void SetTopInterface(Ila& m);
+
   // TX FIFO
   static void SetupTxInterface(Ila& m);
   static void SetupTxInternal(Ila& m);
