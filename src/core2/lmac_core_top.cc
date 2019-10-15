@@ -18,6 +18,7 @@
 
 #include <ilang/util/log.h>
 #include <lmac/core2/configs.h>
+#include <lmac/utils.h>
 
 namespace ilang {
 
@@ -79,7 +80,7 @@ Ila LmacCore2::New(const std::string& name) {
     // RX FIFO
     auto rx_fetch = BoolConst(true);
 
-    // Reg interface
+   // Reg interface
     auto reg_fetch = BoolConst(true);
 
     // PHY

@@ -72,13 +72,15 @@ int main(int argc, const char** argv) {
   output_path = "../verification/core2/TX_FIFO";
   var_map = "../refinement/core2/var_map_tx_fifo.json";
   instr_map = "../refinement/core2/instr_cond_tx_fifo.json";
-  GenVerifTargetTX(core2.child("TX_FIFO"), design_path, instr_map, var_map, output_path);
+  auto model = core2.child("TX_FIFO");
+  GenVerifTargetTX(model, design_path, instr_map, var_map, output_path);
 
   // generating verification target for TX_FUNC
   output_path = "../verification/core2/TX_FUNC";
   var_map = "../refinement/core2/var_map_tx_func.json";
   instr_map = "../refinement/core2/instr_cond_tx_func.json";
-  GenVerifTargetTX(core2.child("TX_FUNC"), design_path, instr_map, var_map, output_path);
+  model = core2.child("TX_FUNC");
+  GenVerifTargetTX(model, design_path, instr_map, var_map, output_path);
 
   // reset debug config.
   DisableDebug("LMAC");

@@ -17,7 +17,7 @@
 
 namespace ilang {
 
-void LmacCore2::SetTopInterface(Ila& m) {
+void LmacCore2::SetupTopInterface(Ila& m) {
   // operating modes
   // This input affect both the RX and TX. It is placed here temperally  
   NewInput(m, MODE_1G, MODE_1G_BWID);

@@ -52,7 +52,7 @@ private:
   static void SetInit(Ila& m);
 
   // This is for setting up the states at the top module (shared by both tx and rx)
-  static void SetTopInterface(Ila& m);
+  static void SetupTopInterface(Ila& m);
 
   // TX FIFO
   static void SetupTxInterface(Ila& m);
