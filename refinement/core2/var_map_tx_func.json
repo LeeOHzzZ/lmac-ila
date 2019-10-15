@@ -1,0 +1,177 @@
+{
+  "models": { 
+    "ILA"     : "m0", 
+    "VERILOG" : "m1" 
+  },
+
+  "state mapping": { 
+    "Linkup"                    : "m1.xauiA_linkup",
+
+    "TXFIFO_FULL"               : "m1.tx_mac_full",
+    "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw",
+
+
+    "TX_STATE"                  : "m1.core.tx_10G_wrap.tx_xgmii.state",
+    "TX_STATE_ENCAP"            : "m1.core.tx_10G_wrap.tx_encap.state",
+    "TX_B2B_CNTR"               : "m1.core.tx_10G_wrap.tx_encap.b2b_counter",
+    "TX_PACKET_BYTE_CNT"        : "m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg",
+    "TX_WCNT"                   : "m1.core.tx_10G_wrap.tx_xgmii.wcnt",
+    "XGMII_DOUT_REG"            : "m1.core.tx_10G_wrap.tx_xgmii.txd",
+    "XGMII_COUT_REG"            : "m1.core.tx_10G_wrap.tx_xgmii.txc",
+    "TX_PKT_SENT"               : "m1.core.tx_10G_wrap.tx_xgmii.pkt_transmitted",
+    "TX_BYTE_SENT"              : "m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt"
+    
+    "test"                      : [ ["__START__","m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg"],["__IEND__", "#byte_cnt_end#"]],
+
+
+  
+  },
+  "post-value-holder" : {
+
+    "tx_st_encap_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 4",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.state",
+      "width": 8
+    },
+
+    "tx_pkt_byte_cnt_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 4",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg",
+      "width": 16
+    },
+
+    "tx_wcnt_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 5",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.wcnt",
+      "width": 16
+    },
+
+    "tx_state_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 5",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.state",
+      "width": 8
+    },
+    
+    "b2b_counter_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 5",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.b2b_counter",
+      "width": 6
+    },
+
+
+
+    "b2b_counter_WrPktPayload_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.b2b_counter",
+      "width": 6
+    },
+
+    "tx_state_WrPktPayload_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.state",
+      "width": 8
+    },
+
+    "tx_st_encap_WrPktPayload_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.state",
+      "width": 8
+    },
+
+    "tx_wcnt_WrPktPaylaod_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.wcnt",
+      "width": 16
+    },
+
+
+
+    "b2b_counter_LastOne_end" : {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.b2b_counter",
+      "width": 6
+    },
+
+    "tx_state_LastOne_end" : {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.state",
+      "width": 8
+    }
+  }
+  ,
+
+  "interface mapping": {
+    "clk"               : "**CLOCK**",
+    "xA_clk"            : "**CLOCK**",
+    "reset_"            : "RESETN", 
+
+    "mode_10G"          : "MODE_10G",
+    "mode_5G"           : "MODE_5G",
+    "mode_2p5G"         : "MODE_2P5G",
+    "mode_1G"           : "MODE_1G",
+
+    "TCORE_MODE"        : "**KEEP**",
+
+    "tx_mac_wr"         : "**KEEP**",
+    "tx_mac_data"       : "**KEEP**",		
+    "tx_mac_full"       : "**SO**",		
+    "tx_mac_usedw"      : "**SO**",	
+
+    "rx_mac_data"       : "**KEEP**",
+    "rx_mac_ctrl"       : "**KEEP**",
+    "rx_mac_empty"	    : "**KEEP**",
+    "rx_mac_rd"         : "**KEEP**",
+    "rx_mac_rd_cycle"   : "**KEEP**",	
+
+    "rx_mac_full_dbg"   : "**NC**",
+    "rx_mac_usedw_dbg"  : "**NC**",
+
+    "cs_fifo_rd_en"     : "**KEEP**",
+    "cs_fifo_empty"     : "**KEEP**",
+    "ipcs_fifo_dout"    : "**KEEP**",
+
+    "xgmii_reset_"      : "**KEEP**",
+    "xgmii_txd"         : "**KEEP**",
+    "xgmii_txc"         : "**KEEP**",
+
+    "xgmii_rxd"         : "**KEEP**",
+    "xgmii_rxc"         : "**KEEP**",
+    "xgmii_led_"        : "**KEEP**",	
+
+    "xauiA_linkup"      : "**SO**",
+
+    "host_addr_reg"     : "**KEEP**",
+    "SYS_ADDR"          : "**KEEP**",
+
+    "fail_over"         : "**KEEP**",
+    "fmac_ctrl"         : "MAC_CTRL",
+    "fmac_ctrl1"        : "MAC_CTRL1",
+
+    "fmac_rxd_en"       : "**KEEP**",
+
+    "mac_pause_value"   : "**KEEP**",
+    "mac_addr0"         : "**KEEP**",
+    "mcast_saddr"       : "**KEEP**",
+
+    "reg_rd_start"      : "**KEEP**",
+
+    "reg_rd_done_out"   : "**SO**",
+
+    "FMAC_REGDOUT"      : "**SO**",
+    "FIFO_OV_IPEND"     : "**KEEP**"
+  },
+
+  "mapping control" : [
+    "(m1.TCORE_MODE == 1)",
+    "(m1.SYS_ADDR == 1)",
+    "(m1.mode_10G == 1)",
+    "(m1.mode_5G == 0)", 
+    "(m1.mode_2p5G == 0)",
+    "(m1.mode_1G == 0)",
+    "(m1.core.tx_2b_dly == 2)",
+    "(m1.core.tx_10G_wrap.tx_encap.tx_rdy == 1)",
+    "(m1.tx_mac_wr == 0)"
+  ],
+
+  "functions": {}
+}

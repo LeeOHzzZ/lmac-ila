@@ -167,7 +167,7 @@ void LmacCore2::SetInstr(Ila& m) {
   // RX FIFO instructions
 
   // Register and configuration instructions
-  SetupRegInstr(m);
+  // SetupRegInstr(m);
 
   // PHY instructions
 

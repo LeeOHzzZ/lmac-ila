@@ -23,7 +23,7 @@ void GenVerifTargetTX(Ila& model, const std::string& design_path,
 
   std::vector<std::string> design_files = {
       "LMAC_CORE_TOP.v",
-      "asynch_fifo_reg.v", // XXX change accordingly
+      "asynch_fifo.v", // XXX change accordingly
       "br_sfifo4x32.v",
       "bsh32_dn_88.v",
       "bsh8_dn_64.v",
