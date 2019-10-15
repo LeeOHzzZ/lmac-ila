@@ -39,7 +39,7 @@ namespace ilang {
   // These states are set at the child level, cm stands for child model.
   // These states are only used at the child modules.
 
-  void LmacCore2::SetupTXFuncInternal(Ila& cm) {
+  void LmacCore2::SetupTxFuncInternal(Ila& cm) {
     //////////////////////////////////
     // Internal Architectual States
     //////////////////////////////////

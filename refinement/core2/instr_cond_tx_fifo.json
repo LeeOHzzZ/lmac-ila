@@ -1,0 +1,13 @@
+{
+    "instructions": [
+
+
+        {
+            "instruction"       :   "WR_PKT_DATA_FIFO",
+            "ready bound"       :   1
+        }
+
+    ],
+
+    "global invariants" : []
+}

@@ -38,13 +38,15 @@
     "FMAC_RX_PKT_CNT1518_HI"    : "m1.FMAC_RX_PKT_CNT1518_HI",
     
 
-    // XXX: double check
+
     "RX_IPCS_DATA"              : "m1.ipcs_fifo_dout",
     "RX_IPCS_EMPTY"             : "m1.cs_fifo_empty",
     "RX_PKT_DATA"               : "m1.core.drx_pkt_data",
     "RX_PKT_EMPTY"              : "m1.rx_mac_empty",
 
-    // TX Path
+    "RESETN"                    : "m1.reset_",
+
+
     "TXFIFO_FULL"               : "m1.tx_mac_full",
     "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw",
 
@@ -59,9 +61,84 @@
     "TX_PKT_SENT"               : "m1.core.tx_10G_wrap.tx_xgmii.pkt_transmitted",
     "TX_BYTE_SENT"              : "m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt"
     
+    "test"                      : [ ["__START__","m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg"],["__IEND__", "#byte_cnt_end#"]],
+
 
   
   },
+  "post-value-holder" : {
+
+    "tx_st_encap_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 4",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.state",
+      "width": 8
+    },
+
+    "tx_pkt_byte_cnt_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 4",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg",
+      "width": 16
+    },
+
+    "tx_wcnt_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 5",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.wcnt",
+      "width": 16
+    },
+
+    "tx_state_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 5",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.state",
+      "width": 8
+    },
+    
+    "b2b_counter_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 5",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.b2b_counter",
+      "width": 6
+    },
+
+
+
+    "b2b_counter_WrPktPayload_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.b2b_counter",
+      "width": 6
+    },
+
+    "tx_state_WrPktPayload_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.state",
+      "width": 8
+    },
+
+    "tx_st_encap_WrPktPayload_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.state",
+      "width": 8
+    },
+
+    "tx_wcnt_WrPktPaylaod_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.wcnt",
+      "width": 16
+    },
+
+
+
+    "b2b_counter_LastOne_end" : {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.b2b_counter",
+      "width": 6
+    },
+
+    "tx_state_LastOne_end" : {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.state",
+      "width": 8
+    }
+  }
+  ,
 
   "interface mapping": {
     "clk"               : "**CLOCK**",
@@ -130,7 +207,8 @@
     "(m1.mode_10G == 1)",
     "(m1.mode_5G == 0)", 
     "(m1.mode_2p5G == 0)",
-    "(m1.mode_1G == 0)"
+    "(m1.mode_1G == 0)",
+    "(m1.core.tx_10G_wrap.tx_encap.tx_rdy == 1)"
   ],
 
   "functions": {}

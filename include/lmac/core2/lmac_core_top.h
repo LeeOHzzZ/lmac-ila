@@ -17,9 +17,6 @@
 #ifndef LMAC_CORE2_LMAC_CORE_TOP_H__
 #define LMAC_CORE2_LMAC_CORE_TOP_H__
 
-#define RESETN "RESTN"
-#define RESETN_BWID 1
-#define RESET_VALID 0x0
 
 #include <string>
 
@@ -54,11 +51,16 @@ private:
   // set initial conditions
   static void SetInit(Ila& m);
 
+  // This is for setting up the states at the top module (shared by both tx and rx)
   static void SetTopInterface(Ila& m);
 
   // TX FIFO
   static void SetupTxInterface(Ila& m);
-  static void SetupTxInternal(Ila& m);
+  static void SetUpTxChild(Ila& m);
+  static void AddChild_TX_FIFO(Ila& m);
+  static void AddChild_TX_FUNC(Ila& m);
+  static void SetupTxFIFOInternal(Ila& m);
+  static void SetupTxFuncInternal(Ila& cm);
   static void SetupTxInstr(Ila& m);
  
 

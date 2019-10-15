@@ -1,0 +1,27 @@
+{
+    "instructions": [
+
+        {
+            "instruction"       :   "SET_B2B_CNTR_10G",
+            "ready bound"       :   1
+        },
+
+        {
+            "instruction"       :   "READ_BYTE_CNT_10G",
+            "ready bound"       :   6
+        },
+
+        {
+            "instruction"       :   "WR_PKT_PAYLOAD_10G",
+            "ready bound"       :   2
+        },
+
+        {
+            "instruction"       :   "WR_PKT_LASTONE_10G",
+            "ready bound"       :   2
+        }
+
+    ],
+
+    "global invariants" : []
+}
