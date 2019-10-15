@@ -33,11 +33,12 @@ add_executable(${MyTarget}
   src/core2/eqcheck_reg.cc
   src/core2/eqcheck_tx.cc
   src/core2/lmac_core_top.cc
+  src/core2/lmac_top_interface.cc
+  src/core2/tx_child.cc
   src/core2/mmio_regs.cc
   src/core2/reg_instr.cc
   src/core2/reg_interface.cc
   src/core2/rx_interface.cc
-  src/core2/tx_instr_v3.cc
   src/core2/tx_interface.cc
   src/core2/tx_internal.cc
   src/utils.cc
