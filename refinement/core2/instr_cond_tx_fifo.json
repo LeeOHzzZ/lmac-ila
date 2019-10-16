@@ -3,7 +3,7 @@
 
 
         {
-            "instruction"       :   "WR_PKT_DATA_FIFO",
+            "instruction"       :   "TX_WR_PKT_DATA_FIFO",
             "ready bound"       :   1
         }
 

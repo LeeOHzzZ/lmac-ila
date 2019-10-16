@@ -112,8 +112,8 @@ void LmacCore2::SetArchStateVar(Ila& m) {
   SetupRxInterface(m);
 
   // Register interface and configuration
-  SetupRegInterface(m);
-  SetupMmioRegs(m);
+//  SetupRegInterface(m);
+//  SetupMmioRegs(m);
 
   // PHY interface signals
 
