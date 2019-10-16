@@ -29,6 +29,8 @@ int main(int argc, const char** argv) {
   // EnableDebug("LMAC");
 
   // create LMac Core 2 ILA
+  ILA_INFO << "before creating ILA model";
+
   auto core2 = LmacCore2::New();
 
   ILA_INFO << "before export ILA portable";
@@ -42,12 +44,14 @@ int main(int argc, const char** argv) {
   core2.ExportToVerilog(fw_verilog);
 
   // define the command line parser
+  /*
   ArgumentParser parser;
   parser.addArgument("-d", "--design_path", 1);
   parser.addArgument("-o", "--output_path", 1);
   parser.addArgument("-i", "--instr_map", 1);
   parser.addArgument("-v", "--var_map", 1);
   parser.parse(argc, argv);
+*
 
   auto design_path = parser.retrieve<std::string>("design_path");
   auto output_path = parser.retrieve<std::string>("output_path");
@@ -57,6 +61,7 @@ int main(int argc, const char** argv) {
   design_path = (design_path == "") ? "../design/core2" : design_path;
   output_path = (output_path == "") ? "../verification/core2" : output_path;
   var_map = (var_map == "") ? "../refinement/core2/var_map.json" : var_map;
+  */
   // var_map = "../refinement/core2/var_map.json";
 
 
@@ -69,9 +74,10 @@ int main(int argc, const char** argv) {
   //                   output_path + "/TX");
 
   // generating verification target for TX_FIFO
-  output_path = "../verification/core2/TX_FIFO";
-  var_map = "../refinement/core2/var_map_tx_fifo.json";
-  instr_map = "../refinement/core2/instr_cond_tx_fifo.json";
+  auto design_path = "../design/core2";
+  auto output_path = "../verification/core2/TX_FIFO";
+  auto var_map = "../refinement/core2/var_map_tx_fifo.json";
+  auto instr_map = "../refinement/core2/instr_cond_tx_fifo.json";
   auto model = core2.child("TX_FIFO");
   GenVerifTargetTX(model, design_path, instr_map, var_map, output_path);
 

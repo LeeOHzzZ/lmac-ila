@@ -37,11 +37,12 @@ namespace ilang {
   
   // This function is for adding child to implement the micro-instructions of the TX path
   void LmacCore2::SetupTxChild(Ila& m) {
+    ILA_INFO << "before adding FIFO child";
     AddChild_TX_FIFO(m);
+    ILA_INFO << "before adding FUNC child";
     AddChild_TX_FUNC(m);
   }
 
-  void LmacCore2::SetupTxFIFOInternal(Ila& m);
 
   // child ILA model for TX_FIFO
   // Attention: Although the FIFO is a seperate child module, however there are multiple states of the FIFO are shared with the TX_FUNC.
@@ -50,10 +51,14 @@ namespace ilang {
     // create a new child under the top module named as tx_fifo
     auto child_tx_fifo = m.NewChild("TX_FIFO");
     // Setup the internal states for the child tx_fifo
-    SetupTxFIFOInternal(child_tx_fifo);
+    ILA_INFO << "before setting up TXFIFOInteranl";
 
-    child_tx_fifo.setValid(m.input(TX_WE) == TX_WE_V_VALID);
-    child_tx_fifo.setFetch(BoolConst(true));
+    SetupTxFIFOInternal(m);
+
+    child_tx_fifo.SetValid(m.input(TX_WE) == TX_WE_V_VALID);
+    child_tx_fifo.SetFetch(BvConst(0x1, 1));
+    
+    ILA_INFO << "before FIFO child instructions";
 
     {
       auto instr = child_tx_fifo.NewInstr("TX_WR_PKT_DATA_FIFO");
@@ -72,10 +77,13 @@ namespace ilang {
       auto wr_ptr = m.state(TXFIFO_BUFF_WR_PTR);
 
       // update
+      ILA_INFO << "before writing into FIFO";
+      ILA_INFO << fifo << wr_ptr << data_in << "test";
       instr.SetUpdate(fifo, Store(fifo, wr_ptr, data_in));
+      ILA_INFO << "before updating other fifo info";
       instr.SetUpdate(wr_ptr, wr_ptr + 0x1);
       instr.SetUpdate(txfifo_wused, txfifo_wused + 0x1);
-      instr.SetUpdate(txfifo_full, Ite((txfifo_wused == BvConst(0x3FF, 10)), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID)));
+      instr.SetUpdate(txfifo_full, Ite((txfifo_wused == 1024), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID)));
 
     }
 
@@ -102,7 +110,7 @@ namespace ilang {
     SetupTxFuncInternal(child_tx_func);
 
     child_tx_func.SetValid(m.input(RESETN) == RESETN_VALID);
-    child_tx_func.SetFetch(BoolConst(true));
+    child_tx_func.SetFetch(BvConst(0x1, 1));
 
     // add reference of chile_tx_func for convenience
     auto &cm = child_tx_func;
@@ -111,10 +119,10 @@ namespace ilang {
     auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0);
     auto fifo = m.state(TXFIFO_BUFF);
     auto fifo_rd_ptr = m.state(TXFIFO_BUFF_RD_PTR);
-    auto fifo_wused = m.state(TXFIFO_WUSED_QWD);
-
-    // common child states
+    auto fifo_wused = m.state(TXFIFO_WUSED_QWD);  
     auto fifo_output = m.state(TXFIFO_RD_OUTPUT);
+   
+    // common child states
     auto b2b_cntr = cm.state(TX_B2B_CNTR);
     auto txd = cm.state(XGMII_DOUT_REG);
     auto txc = cm.state(XGMII_COUT_REG);
@@ -143,12 +151,13 @@ namespace ilang {
       // State Update
       instr.SetUpdate(b2b_cntr, b2b_cntr - 1); // 1 clk
       instr.SetUpdate(txd, Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32))); // 1 clk
-      instr.SetUpdate(txd, BvConst(0xFF, XGMII_COUT_REG_BWID)); // 1 clk
+      instr.SetUpdate(txc, BvConst(0xFF, XGMII_COUT_REG_BWID)); // 1 clk
 
     }
 
     // This instruction is to read the first qword of the packet from user, which contains the size of the packet
     // Corresponding to the state GET_WAIT_2 of the state machine in xgmii
+    ILA_INFO << "before read byte count instr";
     {
       auto instr = cm.NewInstr("READ_BYTE_CNT_10G");
 
@@ -158,7 +167,7 @@ namespace ilang {
       auto state_idle = (cm.state(TX_STATE) == TX_STATE_IDLE);
       auto state_encap_idle = (cm.state(TX_STATE_ENCAP) == TX_STATE_ENCAP_IDLE);
       auto b2b_ok = (b2b_cntr == 0);
-
+      
       instr.SetDecode(mode_10G & b2b_ok & state_idle & state_encap_idle & fifo_non_empty);
 
       // State Update
@@ -219,6 +228,7 @@ namespace ilang {
 
 
     // This instruction is for writing the payload of the packet 
+    ILA_INFO << "before wr_pkt_payload_instr";
     {
       auto instr = cm.NewInstr("WR_PKT_PAYLOAD_10G");
 
@@ -242,9 +252,9 @@ namespace ilang {
       // CRC code Update
 
       // fq stands for first qword of the whole packet. When the remaining bytes equals to the byte count, it is the fisrt qword.
-      auto fq = (wcnt == m.state(TX_WCNT_INI));
+      auto fq = (wcnt == cm.state(TX_WCNT_INI));
       auto rb = Extract(byte_cnt, 2, 0);
-
+      
       // CRC code update
       instr.SetUpdate(crc_dat_in, Ite(fq, Ite((rb == 0x0), fifo_output,
                                   Ite((rb == 0x1), Concat(Extract(fifo_output,  7, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 24))),
@@ -269,8 +279,8 @@ namespace ilang {
       instr.SetUpdate(tx_buf, fifo_output);
 
       // CRC generation, using half_byte algorithm. reference: https://create.stephan-brumme.com/crc32/#half-byte
-      auto crc_g = m.state(CRC_IN);
-      auto data = m.state(CRC_DAT_IN);
+      auto crc_g = cm.state(CRC_IN);
+      auto data = cm.state(CRC_DAT_IN);
       // The current stores the byte that generator takes. 
       
       for (auto len = 0; len < 8; len++) {
@@ -283,7 +293,7 @@ namespace ilang {
       instr.SetUpdate(crc_in, Ite((wcnt > 0), crc_g, crc_in));
       // update the CRC output. Needs transformation.
       auto crc_code = ~(((crc_in >> 24) & BvConst(0xFF, 32)) | ((crc_in >> 8) & BvConst(0xFF00, 32)) | ((crc_in << 8) & BvConst(0xFF0000, 32)) | ((crc_in << 24) & BvConst(0xFF000000, 32)));
-      instr.SetUpdate(m.state(CRC), Ite((wcnt > 0), crc_code, m.state(CRC)));
+      instr.SetUpdate(cm.state(CRC), Ite((wcnt > 0), crc_code, cm.state(CRC)));
 
       // when output the crc code, we need to change the endian of the code.
       auto crc_output = ((crc >> 24) & BvConst(0xFF, 32)) | ((crc >> 8) & BvConst(0xFF00, 32)) | ((crc << 8) & BvConst(0xFF0000, 32)) | ((crc << 24) & BvConst(0xFF000000, 32));
@@ -357,13 +367,14 @@ namespace ilang {
                                             dout_idle))));
                                                                 
       // Update the wcnt
-      instr.SetUpdate(b2b_cntr, Ite((st_encap == TX_STATE_ENCAP_IDLE), b2b_cntr - 1, b2b_cntr)); // 1 clk
+      instr.SetUpdate(b2b_cntr, Ite((tx_encap_state == TX_STATE_ENCAP_IDLE), b2b_cntr - 1, b2b_cntr)); // 1 clk
       instr.SetUpdate(tx_state, Ite((wcnt < 0), TX_STATE_DAT, TX_STATE_CRC)); // 1 clk
-      instr.SetUpdate(tx_encap_state, Ite((wcnt < 16), TX_STATE_ENCAP_IDLE, st_encap)); // 1 clk
+      instr.SetUpdate(tx_encap_state, Ite((wcnt < 16), TX_STATE_ENCAP_IDLE, tx_encap_state)); // 1 clk
       instr.SetUpdate(wcnt, wcnt - 8); // 1 clk
     }
 
     // This is for writing the EOF and CRC code at the end of the frame.
+    ILA_INFO << "before wr_pkt_lastone instr";
     {
       auto instr = m.NewInstr("WR_PKT_LASTONE_10G");
 

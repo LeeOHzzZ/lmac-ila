@@ -32,6 +32,9 @@ namespace ilang {
     // write pointer
     NewState(m, TXFIFO_BUFF_WR_PTR, TXFIFO_BUFF_WR_PTR_BWID);
   
+    // read output
+    NewState(m, TXFIFO_RD_OUTPUT, TXFIFO_RD_OUTPUT_BWID);
+
     return;
   }
   
@@ -63,8 +66,6 @@ namespace ilang {
     NewState(cm, TX_PKT_SENT, TX_PKT_SENT_BWID);
     // State for recording the bytes count
     NewState(cm, TX_BYTE_SENT, TX_BYTE_SENT_BWID);
-    // Read output of the TX FIFO
-    NewState(cm, TXFIFO_RD_OUTPUT, TXFIFO_RD_OUTPUT_BWID);
     // register for CRC, store the 4byte CRC
     NewState(cm, CRC, CRC_BWID);
     // State for CRC data input

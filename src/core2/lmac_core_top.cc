@@ -37,8 +37,11 @@ Ila LmacCore2::New(const std::string& name) {
   SetImplStateVar(m);
 
   // model hierarchy
+  ILA_INFO << " before setting up child models";
+
   SetChild(m);
 
+  ILA_INFO << "before setting up instructions";
   // instruction decode & updates
   SetInstr(m);
 
