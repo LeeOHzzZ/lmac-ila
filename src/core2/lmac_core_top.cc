@@ -44,7 +44,8 @@ Ila LmacCore2::New(const std::string& name) {
   ILA_INFO << "before setting up instructions";
   // instruction decode & updates
   SetInstr(m);
-
+  
+  ILA_INFO << "before setting up initial condition";
   // initial condition
   SetInit(m);
 
@@ -58,18 +59,18 @@ Ila LmacCore2::New(const std::string& name) {
 
     // TX FIFO
     // Set the TX valid to always true.
-    auto tx_valid = true;
+    auto tx_valid = BoolConst(true);
 
     // RX FIFO
-    auto rx_valid = true;
+    auto rx_valid = BoolConst(true);
 
     // Reg interface
-    auto reg_itf_valid = (m.input(REG_RD_START) == REG_RD_START_V_BUSY) &
-                         (m.input(HOST_ADDR) >= FMAC_TX_PKT_CNT_ADDR) &
-                         (m.input(HOST_ADDR) <= FMAC_RX_PKT_CNT1518_HI_ADDR);
-
+//    auto reg_itf_valid = (m.input(REG_RD_START) == REG_RD_START_V_BUSY) &
+//                         (m.input(HOST_ADDR) >= FMAC_TX_PKT_CNT_ADDR) &
+//                         (m.input(HOST_ADDR) <= FMAC_RX_PKT_CNT1518_HI_ADDR);
+    auto reg_itf_valid = BoolConst(true);
     // PHY
-    auto phy_valid = true;
+    auto phy_valid = BoolConst(true);
 
     auto valid = reg_itf_valid | tx_valid | rx_valid | phy_valid;
     ILA_INFO << "before setting valid function";
@@ -96,8 +97,10 @@ Ila LmacCore2::New(const std::string& name) {
   }
 
   ILA_DLOG("LMAC") << "Done";
+  ILA_INFO << "creating LMAC model done";
   return m;
 }
+
 
 void LmacCore2::SetArchStateVar(Ila& m) {
   ILA_DLOG("LMAC") << "Setup state variables from spec.";
@@ -109,7 +112,7 @@ void LmacCore2::SetArchStateVar(Ila& m) {
   SetupTxInterface(m);
 
   // RX interface signals
-  SetupRxInterface(m);
+//  SetupRxInterface(m);
 
   // Register interface and configuration
 //  SetupRegInterface(m);

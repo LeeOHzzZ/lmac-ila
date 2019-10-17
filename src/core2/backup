@@ -1,0 +1,2 @@
+
+    "test"                      : [ ["__START__","m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg"],["__IEND__", "#byte_cnt_end#"]],

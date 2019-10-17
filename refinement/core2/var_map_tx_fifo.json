@@ -5,7 +5,6 @@
   },
 
   "state mapping": { 
-    "Linkup"                    : "m1.xauiA_linkup",
     "TXFIFO_FULL"               : "m1.tx_mac_full",
     "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw"
   },
@@ -49,14 +48,14 @@
     "xgmii_rxc"         : "**KEEP**",
     "xgmii_led_"        : "**KEEP**",	
 
-    "xauiA_linkup"      : "**SO**",
+    "xauiA_linkup"      : "**KEEP**",
 
     "host_addr_reg"     : "**KEEP**",
     "SYS_ADDR"          : "**KEEP**",
 
     "fail_over"         : "**KEEP**",
-    "fmac_ctrl"         : "MAC_CTRL",
-    "fmac_ctrl1"        : "MAC_CTRL1",
+    "fmac_ctrl"         : "**KEEP**",
+    "fmac_ctrl1"        : "**KEEP**",
 
     "fmac_rxd_en"       : "**KEEP**",
 
