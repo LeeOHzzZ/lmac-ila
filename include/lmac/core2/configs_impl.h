@@ -23,7 +23,7 @@ namespace ilang {
 // -------------------------------------------------------------------------- //
 // TOP MODULE
 // -------------------------------------------------------------------------- //
-#define RESETN "RESTN"
+#define RESETN "RESETN"
 #define RESETN_BWID 1
 #define RESETN_VALID 0x1
 
