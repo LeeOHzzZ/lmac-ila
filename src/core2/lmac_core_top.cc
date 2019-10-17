@@ -29,9 +29,6 @@ LmacCore2::~LmacCore2() {}
 Ila LmacCore2::New(const std::string& name) {
   auto m = Ila(name);
 
-  // The reset signal of the of module. It is put here temporally
-  NewInput(m, RESETN, RESETN_BWID);
-
   // state vars
   SetArchStateVar(m);
   SetImplStateVar(m);

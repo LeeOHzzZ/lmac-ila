@@ -108,8 +108,10 @@ namespace ilang {
     auto child_tx_func = m.NewChild("TX_FUNC");
     // Set up internal states for this child
     SetupTxFuncInternal(child_tx_func);
-
-    child_tx_func.SetValid(m.input(RESETN) == RESETN_VALID);
+    
+    auto resetn = m.input(RESETN);
+    ILA_INFO <<"Can we read the RESET input from child tx_func?  " <<  m.input(RESETN);
+    child_tx_func.SetValid(resetn == RESETN_VALID);
     child_tx_func.SetFetch(BvConst(0x1, 1));
 
     // add reference of chile_tx_func for convenience

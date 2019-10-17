@@ -24,7 +24,7 @@ void LmacCore2::SetupTopInterface(Ila& m) {
   NewInput(m, MODE_2P5G, MODE_2P5G_BWID);
   NewInput(m, MODE_5G, MODE_5G_BWID);
   NewInput(m, MODE_10G, MODE_10G_BWID);
-
+  NewInput(m, RESETN, RESETN_BWID);
   return;
 }
 
