@@ -27,7 +27,7 @@
     "CRC_IN"                    : "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in",
     "CRC_DAT_IN"                : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.bdin",
     "TX_WCNT_INI"               : "m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini",
-    "TX_BUF"                    : "m1.core.tx_10G_wrap.bdata1"
+    "TX_BUF"                    : "m1.core.tx_10G_wrap.tx_xgmii.bdata1"
 
   
   },
