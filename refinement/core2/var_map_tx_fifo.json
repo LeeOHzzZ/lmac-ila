@@ -8,16 +8,21 @@
     "TXFIFO_FULL"               : "m1.tx_mac_full",
     "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw",
     "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem",
-    "TXFIFO_WR_PTR"             : "m1.core.txfifo.tx_f.wr_ptr",
-    "TXFIFO_RD_PTR"             : "m1.core.txfifo.tx_f.rd_ptr",
+    "TXFIFO_BUFF_WR_PTR"        : "m0.TXFIFO_BUFF_WR_PTR[10:0] == m1.core.txfifo.tx_f.wr_ptr[10:0]",
+    "TXFIFO_BUFF_RD_PTR"        : "m0.TXFIFO_BUFF_RD_PTR[10:0] == m1.core.txfifo.tx_f.rd_ptr[10:0]",
     "TXFIFO_RD_OUTPUT"          : "m1.core.txfifo.tx_f.dataout"
   },
   
+  "annotation": {
+    "memory" : {
+      "TXFIFO_BUFF": "internal"
+    }	    
+  }, 
 
   "interface mapping": {
     "clk"               : "**CLOCK**",
     "xA_clk"            : "**CLOCK**",
-    "reset_"            : "**RESETN**", 
+    "reset_"            : "RESETN", 
 
     "mode_10G"          : "MODE_10G",
     "mode_5G"           : "MODE_5G",
@@ -82,7 +87,6 @@
     "(m1.mode_5G == 0)", 
     "(m1.mode_2p5G == 0)",
     "(m1.mode_1G == 0)",
-    "(m1.core.tx_10G_wrap.tx_encap.tx_rdy == 1)",
     "(m1.core.txfifo_rd_en == 0)"
   ],
 
