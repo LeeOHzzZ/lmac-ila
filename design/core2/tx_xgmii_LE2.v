@@ -86,6 +86,8 @@ input		  fmac_tx_clr_en;
 reg    [63:0] bdata1;			  // buffer input data
 reg    [63:0] bdata2;
 reg    [15:0] wcnt;
+reg		 [15:0] ila_wcnt_ini; // register for holding the initial value of wcnt.
+
 
 wire	[15:0] nbytes;
 reg  	[15:0] nbytes_reg;
@@ -104,6 +106,8 @@ reg    crc_last_;
 reg    crc_clr_;
 reg    [15:0] crc_cnt;
 wire   [31:0] crc32;			   // CRC output
+wire	 [31:0] ILA_crc_in;    // signal for an internal state of ILA model. 
+assign ILA_crc_in = ~crc32;  // Let's try if the parser can find the wire. If it cannot find it, then we can add the register at the bottom module.
 
 reg		sent;
 reg		sent_dly;
@@ -231,6 +235,7 @@ begin
 	insert_crc<=   0;
 
 	wcnt <=   0;
+	ila_wcnt_ini <= 0;
 	
 	crc_we_ <=   1;
 	crc_last_<=   1;
@@ -334,6 +339,9 @@ begin
 		             (pulse_0? TX_DAT : GET_WAIT2); 
 		             
 		wcnt    <=   mode_10G ? nbytes_reg - 16'd1:
+					 (pulse_0 ? nbytes_reg - 16'd1 : wcnt);
+
+		ila_wcnt_ini  <=   mode_10G ? nbytes_reg - 16'd1:
 					 (pulse_0 ? nbytes_reg - 16'd1 : wcnt);
 					 
 		txc_int <=   mode_10G ? 8'h01:

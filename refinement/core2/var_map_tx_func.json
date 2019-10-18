@@ -7,6 +7,10 @@
   "state mapping": { 
     "TXFIFO_FULL"               : "m1.tx_mac_full",
     "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw",
+    "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem",
+    "TXFIFO_WR_PTR"             : "m1.core.txfifo.tx_f.wr_ptr",
+    "TXFIFO_RD_PTR"             : "m1.core.txfifo.tx_f.rd_ptr",
+    "TXFIFO_RD_OUTPUT"          : "m1.core.txfifo.tx_f.dataout",
 
 
     "TX_STATE"                  : "m1.core.tx_10G_wrap.tx_xgmii.state",
@@ -17,7 +21,14 @@
     "XGMII_DOUT_REG"            : "m1.core.tx_10G_wrap.tx_xgmii.txd",
     "XGMII_COUT_REG"            : "m1.core.tx_10G_wrap.tx_xgmii.txc",
     "TX_PKT_SENT"               : "m1.core.tx_10G_wrap.tx_xgmii.pkt_transmitted",
-    "TX_BYTE_SENT"              : "m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt"
+    "TX_BYTE_SENT"              : "m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt",
+
+    "CRC"                       : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32",
+    "CRC_IN"                    : "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in",
+    "CRC_DAT_IN"                : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.bdin",
+    "TX_WCNT_INI"               : "m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini",
+    "TX_BUF"                    : "m1.core.tx_10G_wrap.bdata1"
+
   
   },
 
@@ -163,9 +174,9 @@
     "(m1.mode_5G == 0)", 
     "(m1.mode_2p5G == 0)",
     "(m1.mode_1G == 0)",
-    "(m1.core.tx_2b_dly == 2)",
+    "(m1.core.tx_b2b_dly == 2)",
     "(m1.core.tx_10G_wrap.tx_encap.tx_rdy == 1)",
-    "(m1.tx_mac_wr == 0)"
+    "(m1.core.txfifo_wr_en == 0)"
   ],
 
   "functions": {}

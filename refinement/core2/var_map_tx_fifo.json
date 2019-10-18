@@ -6,14 +6,18 @@
 
   "state mapping": { 
     "TXFIFO_FULL"               : "m1.tx_mac_full",
-    "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw"
+    "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw",
+    "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem",
+    "TXFIFO_WR_PTR"             : "m1.core.txfifo.tx_f.wr_ptr",
+    "TXFIFO_RD_PTR"             : "m1.core.txfifo.tx_f.rd_ptr",
+    "TXFIFO_RD_OUTPUT"          : "m1.core.txfifo.tx_f.dataout"
   },
   
 
   "interface mapping": {
     "clk"               : "**CLOCK**",
     "xA_clk"            : "**CLOCK**",
-    "reset_"            : "**NRESET**", 
+    "reset_"            : "**RESETN**", 
 
     "mode_10G"          : "MODE_10G",
     "mode_5G"           : "MODE_5G",

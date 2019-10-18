@@ -182,11 +182,12 @@ namespace ilang {
 
       // states update
       // Updating the qword count in bytes
+      instr.SetUpdate(byte_cnt, Extract(fifo_output, 15, 0)); // 4 clk
+
       auto bcnt_h = Extract(byte_cnt, 15, 3);
       auto bcnt_l = Extract(byte_cnt, 2, 0);
       auto nbytes = Ite((bcnt_l > 0), Concat((bcnt_h + 1), BvConst(0x0, 3)), Concat(bcnt_h, BvConst(0x0, 3)));
-
-      instr.SetUpdate(byte_cnt, Extract(fifo_output, 15, 0)); // 4 clk
+      
       instr.SetUpdate(wcnt, (nbytes - 1)); // 5 clk
       instr.SetUpdate(cm.state(TX_WCNT_INI), (nbytes - 1));
 
