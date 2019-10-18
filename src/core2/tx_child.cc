@@ -50,10 +50,6 @@ namespace ilang {
   void LmacCore2::AddChild_TX_FIFO(Ila& m) {
     // create a new child under the top module named as tx_fifo
     auto child_tx_fifo = m.NewChild("TX_FIFO");
-    // Setup the internal states for the child tx_fifo
-    ILA_INFO << "before setting up TXFIFOInteranl";
-
-    SetupTxFIFOInternal(m);
 
     child_tx_fifo.SetValid(m.input(TX_WE) == TX_WE_V_VALID);
     child_tx_fifo.SetFetch(BvConst(0x1, 1));

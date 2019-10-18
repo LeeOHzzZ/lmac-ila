@@ -40,15 +40,15 @@ int main(int argc, const char** argv) {
   // export verilog target (w/ child program)
   ILA_INFO << "before exporting verilog target";
   std::string verilog_file_name = "LmacCore2.v";
-  std::ofstream fw_verilog(verilog_file_name);
+  std::ofstream fw_verilog0(verilog_file_name);
   core2.ExportToVerilog(fw_verilog);
 
   verilog_file_name = "LmacCore2_TX_FIFO.v";
-  std::ofstream fw_verilog(verilog_file_name);
+  std::ofstream fw_verilog1(verilog_file_name);
   core2.child("TX_FIFO").ExportToVerilog(fw_verilog);
 
   verilog_file_name = "LmacCore2_TX_FUNC.v";
-  std::ofstream fw_verilog(verilog_file_name);
+  std::ofstream fw_verilog2(verilog_file_name);
   core2.child("TX_FUNC").ExportToVerilog(fw_verilog);
 
   // define the command line parser

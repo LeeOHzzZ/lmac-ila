@@ -56,7 +56,7 @@ private:
 
   // TX FIFO
   static void SetupTxInterface(Ila& m);
-  static void SetUpTxChild(Ila& m);
+  static void SetupTxChild(Ila& m);
   static void AddChild_TX_FIFO(Ila& m);
   static void AddChild_TX_FUNC(Ila& m);
   static void SetupTxFIFOInternal(Ila& m);

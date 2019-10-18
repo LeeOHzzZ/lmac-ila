@@ -107,6 +107,8 @@ void LmacCore2::SetArchStateVar(Ila& m) {
 
   // TX interface signals
   SetupTxInterface(m);
+  // TX FIFO states should be set at the parent level.
+  SetupTxFIFOInternal(m);
 
   // RX interface signals
 //  SetupRxInterface(m);
@@ -155,7 +157,6 @@ void LmacCore2::SetImplStateVar(Ila& m) {
 
 void LmacCore2::SetChild(Ila& m) {
   ILA_DLOG("LMAC") << "Setup child ILAs";
-  
   SetupTxChild(m);
   
 
