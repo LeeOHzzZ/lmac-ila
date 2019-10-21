@@ -111,7 +111,7 @@ namespace ilang {
     child_tx_func.SetFetch(BvConst(0x1, 1));
 
     // add reference of chile_tx_func for convenience
-    auto &cm = child_tx_func;
+    auto cm = child_tx_func;
 
     // parent states
     auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0);
@@ -375,7 +375,7 @@ namespace ilang {
     // This is for writing the EOF and CRC code at the end of the frame.
     ILA_INFO << "before wr_pkt_lastone instr";
     {
-      auto instr = m.NewInstr("WR_PKT_LASTONE_10G");
+      auto instr = cm.NewInstr("WR_PKT_LASTONE_10G");
 
       // decode 
       auto mode_10G = (m.input(MODE_10G) == 1);
