@@ -1,0 +1,16 @@
+[GENERAL]
+model_files:wrapper.v[wrapper],rst.ets
+assume_if_true: True
+abstract_clock: True
+[DEFAULT]
+bmc_length: 7
+precondition: reset_done = 1_1
+
+[variable_map_assert]
+description:"variable_map_assert"
+properties:(variable_map_assert__p43__ = 1_1) & (variable_map_assert__p45__ = 1_1) & (variable_map_assert__p47__ = 1_1) & (variable_map_assert__p49__ = 1_1)
+assumptions:(noreset__m0__ = 1_1) & (variable_map_assume__m2__ = 1_1) & (variable_map_assume__m4__ = 1_1) & (variable_map_assume__m6__ = 1_1) & (variable_map_assume__m8__ = 1_1) & (variable_map_assume__m10__ = 1_1) & (variable_map_assume__m12__ = 1_1) & (variable_map_assume__m14__ = 1_1) & (variable_map_assume__m16__ = 1_1) & (variable_map_assume__m18__ = 1_1) & (variable_map_assume__m20__ = 1_1) & (variable_map_assume__m22__ = 1_1) & (variable_map_assume__m24__ = 1_1) & (variable_map_assume__m26__ = 1_1) & (variable_map_assume__m28__ = 1_1) & (variable_map_assume__m30__ = 1_1) & (variable_map_assume__m32__ = 1_1) & (variable_map_assume__m34__ = 1_1) & (variable_map_assume__m36__ = 1_1) & (variable_map_assume__m38__ = 1_1) & (variable_map_assume__m40__ = 1_1) & (additional_mapping_control_assume__m50__ = 1_1) & (additional_mapping_control_assume__m51__ = 1_1) & (additional_mapping_control_assume__m52__ = 1_1) & (additional_mapping_control_assume__m53__ = 1_1) & (additional_mapping_control_assume__m54__ = 1_1) & (additional_mapping_control_assume__m55__ = 1_1) & (additional_mapping_control_assume__m56__ = 1_1) & (additional_mapping_control_assume__m57__ = 1_1) & (additional_mapping_control_assume__m58__ = 1_1) & (issue_decode__m59__ = 1_1) & (issue_valid__m60__ = 1_1) & (post_value_holder__m61__ = 1_1) & (post_value_holder__m62__ = 1_1) & (post_value_holder__m63__ = 1_1) & (post_value_holder__m64__ = 1_1) & (post_value_holder__m65__ = 1_1) & (post_value_holder__m66__ = 1_1) & (post_value_holder__m67__ = 1_1) & (post_value_holder__m68__ = 1_1) & (post_value_holder__m69__ = 1_1) & (post_value_holder__m70__ = 1_1) & (post_value_holder__m71__ = 1_1)
+prove: True
+verification: safety
+strategy: ALL
+expected: True
