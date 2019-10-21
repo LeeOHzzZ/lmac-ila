@@ -73,11 +73,8 @@ namespace ilang {
       auto wr_ptr = m.state(TXFIFO_BUFF_WR_PTR);
 
       // update
-      ILA_INFO << "before writing into FIFO";
-      ILA_INFO << fifo << wr_ptr << data_in << "test";
       instr.SetUpdate(fifo, Store(fifo, wr_ptr, data_in));
-      ILA_INFO << "before updating other fifo info";
-      instr.SetUpdate(wr_ptr, wr_ptr + 0x1);
+      instr.SetUpdate(wr_ptr, Ite((wr_ptr == 1024), BvConst(0x0, TXFIFO_BUFF_WR_PTR_BWID), wr_ptr + 0x1));
       instr.SetUpdate(txfifo_wused, txfifo_wused + 0x1);
       instr.SetUpdate(txfifo_full, Ite((txfifo_wused == 1024), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID)));
 
@@ -106,7 +103,6 @@ namespace ilang {
     SetupTxFuncInternal(child_tx_func);
     
     auto resetn = m.input(RESETN);
-    ILA_INFO <<"Can we read the RESET input from child tx_func?  " <<  m.input(RESETN);
     child_tx_func.SetValid(resetn == RESETN_VALID);
     child_tx_func.SetFetch(BvConst(0x1, 1));
 
@@ -155,7 +151,6 @@ namespace ilang {
 
     // This instruction is to read the first qword of the packet from user, which contains the size of the packet
     // Corresponding to the state GET_WAIT_2 of the state machine in xgmii
-    ILA_INFO << "before read byte count instr";
     {
       auto instr = cm.NewInstr("READ_BYTE_CNT_10G");
 
@@ -173,7 +168,7 @@ namespace ilang {
       // For the wr_ptr, rd_ptr, fifo_output, we don't care about the value of them.
       // But the fifo_wused is required to write the refinement relation.
       instr.SetUpdate(fifo_output, Load(fifo, fifo_rd_ptr));
-      instr.SetUpdate(fifo_rd_ptr, fifo_rd_ptr + 1);
+      instr.SetUpdate(fifo_rd_ptr, Ite((fifo_rd_ptr == 1024), BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1));
       instr.SetUpdate(fifo_wused, fifo_wused - 1);
 
       // states update
@@ -245,7 +240,7 @@ namespace ilang {
       // when wcnt < 0, we have taken all the data. No need to fetch from the fifo and update the crc output.
       // Read data from FIFO
       instr.SetUpdate(fifo_output, Ite((wcnt > 0), Load(fifo, fifo_rd_ptr), fifo_output));
-      instr.SetUpdate(fifo_rd_ptr, Ite((wcnt > 0), fifo_rd_ptr + 1, fifo_rd_ptr));
+      instr.SetUpdate(fifo_rd_ptr, Ite((wcnt > 0), Ite((fifo_rd_ptr == 1024), BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1), fifo_rd_ptr));
       instr.SetUpdate(fifo_wused, Ite((wcnt > 0), fifo_wused - 1, fifo_wused));
 
       // CRC code Update
@@ -373,7 +368,6 @@ namespace ilang {
     }
 
     // This is for writing the EOF and CRC code at the end of the frame.
-    ILA_INFO << "before wr_pkt_lastone instr";
     {
       auto instr = cm.NewInstr("WR_PKT_LASTONE_10G");
 

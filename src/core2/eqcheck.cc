@@ -33,7 +33,7 @@ VerilogVerificationTargetGenerator::vtg_config_t SetVerifGenConfig() {
   SetUnsignedComparison(true);
 
   // CoSA
-  config.CosaSolver = "btor";
+  config.CosaSolver = "z3";
   config.CosaPyEnvironment = "$HOME/cosa_ve/bin/activate";
   config.CosaGenTraceVcd = true;
   // config.CosaPath = "$HOME/CoSA";
