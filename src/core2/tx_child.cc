@@ -131,6 +131,7 @@ namespace ilang {
     // adding instructions for the TX functions.
     
     // instruction that set up the b2b_counter 
+    ILA_INFO << "before setting b2b cntr instruction";
     {
       auto instr = cm.NewInstr("SET_B2B_CNTR_10G");
 
@@ -151,6 +152,7 @@ namespace ilang {
 
     // This instruction is to read the first qword of the packet from user, which contains the size of the packet
     // Corresponding to the state GET_WAIT_2 of the state machine in xgmii
+    ILA_INFO << "before read byte cnt instruction";
     {
       auto instr = cm.NewInstr("READ_BYTE_CNT_10G");
 
@@ -190,7 +192,7 @@ namespace ilang {
       // Be Careful!!! The output state is actually 1 clk behind the other arch states in this step!
 
       // I put the B2B CNTR here 
-      instr.SetUpdate(txd, Concat(BvConst(0xD5555555, 32), BvConst(0x555555FB, 32))); // 6 clk
+      instr.SetUpdate(txd, Concat(BvConst(0xD555, 16), Concat(BvConst(0x5555, 16), BvConst(0x555555FB,32)))); // 6 clk
       instr.SetUpdate(txc, BvConst(0x01, XGMII_COUT_REG_BWID)); // 6 clk 
       instr.SetUpdate(b2b_cntr, TX_B2B_CNTR_INITIAL);
 
@@ -200,29 +202,29 @@ namespace ilang {
       auto rb = Extract(byte_cnt, 2, 0); // rb stands for residual bytes
       instr.SetUpdate(crc, Ite((rb == 0x0), BvConst(0x00000000, 32), 
                                     Ite((rb == 0x1), BvConst(0x56a579b9, 32),
-                                    Ite((rb == 0x2), BvConst(0xe962b350, 32),
+                                    Ite((rb == 0x2), Concat(BvConst(0xe962, 16), BvConst(0xb350, 16)),
                                     Ite((rb == 0x3), BvConst(0x3306840b, 32),
-                                    Ite((rb == 0x4), BvConst(0x9d0ad96d, 32),
+                                    Ite((rb == 0x4), Concat(BvConst(0x9d0a, 16), BvConst(0xd96d, 16)),
                                     Ite((rb == 0x5), BvConst(0x7ed9d15c, 32),
                                     Ite((rb == 0x6), BvConst(0x6f62e365, 32),
-                                                    BvConst(0x26706a0f, 32))))))))
+                                                     BvConst(0x26706a0f, 32))))))))
                       );
       
       // The crc_in inverted the endian of the crc and the inverted the bits.
-      instr.SetUpdate(crc_in, Ite((rb == 0x0), BvConst(0xffffffff, 32),
+      instr.SetUpdate(crc_in, Ite((rb == 0x0), Concat(BvConst(0xffff, 16), BvConst(0xffff,16)),
                                     Ite((rb == 0x1), BvConst(0x46865aa9, 32),
-                                    Ite((rb == 0x2), BvConst(0xaf4c9d16, 32),
-                                    Ite((rb == 0x3), BvConst(0xf47bf9cc, 32),
-                                    Ite((rb == 0x4), BvConst(0x9226f562, 32),
-                                    Ite((rb == 0x5), BvConst(0xa32e2681, 32),
-                                    Ite((rb == 0x6), BvConst(0x9a1c9d90, 32),
-                                                    BvConst(0xf0958fd9, 32))))))))
+                                    Ite((rb == 0x2), Concat(BvConst(0xaf4c, 16), BvConst(0x9d16, 16)),
+                                    Ite((rb == 0x3), Concat(BvConst(0xf47b, 16), BvConst(0xf9cc, 16)),
+                                    Ite((rb == 0x4), Concat(BvConst(0x9226, 16), BvConst(0xf562, 16)),
+                                    Ite((rb == 0x5), Concat(BvConst(0xa32e, 16), BvConst(0x2681, 16)),
+                                    Ite((rb == 0x6), Concat(BvConst(0x9a1c, 16), BvConst(0x9d90, 16)),
+                                                     Concat(BvConst(0xf095, 16), BvConst(0x8fd9, 16)))))))))
                       );
     }
 
-
+    
     // This instruction is for writing the payload of the packet 
-    ILA_INFO << "before wr_pkt_payload_instr";
+    ILA_INFO << "before writing payload";
     {
       auto instr = cm.NewInstr("WR_PKT_PAYLOAD_10G");
 
@@ -286,11 +288,11 @@ namespace ilang {
       // update CRC code input for the generator;
       instr.SetUpdate(crc_in, Ite((wcnt > 0), crc_g, crc_in));
       // update the CRC output. Needs transformation.
-      auto crc_code = ~(((crc_in >> 24) & BvConst(0xFF, 32)) | ((crc_in >> 8) & BvConst(0xFF00, 32)) | ((crc_in << 8) & BvConst(0xFF0000, 32)) | ((crc_in << 24) & BvConst(0xFF000000, 32)));
+      auto crc_code = ~(((crc_in >> 24) & BvConst(0xFF, 32)) | ((crc_in >> 8) & BvConst(0xFF00, 32)) | ((crc_in << 8) & BvConst(0xFF0000, 32)) | ((crc_in << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16))));
       instr.SetUpdate(cm.state(CRC), Ite((wcnt > 0), crc_code, cm.state(CRC)));
 
       // when output the crc code, we need to change the endian of the code.
-      auto crc_output = ((crc >> 24) & BvConst(0xFF, 32)) | ((crc >> 8) & BvConst(0xFF00, 32)) | ((crc << 8) & BvConst(0xFF0000, 32)) | ((crc << 24) & BvConst(0xFF000000, 32));
+      auto crc_output = ((crc >> 24) & BvConst(0xFF, 32)) | ((crc >> 8) & BvConst(0xFF00, 32)) | ((crc << 8) & BvConst(0xFF0000, 32)) | ((crc << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16)));
 
       // difference between crc_code and crc_output is that crc_code is the value in the crc register, however, when
       // outputing the value to txd, we need to change the endian. crc_output is for txd.
@@ -368,6 +370,7 @@ namespace ilang {
     }
 
     // This is for writing the EOF and CRC code at the end of the frame.
+    ILA_INFO << "before writing lastone";
     {
       auto instr = cm.NewInstr("WR_PKT_LASTONE_10G");
 

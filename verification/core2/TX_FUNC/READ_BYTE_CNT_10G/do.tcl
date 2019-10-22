@@ -43,23 +43,23 @@ assume -name noreset0 { (~__RESETED__) || (dummy_reset == 0) }
 assume -name variable_map_assume1 {(~ __START__ )|| (__m0__)}
 assume -name variable_map_assume2 {(~ __START__ )|| (__m1__)}
 assume -name variable_map_assume3 {(~ __START__ )|| (__m2__)}
-assume -name variable_map_assume4 {(~ __START__ )|| (__m3__)}
+assume -name variable_map_assume4 {(~ __START__ )|| (`true)}
 assume -name variable_map_assume5 {(~ __START__ )|| (__ILA_SO_TXFIFO_BUFF_RD_PTR[10:0] == m1.core.txfifo.tx_f.rd_ptr[10:0])}
 assume -name variable_map_assume6 {(~ __START__ )|| (__ILA_SO_TXFIFO_BUFF_WR_PTR[10:0] == m1.core.txfifo.tx_f.wr_ptr[10:0])}
-assume -name variable_map_assume7 {(~ __START__ )|| (__m4__)}
-assume -name variable_map_assume8 {(~ __START__ )|| (__m5__)}
-assume -name variable_map_assume9 {(~ __START__ )|| (__m6__)}
-assume -name variable_map_assume10 {(~ __START__ )|| (__m7__)}
-assume -name variable_map_assume11 {(~ __START__ )|| (__m8__)}
-assume -name variable_map_assume12 {(~ __START__ )|| (__m9__)}
-assume -name variable_map_assume13 {(~ __START__ )|| (__m10__)}
-assume -name variable_map_assume14 {(~ __START__ )|| (__m11__)}
-assume -name variable_map_assume15 {(~ __START__ )|| (__m12__)}
-assume -name variable_map_assume16 {(~ __START__ )|| (__m13__)}
-assume -name variable_map_assume17 {(~ __START__ )|| (__m14__)}
-assume -name variable_map_assume18 {(~ __START__ )|| (__m15__)}
-assume -name variable_map_assume19 {(~ __START__ )|| (__m16__)}
-assume -name variable_map_assume20 {(~ __START__ )|| (__m17__)}
+assume -name variable_map_assume7 {(~ __START__ )|| (__m3__)}
+assume -name variable_map_assume8 {(~ __START__ )|| (__m4__)}
+assume -name variable_map_assume9 {(~ __START__ )|| (__m5__)}
+assume -name variable_map_assume10 {(~ __START__ )|| (__m6__)}
+assume -name variable_map_assume11 {(~ __START__ )|| (__m7__)}
+assume -name variable_map_assume12 {(~ __START__ )|| (__m8__)}
+assume -name variable_map_assume13 {(~ __START__ )|| (__m9__)}
+assume -name variable_map_assume14 {(~ __START__ )|| (__m10__)}
+assume -name variable_map_assume15 {(~ __START__ )|| (__m11__)}
+assume -name variable_map_assume16 {(~ __START__ )|| (__m12__)}
+assume -name variable_map_assume17 {(~ __START__ )|| (__m13__)}
+assume -name variable_map_assume18 {(~ __START__ )|| (__m14__)}
+assume -name variable_map_assume19 {(~ __START__ )|| (__m15__)}
+assume -name variable_map_assume20 {(~ __START__ )|| (__m16__)}
 assume -name additional_mapping_control_assume21 {(m1.TCORE_MODE == 1)}
 assume -name additional_mapping_control_assume22 {(m1.SYS_ADDR == 1)}
 assume -name additional_mapping_control_assume23 {(m1.mode_10G == 1)}
@@ -69,29 +69,30 @@ assume -name additional_mapping_control_assume26 {(m1.mode_1G == 0)}
 assume -name additional_mapping_control_assume27 {(m1.core.tx_b2b_dly == 2)}
 assume -name additional_mapping_control_assume28 {(m1.core.tx_10G_wrap.tx_encap.tx_rdy == 1)}
 assume -name additional_mapping_control_assume29 {(m1.core.txfifo_wr_en == 0)}
-assume -name issue_decode30 {(~ __START__) || (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__)}
-assume -name issue_valid31 {(~ __START__) || (__ILA_TX_FUNC_valid__)}
-assume -name post_value_holder32 {(~(__CYCLE_CNT__ == 1) || ((b2b_counter_LastOne_end) == (m1.core.tx_10G_wrap.tx_encap.b2b_counter)))}
-assume -name post_value_holder33 {(~(__CYCLE_CNT__ == 5) || ((b2b_counter_RdByteCnt_end) == (m1.core.tx_10G_wrap.tx_encap.b2b_counter)))}
-assume -name post_value_holder34 {(~(__CYCLE_CNT__ == 1) || ((b2b_counter_WrPktPayload_end) == (m1.core.tx_10G_wrap.tx_encap.b2b_counter)))}
-assume -name post_value_holder35 {(~(__CYCLE_CNT__ == 4) || ((tx_pkt_byte_cnt_RdByteCnt_end) == (m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg)))}
-assume -name post_value_holder36 {(~(__CYCLE_CNT__ == 4) || ((tx_st_encap_RdByteCnt_end) == (m1.core.tx_10G_wrap.tx_encap.state)))}
-assume -name post_value_holder37 {(~(__CYCLE_CNT__ == 1) || ((tx_st_encap_WrPktPayload_end) == (m1.core.tx_10G_wrap.tx_encap.state)))}
-assume -name post_value_holder38 {(~(__CYCLE_CNT__ == 1) || ((tx_state_LastOne_end) == (m1.core.tx_10G_wrap.tx_xgmii.state)))}
-assume -name post_value_holder39 {(~(__CYCLE_CNT__ == 5) || ((tx_state_RdByteCnt_end) == (m1.core.tx_10G_wrap.tx_xgmii.state)))}
-assume -name post_value_holder40 {(~(__CYCLE_CNT__ == 1) || ((tx_state_WrPktPayload_end) == (m1.core.tx_10G_wrap.tx_xgmii.state)))}
-assume -name post_value_holder41 {(~(__CYCLE_CNT__ == 5) || ((tx_wcnt_RdByteCnt_end) == (m1.core.tx_10G_wrap.tx_xgmii.wcnt)))}
-assume -name post_value_holder42 {(~(__CYCLE_CNT__ == 1) || ((tx_wcnt_WrPktPaylaod_end) == (m1.core.tx_10G_wrap.tx_xgmii.wcnt)))}
-assert -name variable_map_assert0 {(~ __IEND__) || (__m18__)}
-assert -name variable_map_assert1 {(~ __IEND__) || (__m19__)}
+assume -name additional_mapping_control_assume30 {(__ILA_SO_TXFIFO_BUFF == m1.core.txfifo.tx_f.mem)}
+assume -name issue_decode31 {(~ __START__) || (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__)}
+assume -name issue_valid32 {(~ __START__) || (__ILA_TX_FUNC_valid__)}
+assume -name post_value_holder33 {(~(__CYCLE_CNT__ == 1) || ((b2b_counter_LastOne_end) == (m1.core.tx_10G_wrap.tx_encap.b2b_counter)))}
+assume -name post_value_holder34 {(~(__CYCLE_CNT__ == 5) || ((b2b_counter_RdByteCnt_end) == (m1.core.tx_10G_wrap.tx_encap.b2b_counter)))}
+assume -name post_value_holder35 {(~(__CYCLE_CNT__ == 1) || ((b2b_counter_WrPktPayload_end) == (m1.core.tx_10G_wrap.tx_encap.b2b_counter)))}
+assume -name post_value_holder36 {(~(__CYCLE_CNT__ == 4) || ((tx_pkt_byte_cnt_RdByteCnt_end) == (m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg)))}
+assume -name post_value_holder37 {(~(__CYCLE_CNT__ == 4) || ((tx_st_encap_RdByteCnt_end) == (m1.core.tx_10G_wrap.tx_encap.state)))}
+assume -name post_value_holder38 {(~(__CYCLE_CNT__ == 1) || ((tx_st_encap_WrPktPayload_end) == (m1.core.tx_10G_wrap.tx_encap.state)))}
+assume -name post_value_holder39 {(~(__CYCLE_CNT__ == 1) || ((tx_state_LastOne_end) == (m1.core.tx_10G_wrap.tx_xgmii.state)))}
+assume -name post_value_holder40 {(~(__CYCLE_CNT__ == 5) || ((tx_state_RdByteCnt_end) == (m1.core.tx_10G_wrap.tx_xgmii.state)))}
+assume -name post_value_holder41 {(~(__CYCLE_CNT__ == 1) || ((tx_state_WrPktPayload_end) == (m1.core.tx_10G_wrap.tx_xgmii.state)))}
+assume -name post_value_holder42 {(~(__CYCLE_CNT__ == 5) || ((tx_wcnt_RdByteCnt_end) == (m1.core.tx_10G_wrap.tx_xgmii.wcnt)))}
+assume -name post_value_holder43 {(~(__CYCLE_CNT__ == 1) || ((tx_wcnt_WrPktPaylaod_end) == (m1.core.tx_10G_wrap.tx_xgmii.wcnt)))}
+assert -name variable_map_assert0 {(~ __IEND__) || (__m17__)}
+assert -name variable_map_assert1 {(~ __IEND__) || (__m18__)}
 assert -name variable_map_assert2 {(~ __IEND__) || (__ILA_SO_TXFIFO_BUFF_RD_PTR[10:0] == m1.core.txfifo.tx_f.rd_ptr[10:0])}
-assert -name variable_map_assert3 {(~ __IEND__) || (__m21__)}
-assert -name variable_map_assert4 {(~ __IEND__) || (__m22__)}
-assert -name variable_map_assert5 {(~ __IEND__) || (__m23__)}
-assert -name variable_map_assert6 {(~ __IEND__) || (__m24__)}
-assert -name variable_map_assert7 {(~ __IEND__) || (__m25__)}
-assert -name variable_map_assert8 {(~ __IEND__) || (__m26__)}
-assert -name variable_map_assert9 {(~ __IEND__) || (__m27__)}
-assert -name variable_map_assert10 {(~ __IEND__) || (__m28__)}
-assert -name variable_map_assert11 {(~ __IEND__) || (__m29__)}
-assert -name variable_map_assert12 {(~ __IEND__) || (__m30__)}
+assert -name variable_map_assert3 {(~ __IEND__) || (__m19__)}
+assert -name variable_map_assert4 {(~ __IEND__) || (__m20__)}
+assert -name variable_map_assert5 {(~ __IEND__) || (__m21__)}
+assert -name variable_map_assert6 {(~ __IEND__) || (__m22__)}
+assert -name variable_map_assert7 {(~ __IEND__) || (__m23__)}
+assert -name variable_map_assert8 {(~ __IEND__) || (__m24__)}
+assert -name variable_map_assert9 {(~ __IEND__) || (__m25__)}
+assert -name variable_map_assert10 {(~ __IEND__) || (__m26__)}
+assert -name variable_map_assert11 {(~ __IEND__) || (__m27__)}
+assert -name variable_map_assert12 {(~ __IEND__) || (__m28__)}
