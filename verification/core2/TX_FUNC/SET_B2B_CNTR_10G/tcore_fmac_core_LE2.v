@@ -413,8 +413,8 @@ wire [63:0] ram2derx_rdata = 0;
 wire		crc32_ok;
 
 
-wire [10:0] txfifo_usedw_int;   
-assign txfifo_usedw = {3'h0, txfifo_usedw_int};
+wire [4:0] txfifo_usedw_int;   
+assign txfifo_usedw = {8'h0, txfifo_usedw_int};
 
 assign raddr_marker	= 12'b0;
 assign xreq = 1'b0;

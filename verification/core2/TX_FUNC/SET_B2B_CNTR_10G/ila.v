@@ -11,6 +11,38 @@ clk,
 rst,
 __ILA_TX_FUNC_decode_of_SET_B2B_CNTR_10G__,
 __ILA_TX_FUNC_valid__,
+TXFIFO_BUFF_0,
+TXFIFO_BUFF_1,
+TXFIFO_BUFF_2,
+TXFIFO_BUFF_3,
+TXFIFO_BUFF_4,
+TXFIFO_BUFF_5,
+TXFIFO_BUFF_6,
+TXFIFO_BUFF_7,
+TXFIFO_BUFF_8,
+TXFIFO_BUFF_9,
+TXFIFO_BUFF_10,
+TXFIFO_BUFF_11,
+TXFIFO_BUFF_12,
+TXFIFO_BUFF_13,
+TXFIFO_BUFF_14,
+TXFIFO_BUFF_15,
+TXFIFO_BUFF_16,
+TXFIFO_BUFF_17,
+TXFIFO_BUFF_18,
+TXFIFO_BUFF_19,
+TXFIFO_BUFF_20,
+TXFIFO_BUFF_21,
+TXFIFO_BUFF_22,
+TXFIFO_BUFF_23,
+TXFIFO_BUFF_24,
+TXFIFO_BUFF_25,
+TXFIFO_BUFF_26,
+TXFIFO_BUFF_27,
+TXFIFO_BUFF_28,
+TXFIFO_BUFF_29,
+TXFIFO_BUFF_30,
+TXFIFO_BUFF_31,
 TXFIFO_FULL,
 TXFIFO_WUSED_QWD,
 TXFIFO_BUFF_RD_PTR,
@@ -44,10 +76,42 @@ input            clk;
 input            rst;
 output            __ILA_TX_FUNC_decode_of_SET_B2B_CNTR_10G__;
 output            __ILA_TX_FUNC_valid__;
+output     [63:0] TXFIFO_BUFF_0;
+output     [63:0] TXFIFO_BUFF_1;
+output     [63:0] TXFIFO_BUFF_2;
+output     [63:0] TXFIFO_BUFF_3;
+output     [63:0] TXFIFO_BUFF_4;
+output     [63:0] TXFIFO_BUFF_5;
+output     [63:0] TXFIFO_BUFF_6;
+output     [63:0] TXFIFO_BUFF_7;
+output     [63:0] TXFIFO_BUFF_8;
+output     [63:0] TXFIFO_BUFF_9;
+output     [63:0] TXFIFO_BUFF_10;
+output     [63:0] TXFIFO_BUFF_11;
+output     [63:0] TXFIFO_BUFF_12;
+output     [63:0] TXFIFO_BUFF_13;
+output     [63:0] TXFIFO_BUFF_14;
+output     [63:0] TXFIFO_BUFF_15;
+output     [63:0] TXFIFO_BUFF_16;
+output     [63:0] TXFIFO_BUFF_17;
+output     [63:0] TXFIFO_BUFF_18;
+output     [63:0] TXFIFO_BUFF_19;
+output     [63:0] TXFIFO_BUFF_20;
+output     [63:0] TXFIFO_BUFF_21;
+output     [63:0] TXFIFO_BUFF_22;
+output     [63:0] TXFIFO_BUFF_23;
+output     [63:0] TXFIFO_BUFF_24;
+output     [63:0] TXFIFO_BUFF_25;
+output     [63:0] TXFIFO_BUFF_26;
+output     [63:0] TXFIFO_BUFF_27;
+output     [63:0] TXFIFO_BUFF_28;
+output     [63:0] TXFIFO_BUFF_29;
+output     [63:0] TXFIFO_BUFF_30;
+output     [63:0] TXFIFO_BUFF_31;
 output reg            TXFIFO_FULL;
 output reg     [12:0] TXFIFO_WUSED_QWD;
-output reg     [15:0] TXFIFO_BUFF_RD_PTR;
-output reg     [15:0] TXFIFO_BUFF_WR_PTR;
+output reg      [4:0] TXFIFO_BUFF_RD_PTR;
+output reg      [4:0] TXFIFO_BUFF_WR_PTR;
 output reg     [63:0] TXFIFO_RD_OUTPUT;
 output reg      [4:0] TX_STATE;
 output reg      [7:0] TX_STATE_ENCAP;
@@ -72,8 +136,40 @@ wire            MODE_1G;
 wire            MODE_2P5G;
 wire            MODE_5G;
 wire            RESETN;
-(* keep *) wire     [15:0] TXFIFO_BUFF_RD_PTR_randinit;
-(* keep *) wire     [15:0] TXFIFO_BUFF_WR_PTR_randinit;
+wire     [63:0] TXFIFO_BUFF_0;
+wire     [63:0] TXFIFO_BUFF_1;
+wire     [63:0] TXFIFO_BUFF_10;
+wire     [63:0] TXFIFO_BUFF_11;
+wire     [63:0] TXFIFO_BUFF_12;
+wire     [63:0] TXFIFO_BUFF_13;
+wire     [63:0] TXFIFO_BUFF_14;
+wire     [63:0] TXFIFO_BUFF_15;
+wire     [63:0] TXFIFO_BUFF_16;
+wire     [63:0] TXFIFO_BUFF_17;
+wire     [63:0] TXFIFO_BUFF_18;
+wire     [63:0] TXFIFO_BUFF_19;
+wire     [63:0] TXFIFO_BUFF_2;
+wire     [63:0] TXFIFO_BUFF_20;
+wire     [63:0] TXFIFO_BUFF_21;
+wire     [63:0] TXFIFO_BUFF_22;
+wire     [63:0] TXFIFO_BUFF_23;
+wire     [63:0] TXFIFO_BUFF_24;
+wire     [63:0] TXFIFO_BUFF_25;
+wire     [63:0] TXFIFO_BUFF_26;
+wire     [63:0] TXFIFO_BUFF_27;
+wire     [63:0] TXFIFO_BUFF_28;
+wire     [63:0] TXFIFO_BUFF_29;
+wire     [63:0] TXFIFO_BUFF_3;
+wire     [63:0] TXFIFO_BUFF_30;
+wire     [63:0] TXFIFO_BUFF_31;
+wire     [63:0] TXFIFO_BUFF_4;
+wire     [63:0] TXFIFO_BUFF_5;
+wire     [63:0] TXFIFO_BUFF_6;
+wire     [63:0] TXFIFO_BUFF_7;
+wire     [63:0] TXFIFO_BUFF_8;
+wire     [63:0] TXFIFO_BUFF_9;
+(* keep *) wire      [4:0] TXFIFO_BUFF_RD_PTR_randinit;
+(* keep *) wire      [4:0] TXFIFO_BUFF_WR_PTR_randinit;
 (* keep *) wire            TXFIFO_FULL_randinit;
 (* keep *) wire     [63:0] TXFIFO_RD_OUTPUT_randinit;
 (* keep *) wire     [12:0] TXFIFO_WUSED_QWD_randinit;
@@ -105,6 +201,39 @@ wire            n6____DOLLAR__165;
 wire            n7____DOLLAR__169;
 wire      [5:0] n9____DOLLAR__172;
 wire            rst;
+reg     [63:0] TXFIFO_BUFF[31:0];
+assign TXFIFO_BUFF_0 = TXFIFO_BUFF[0] ;
+assign TXFIFO_BUFF_1 = TXFIFO_BUFF[1] ;
+assign TXFIFO_BUFF_2 = TXFIFO_BUFF[2] ;
+assign TXFIFO_BUFF_3 = TXFIFO_BUFF[3] ;
+assign TXFIFO_BUFF_4 = TXFIFO_BUFF[4] ;
+assign TXFIFO_BUFF_5 = TXFIFO_BUFF[5] ;
+assign TXFIFO_BUFF_6 = TXFIFO_BUFF[6] ;
+assign TXFIFO_BUFF_7 = TXFIFO_BUFF[7] ;
+assign TXFIFO_BUFF_8 = TXFIFO_BUFF[8] ;
+assign TXFIFO_BUFF_9 = TXFIFO_BUFF[9] ;
+assign TXFIFO_BUFF_10 = TXFIFO_BUFF[10] ;
+assign TXFIFO_BUFF_11 = TXFIFO_BUFF[11] ;
+assign TXFIFO_BUFF_12 = TXFIFO_BUFF[12] ;
+assign TXFIFO_BUFF_13 = TXFIFO_BUFF[13] ;
+assign TXFIFO_BUFF_14 = TXFIFO_BUFF[14] ;
+assign TXFIFO_BUFF_15 = TXFIFO_BUFF[15] ;
+assign TXFIFO_BUFF_16 = TXFIFO_BUFF[16] ;
+assign TXFIFO_BUFF_17 = TXFIFO_BUFF[17] ;
+assign TXFIFO_BUFF_18 = TXFIFO_BUFF[18] ;
+assign TXFIFO_BUFF_19 = TXFIFO_BUFF[19] ;
+assign TXFIFO_BUFF_20 = TXFIFO_BUFF[20] ;
+assign TXFIFO_BUFF_21 = TXFIFO_BUFF[21] ;
+assign TXFIFO_BUFF_22 = TXFIFO_BUFF[22] ;
+assign TXFIFO_BUFF_23 = TXFIFO_BUFF[23] ;
+assign TXFIFO_BUFF_24 = TXFIFO_BUFF[24] ;
+assign TXFIFO_BUFF_25 = TXFIFO_BUFF[25] ;
+assign TXFIFO_BUFF_26 = TXFIFO_BUFF[26] ;
+assign TXFIFO_BUFF_27 = TXFIFO_BUFF[27] ;
+assign TXFIFO_BUFF_28 = TXFIFO_BUFF[28] ;
+assign TXFIFO_BUFF_29 = TXFIFO_BUFF[29] ;
+assign TXFIFO_BUFF_30 = TXFIFO_BUFF[30] ;
+assign TXFIFO_BUFF_31 = TXFIFO_BUFF[31] ;
 assign n0____DOLLAR__124 =  ( RESETN ) == ( 1'b1 )  ;
 assign __ILA_TX_FUNC_valid__ = n0____DOLLAR__124 ;
 assign n1____DOLLAR__150 =  ( MODE_10G ) == ( 1'b1 )  ;

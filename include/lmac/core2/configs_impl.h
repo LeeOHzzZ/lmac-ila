@@ -37,8 +37,8 @@ namespace ilang {
 //#define TXFIFO_BUFF_ADDR_BWID                                                  \
   (TX_DATA_PKT_BYTE_CNT_END - TX_DATA_PKT_BYTE_CNT_BEG + 1)
 // temporarilly decrease the buffer size for verification. Set the depth of the 
-// buffer to be 16 => buff_addr width should be 4
-#define TXFIFO_BUFF_ADDR_BWID 4
+// buffer to be 16 => buff_addr width should be 4 + 1 = 5
+#define TXFIFO_BUFF_ADDR_BWID 5 
 // bit-width of the TX FIFO buffer data
 #define TXFIFO_BUFF_DATA_BWID TX_DATA_BWID
 // depth of the TX FIFO buffer

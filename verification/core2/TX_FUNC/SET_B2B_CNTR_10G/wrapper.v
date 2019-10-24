@@ -88,6 +88,8 @@ __m17__,
 __m18__,
 __m19__,
 __m1__,
+__m20__,
+__m21__,
 __m2__,
 __m3__,
 __m4__,
@@ -159,8 +161,8 @@ input            rst;
 output     [31:0] __ILA_SO_CRC;
 output     [63:0] __ILA_SO_CRC_DAT_IN;
 output     [31:0] __ILA_SO_CRC_IN;
-output     [15:0] __ILA_SO_TXFIFO_BUFF_RD_PTR;
-output     [15:0] __ILA_SO_TXFIFO_BUFF_WR_PTR;
+output      [4:0] __ILA_SO_TXFIFO_BUFF_RD_PTR;
+output      [4:0] __ILA_SO_TXFIFO_BUFF_WR_PTR;
 output            __ILA_SO_TXFIFO_FULL;
 output     [63:0] __ILA_SO_TXFIFO_RD_OUTPUT;
 output     [12:0] __ILA_SO_TXFIFO_WUSED_QWD;
@@ -198,6 +200,8 @@ output            __m17__;
 output            __m18__;
 output            __m19__;
 output            __m1__;
+output            __m20__;
+output            __m21__;
 output            __m2__;
 output            __m3__;
 output            __m4__;
@@ -238,8 +242,40 @@ wire            __2ndIEND__;
 (* keep *) wire     [31:0] __ILA_SO_CRC;
 (* keep *) wire     [63:0] __ILA_SO_CRC_DAT_IN;
 (* keep *) wire     [31:0] __ILA_SO_CRC_IN;
-(* keep *) wire     [15:0] __ILA_SO_TXFIFO_BUFF_RD_PTR;
-(* keep *) wire     [15:0] __ILA_SO_TXFIFO_BUFF_WR_PTR;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_0;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_1;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_10;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_11;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_12;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_13;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_14;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_15;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_16;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_17;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_18;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_19;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_2;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_20;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_21;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_22;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_23;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_24;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_25;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_26;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_27;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_28;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_29;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_3;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_30;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_31;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_4;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_5;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_6;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_7;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_8;
+(* keep *) wire     [63:0] __ILA_SO_TXFIFO_BUFF_9;
+(* keep *) wire      [4:0] __ILA_SO_TXFIFO_BUFF_RD_PTR;
+(* keep *) wire      [4:0] __ILA_SO_TXFIFO_BUFF_WR_PTR;
 (* keep *) wire            __ILA_SO_TXFIFO_FULL;
 (* keep *) wire     [63:0] __ILA_SO_TXFIFO_RD_OUTPUT;
 (* keep *) wire     [12:0] __ILA_SO_TXFIFO_WUSED_QWD;
@@ -302,6 +338,8 @@ wire      [5:0] __b2b_counter_WrPktPayload_end_init__;
 (* keep *) wire            __m18__;
 (* keep *) wire            __m19__;
 (* keep *) wire            __m1__;
+(* keep *) wire            __m20__;
+(* keep *) wire            __m21__;
 (* keep *) wire            __m2__;
 (* keep *) wire            __m3__;
 (* keep *) wire            __m4__;
@@ -350,23 +388,25 @@ end
 assign __m0__ = m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32 == __ILA_SO_CRC ;
 assign __m1__ = m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.bdin == __ILA_SO_CRC_DAT_IN ;
 assign __m2__ = m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in == __ILA_SO_CRC_IN ;
-assign __m3__ = m1.tx_mac_full == __ILA_SO_TXFIFO_FULL ;
-assign __m4__ = m1.core.txfifo.tx_f.dataout == __ILA_SO_TXFIFO_RD_OUTPUT ;
-assign __m5__ = m1.tx_mac_usedw == __ILA_SO_TXFIFO_WUSED_QWD ;
-assign __m6__ = m1.core.tx_10G_wrap.tx_encap.b2b_counter == __ILA_SO_TX_B2B_CNTR ;
-assign __m7__ = m1.core.tx_10G_wrap.tx_xgmii.bdata1 == __ILA_SO_TX_BUF ;
-assign __m8__ = m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt == __ILA_SO_TX_BYTE_SENT ;
-assign __m9__ = m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg == __ILA_SO_TX_PACKET_BYTE_CNT ;
-assign __m10__ = m1.core.tx_10G_wrap.tx_xgmii.pkt_transmitted == __ILA_SO_TX_PKT_SENT ;
-assign __m11__ = m1.core.tx_10G_wrap.tx_xgmii.state == __ILA_SO_TX_STATE ;
-assign __m12__ = m1.core.tx_10G_wrap.tx_encap.state == __ILA_SO_TX_STATE_ENCAP ;
-assign __m13__ = m1.core.tx_10G_wrap.tx_xgmii.wcnt == __ILA_SO_TX_WCNT ;
-assign __m14__ = m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini == __ILA_SO_TX_WCNT_INI ;
-assign __m15__ = m1.core.tx_10G_wrap.tx_xgmii.txc == __ILA_SO_XGMII_COUT_REG ;
-assign __m16__ = m1.core.tx_10G_wrap.tx_xgmii.txd == __ILA_SO_XGMII_DOUT_REG ;
-assign __m17__ = m1.core.tx_10G_wrap.tx_encap.b2b_counter == __ILA_SO_TX_B2B_CNTR ;
-assign __m18__ = m1.core.tx_10G_wrap.tx_xgmii.txc == __ILA_SO_XGMII_COUT_REG ;
-assign __m19__ = m1.core.tx_10G_wrap.tx_xgmii.txd == __ILA_SO_XGMII_DOUT_REG ;
+assign __m3__ = ( __ILA_SO_TXFIFO_BUFF_0 == m1.core.txfifo.tx_f.mem[0])&&( __ILA_SO_TXFIFO_BUFF_1 == m1.core.txfifo.tx_f.mem[1])&&( __ILA_SO_TXFIFO_BUFF_2 == m1.core.txfifo.tx_f.mem[2])&&( __ILA_SO_TXFIFO_BUFF_3 == m1.core.txfifo.tx_f.mem[3])&&( __ILA_SO_TXFIFO_BUFF_4 == m1.core.txfifo.tx_f.mem[4])&&( __ILA_SO_TXFIFO_BUFF_5 == m1.core.txfifo.tx_f.mem[5])&&( __ILA_SO_TXFIFO_BUFF_6 == m1.core.txfifo.tx_f.mem[6])&&( __ILA_SO_TXFIFO_BUFF_7 == m1.core.txfifo.tx_f.mem[7])&&( __ILA_SO_TXFIFO_BUFF_8 == m1.core.txfifo.tx_f.mem[8])&&( __ILA_SO_TXFIFO_BUFF_9 == m1.core.txfifo.tx_f.mem[9])&&( __ILA_SO_TXFIFO_BUFF_10 == m1.core.txfifo.tx_f.mem[10])&&( __ILA_SO_TXFIFO_BUFF_11 == m1.core.txfifo.tx_f.mem[11])&&( __ILA_SO_TXFIFO_BUFF_12 == m1.core.txfifo.tx_f.mem[12])&&( __ILA_SO_TXFIFO_BUFF_13 == m1.core.txfifo.tx_f.mem[13])&&( __ILA_SO_TXFIFO_BUFF_14 == m1.core.txfifo.tx_f.mem[14])&&( __ILA_SO_TXFIFO_BUFF_15 == m1.core.txfifo.tx_f.mem[15]) ;
+assign __m4__ = m1.tx_mac_full == __ILA_SO_TXFIFO_FULL ;
+assign __m5__ = m1.core.txfifo.tx_f.dataout == __ILA_SO_TXFIFO_RD_OUTPUT ;
+assign __m6__ = m1.tx_mac_usedw == __ILA_SO_TXFIFO_WUSED_QWD ;
+assign __m7__ = m1.core.tx_10G_wrap.tx_encap.b2b_counter == __ILA_SO_TX_B2B_CNTR ;
+assign __m8__ = m1.core.tx_10G_wrap.tx_xgmii.bdata1 == __ILA_SO_TX_BUF ;
+assign __m9__ = m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt == __ILA_SO_TX_BYTE_SENT ;
+assign __m10__ = m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg == __ILA_SO_TX_PACKET_BYTE_CNT ;
+assign __m11__ = m1.core.tx_10G_wrap.tx_xgmii.pkt_transmitted == __ILA_SO_TX_PKT_SENT ;
+assign __m12__ = m1.core.tx_10G_wrap.tx_xgmii.state == __ILA_SO_TX_STATE ;
+assign __m13__ = m1.core.tx_10G_wrap.tx_encap.state == __ILA_SO_TX_STATE_ENCAP ;
+assign __m14__ = m1.core.tx_10G_wrap.tx_xgmii.wcnt == __ILA_SO_TX_WCNT ;
+assign __m15__ = m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini == __ILA_SO_TX_WCNT_INI ;
+assign __m16__ = m1.core.tx_10G_wrap.tx_xgmii.txc == __ILA_SO_XGMII_COUT_REG ;
+assign __m17__ = m1.core.tx_10G_wrap.tx_xgmii.txd == __ILA_SO_XGMII_DOUT_REG ;
+assign __m18__ = ( __ILA_SO_TXFIFO_BUFF_0 == m1.core.txfifo.tx_f.mem[0])&&( __ILA_SO_TXFIFO_BUFF_1 == m1.core.txfifo.tx_f.mem[1])&&( __ILA_SO_TXFIFO_BUFF_2 == m1.core.txfifo.tx_f.mem[2])&&( __ILA_SO_TXFIFO_BUFF_3 == m1.core.txfifo.tx_f.mem[3])&&( __ILA_SO_TXFIFO_BUFF_4 == m1.core.txfifo.tx_f.mem[4])&&( __ILA_SO_TXFIFO_BUFF_5 == m1.core.txfifo.tx_f.mem[5])&&( __ILA_SO_TXFIFO_BUFF_6 == m1.core.txfifo.tx_f.mem[6])&&( __ILA_SO_TXFIFO_BUFF_7 == m1.core.txfifo.tx_f.mem[7])&&( __ILA_SO_TXFIFO_BUFF_8 == m1.core.txfifo.tx_f.mem[8])&&( __ILA_SO_TXFIFO_BUFF_9 == m1.core.txfifo.tx_f.mem[9])&&( __ILA_SO_TXFIFO_BUFF_10 == m1.core.txfifo.tx_f.mem[10])&&( __ILA_SO_TXFIFO_BUFF_11 == m1.core.txfifo.tx_f.mem[11])&&( __ILA_SO_TXFIFO_BUFF_12 == m1.core.txfifo.tx_f.mem[12])&&( __ILA_SO_TXFIFO_BUFF_13 == m1.core.txfifo.tx_f.mem[13])&&( __ILA_SO_TXFIFO_BUFF_14 == m1.core.txfifo.tx_f.mem[14])&&( __ILA_SO_TXFIFO_BUFF_15 == m1.core.txfifo.tx_f.mem[15]) ;
+assign __m19__ = m1.core.tx_10G_wrap.tx_encap.b2b_counter == __ILA_SO_TX_B2B_CNTR ;
+assign __m20__ = m1.core.tx_10G_wrap.tx_xgmii.txc == __ILA_SO_XGMII_COUT_REG ;
+assign __m21__ = m1.core.tx_10G_wrap.tx_xgmii.txd == __ILA_SO_XGMII_DOUT_REG ;
 assign __EDCOND__ = (`false|| ( __CYCLE_CNT__ == 4'd1)) && __STARTED__  ;
 assign __IEND__ = (`false|| ( __CYCLE_CNT__ == 4'd1)) && __STARTED__ && __RESETED__ && (~ __ENDED__) ;
 assign __ISSUE__ = 1 ;
@@ -384,6 +424,38 @@ TX_FUNC__DOT__SET_B2B_CNTR_10G m0 (
    .rst(rst),
    .__ILA_TX_FUNC_decode_of_SET_B2B_CNTR_10G__(__ILA_TX_FUNC_decode_of_SET_B2B_CNTR_10G__),
    .__ILA_TX_FUNC_valid__(__ILA_TX_FUNC_valid__),
+   .TXFIFO_BUFF_0(__ILA_SO_TXFIFO_BUFF_0),
+   .TXFIFO_BUFF_1(__ILA_SO_TXFIFO_BUFF_1),
+   .TXFIFO_BUFF_2(__ILA_SO_TXFIFO_BUFF_2),
+   .TXFIFO_BUFF_3(__ILA_SO_TXFIFO_BUFF_3),
+   .TXFIFO_BUFF_4(__ILA_SO_TXFIFO_BUFF_4),
+   .TXFIFO_BUFF_5(__ILA_SO_TXFIFO_BUFF_5),
+   .TXFIFO_BUFF_6(__ILA_SO_TXFIFO_BUFF_6),
+   .TXFIFO_BUFF_7(__ILA_SO_TXFIFO_BUFF_7),
+   .TXFIFO_BUFF_8(__ILA_SO_TXFIFO_BUFF_8),
+   .TXFIFO_BUFF_9(__ILA_SO_TXFIFO_BUFF_9),
+   .TXFIFO_BUFF_10(__ILA_SO_TXFIFO_BUFF_10),
+   .TXFIFO_BUFF_11(__ILA_SO_TXFIFO_BUFF_11),
+   .TXFIFO_BUFF_12(__ILA_SO_TXFIFO_BUFF_12),
+   .TXFIFO_BUFF_13(__ILA_SO_TXFIFO_BUFF_13),
+   .TXFIFO_BUFF_14(__ILA_SO_TXFIFO_BUFF_14),
+   .TXFIFO_BUFF_15(__ILA_SO_TXFIFO_BUFF_15),
+   .TXFIFO_BUFF_16(__ILA_SO_TXFIFO_BUFF_16),
+   .TXFIFO_BUFF_17(__ILA_SO_TXFIFO_BUFF_17),
+   .TXFIFO_BUFF_18(__ILA_SO_TXFIFO_BUFF_18),
+   .TXFIFO_BUFF_19(__ILA_SO_TXFIFO_BUFF_19),
+   .TXFIFO_BUFF_20(__ILA_SO_TXFIFO_BUFF_20),
+   .TXFIFO_BUFF_21(__ILA_SO_TXFIFO_BUFF_21),
+   .TXFIFO_BUFF_22(__ILA_SO_TXFIFO_BUFF_22),
+   .TXFIFO_BUFF_23(__ILA_SO_TXFIFO_BUFF_23),
+   .TXFIFO_BUFF_24(__ILA_SO_TXFIFO_BUFF_24),
+   .TXFIFO_BUFF_25(__ILA_SO_TXFIFO_BUFF_25),
+   .TXFIFO_BUFF_26(__ILA_SO_TXFIFO_BUFF_26),
+   .TXFIFO_BUFF_27(__ILA_SO_TXFIFO_BUFF_27),
+   .TXFIFO_BUFF_28(__ILA_SO_TXFIFO_BUFF_28),
+   .TXFIFO_BUFF_29(__ILA_SO_TXFIFO_BUFF_29),
+   .TXFIFO_BUFF_30(__ILA_SO_TXFIFO_BUFF_30),
+   .TXFIFO_BUFF_31(__ILA_SO_TXFIFO_BUFF_31),
    .TXFIFO_FULL(__ILA_SO_TXFIFO_FULL),
    .TXFIFO_WUSED_QWD(__ILA_SO_TXFIFO_WUSED_QWD),
    .TXFIFO_BUFF_RD_PTR(__ILA_SO_TXFIFO_BUFF_RD_PTR),

@@ -64,7 +64,7 @@ namespace ilang {
 // and can change from clock to clock.  (Current implementation only uses bits
 // [9:0] for FIFO size 1Kx64)
 #define TXFIFO_WUSED_QWD "TXFIFO_WUSED_QWD"
-#define TXFIFO_WUSED_QWD_BWID 13
+#define TXFIFO_WUSED_QWD_BWID 13 
 
 // -------------------------------------------------------------------------- //
 // RX FIFO Interface

@@ -50,8 +50,8 @@ module txfifo_1024x64
 
 
 	parameter WIDTH = 64,
-			  DEPTH = 1024,
-			  PTR	= 10;
+			  DEPTH = 16,
+			  PTR	= 4;
 			  
 			  
 			input wire 					aclr;
