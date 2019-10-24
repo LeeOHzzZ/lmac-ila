@@ -22,7 +22,7 @@
   "interface mapping": {
     "clk"               : "**CLOCK**",
     "xA_clk"            : "**CLOCK**",
-    "reset_"            : "RESETN", 
+    "reset_"            : "**NRESET**", 
 
     "mode_10G"          : "MODE_10G",
     "mode_5G"           : "MODE_5G",

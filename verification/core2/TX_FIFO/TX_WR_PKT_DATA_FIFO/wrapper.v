@@ -334,7 +334,7 @@ LMAC_CORE_TOP m1(
     .mode_5G(__ILA_I_MODE_5G),
     .reg_rd_done_out(__VLG_O_reg_rd_done_out),
     .reg_rd_start(__VLG_I_reg_rd_start),
-    .reset_(__ILA_I_RESETN),
+    .reset_(~dummy_reset),
     .rx_mac_ctrl(__VLG_O_rx_mac_ctrl),
     .rx_mac_data(__VLG_O_rx_mac_data),
     .rx_mac_empty(__VLG_O_rx_mac_empty),
