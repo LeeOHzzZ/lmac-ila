@@ -532,7 +532,7 @@ tx_10G_wrap tx_10G_wrap(
 assign	xaui_mode	= (mode_10G_buf);	
 
 wire	rxfifo_wrempty156	;	
-
+/*
 fmac_fifo4Kx64 rxfifo(                      
 	.aclr		(!usr_rst_ | !fmac_rxd_en)	,	//i-1	
 	.data		(pkt_data),                     //i-64 from RX_XGMII 
@@ -815,7 +815,7 @@ rx_decap #(FMAC_ID, RX_FIFO_DEPTH, RX_FIFO_ADDR_WIDTH, RX_DRAM_DEPTH, RX_DRAM_AD
 	);	
 
 	
-	
+*/	
 	
 	
 reg		[63:0]	xgmii_dout_reg;

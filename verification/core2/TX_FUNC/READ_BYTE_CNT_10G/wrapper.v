@@ -100,6 +100,9 @@ __m28__,
 __m29__,
 __m2__,
 __m30__,
+__m31__,
+__m32__,
+__m33__,
 __m3__,
 __m4__,
 __m5__,
@@ -221,6 +224,9 @@ output            __m28__;
 output            __m29__;
 output            __m2__;
 output            __m30__;
+output            __m31__;
+output            __m32__;
+output            __m33__;
 output            __m3__;
 output            __m4__;
 output            __m5__;
@@ -368,6 +374,9 @@ wire      [5:0] __b2b_counter_WrPktPayload_end_init__;
 (* keep *) wire            __m29__;
 (* keep *) wire            __m2__;
 (* keep *) wire            __m30__;
+(* keep *) wire            __m31__;
+(* keep *) wire            __m32__;
+(* keep *) wire            __m33__;
 (* keep *) wire            __m3__;
 (* keep *) wire            __m4__;
 (* keep *) wire            __m5__;
@@ -416,33 +425,36 @@ assign __m0__ = m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32 == __ILA_S
 assign __m1__ = m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.bdin == __ILA_SO_CRC_DAT_IN ;
 assign __m2__ = m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in == __ILA_SO_CRC_IN ;
 assign __m3__ = ( __ILA_SO_TXFIFO_BUFF_0 == m1.core.txfifo.tx_f.mem[0])&&( __ILA_SO_TXFIFO_BUFF_1 == m1.core.txfifo.tx_f.mem[1])&&( __ILA_SO_TXFIFO_BUFF_2 == m1.core.txfifo.tx_f.mem[2])&&( __ILA_SO_TXFIFO_BUFF_3 == m1.core.txfifo.tx_f.mem[3])&&( __ILA_SO_TXFIFO_BUFF_4 == m1.core.txfifo.tx_f.mem[4])&&( __ILA_SO_TXFIFO_BUFF_5 == m1.core.txfifo.tx_f.mem[5])&&( __ILA_SO_TXFIFO_BUFF_6 == m1.core.txfifo.tx_f.mem[6])&&( __ILA_SO_TXFIFO_BUFF_7 == m1.core.txfifo.tx_f.mem[7])&&( __ILA_SO_TXFIFO_BUFF_8 == m1.core.txfifo.tx_f.mem[8])&&( __ILA_SO_TXFIFO_BUFF_9 == m1.core.txfifo.tx_f.mem[9])&&( __ILA_SO_TXFIFO_BUFF_10 == m1.core.txfifo.tx_f.mem[10])&&( __ILA_SO_TXFIFO_BUFF_11 == m1.core.txfifo.tx_f.mem[11])&&( __ILA_SO_TXFIFO_BUFF_12 == m1.core.txfifo.tx_f.mem[12])&&( __ILA_SO_TXFIFO_BUFF_13 == m1.core.txfifo.tx_f.mem[13])&&( __ILA_SO_TXFIFO_BUFF_14 == m1.core.txfifo.tx_f.mem[14])&&( __ILA_SO_TXFIFO_BUFF_15 == m1.core.txfifo.tx_f.mem[15]) ;
-assign __m4__ = m1.tx_mac_full == __ILA_SO_TXFIFO_FULL ;
-assign __m5__ = m1.core.txfifo.tx_f.dataout == __ILA_SO_TXFIFO_RD_OUTPUT ;
-assign __m6__ = m1.tx_mac_usedw == __ILA_SO_TXFIFO_WUSED_QWD ;
-assign __m7__ = m1.core.tx_10G_wrap.tx_encap.b2b_counter == __ILA_SO_TX_B2B_CNTR ;
-assign __m8__ = m1.core.tx_10G_wrap.tx_xgmii.bdata1 == __ILA_SO_TX_BUF ;
-assign __m9__ = m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt == __ILA_SO_TX_BYTE_SENT ;
-assign __m10__ = m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg == __ILA_SO_TX_PACKET_BYTE_CNT ;
-assign __m11__ = m1.core.tx_10G_wrap.tx_xgmii.pkt_transmitted == __ILA_SO_TX_PKT_SENT ;
-assign __m12__ = m1.core.tx_10G_wrap.tx_xgmii.state == __ILA_SO_TX_STATE ;
-assign __m13__ = m1.core.tx_10G_wrap.tx_encap.state == __ILA_SO_TX_STATE_ENCAP ;
-assign __m14__ = m1.core.tx_10G_wrap.tx_xgmii.wcnt == __ILA_SO_TX_WCNT ;
-assign __m15__ = m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini == __ILA_SO_TX_WCNT_INI ;
-assign __m16__ = m1.core.tx_10G_wrap.tx_xgmii.txc == __ILA_SO_XGMII_COUT_REG ;
-assign __m17__ = m1.core.tx_10G_wrap.tx_xgmii.txd == __ILA_SO_XGMII_DOUT_REG ;
-assign __m18__ = m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32 == __ILA_SO_CRC ;
-assign __m19__ = m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in == __ILA_SO_CRC_IN ;
-assign __m20__ = ( __ILA_SO_TXFIFO_BUFF_0 == m1.core.txfifo.tx_f.mem[0])&&( __ILA_SO_TXFIFO_BUFF_1 == m1.core.txfifo.tx_f.mem[1])&&( __ILA_SO_TXFIFO_BUFF_2 == m1.core.txfifo.tx_f.mem[2])&&( __ILA_SO_TXFIFO_BUFF_3 == m1.core.txfifo.tx_f.mem[3])&&( __ILA_SO_TXFIFO_BUFF_4 == m1.core.txfifo.tx_f.mem[4])&&( __ILA_SO_TXFIFO_BUFF_5 == m1.core.txfifo.tx_f.mem[5])&&( __ILA_SO_TXFIFO_BUFF_6 == m1.core.txfifo.tx_f.mem[6])&&( __ILA_SO_TXFIFO_BUFF_7 == m1.core.txfifo.tx_f.mem[7])&&( __ILA_SO_TXFIFO_BUFF_8 == m1.core.txfifo.tx_f.mem[8])&&( __ILA_SO_TXFIFO_BUFF_9 == m1.core.txfifo.tx_f.mem[9])&&( __ILA_SO_TXFIFO_BUFF_10 == m1.core.txfifo.tx_f.mem[10])&&( __ILA_SO_TXFIFO_BUFF_11 == m1.core.txfifo.tx_f.mem[11])&&( __ILA_SO_TXFIFO_BUFF_12 == m1.core.txfifo.tx_f.mem[12])&&( __ILA_SO_TXFIFO_BUFF_13 == m1.core.txfifo.tx_f.mem[13])&&( __ILA_SO_TXFIFO_BUFF_14 == m1.core.txfifo.tx_f.mem[14])&&( __ILA_SO_TXFIFO_BUFF_15 == m1.core.txfifo.tx_f.mem[15]) ;
-assign __m21__ = m1.core.txfifo.tx_f.dataout == __ILA_SO_TXFIFO_RD_OUTPUT ;
-assign __m22__ = m1.tx_mac_usedw == __ILA_SO_TXFIFO_WUSED_QWD ;
-assign __m23__ = m1.core.tx_10G_wrap.tx_encap.b2b_counter == __ILA_SO_TX_B2B_CNTR ;
-assign __m24__ = m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg == __ILA_SO_TX_PACKET_BYTE_CNT ;
-assign __m25__ = m1.core.tx_10G_wrap.tx_xgmii.state == __ILA_SO_TX_STATE ;
-assign __m26__ = m1.core.tx_10G_wrap.tx_encap.state == __ILA_SO_TX_STATE_ENCAP ;
-assign __m27__ = m1.core.tx_10G_wrap.tx_xgmii.wcnt == __ILA_SO_TX_WCNT ;
-assign __m28__ = m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini == __ILA_SO_TX_WCNT_INI ;
-assign __m29__ = m1.core.tx_10G_wrap.tx_xgmii.txc == __ILA_SO_XGMII_COUT_REG ;
-assign __m30__ = m1.core.tx_10G_wrap.tx_xgmii.txd == __ILA_SO_XGMII_DOUT_REG ;
+assign __m4__ = m1.core.txfifo.tx_f.rd_ptr == __ILA_SO_TXFIFO_BUFF_RD_PTR ;
+assign __m5__ = m1.core.txfifo.tx_f.wr_ptr == __ILA_SO_TXFIFO_BUFF_WR_PTR ;
+assign __m6__ = m1.tx_mac_full == __ILA_SO_TXFIFO_FULL ;
+assign __m7__ = m1.core.txfifo.tx_f.dataout == __ILA_SO_TXFIFO_RD_OUTPUT ;
+assign __m8__ = m1.tx_mac_usedw == __ILA_SO_TXFIFO_WUSED_QWD ;
+assign __m9__ = m1.core.tx_10G_wrap.tx_encap.b2b_counter == __ILA_SO_TX_B2B_CNTR ;
+assign __m10__ = m1.core.tx_10G_wrap.tx_xgmii.bdata1 == __ILA_SO_TX_BUF ;
+assign __m11__ = m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt == __ILA_SO_TX_BYTE_SENT ;
+assign __m12__ = m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg == __ILA_SO_TX_PACKET_BYTE_CNT ;
+assign __m13__ = m1.core.tx_10G_wrap.tx_xgmii.pkt_transmitted == __ILA_SO_TX_PKT_SENT ;
+assign __m14__ = m1.core.tx_10G_wrap.tx_xgmii.state == __ILA_SO_TX_STATE ;
+assign __m15__ = m1.core.tx_10G_wrap.tx_encap.state == __ILA_SO_TX_STATE_ENCAP ;
+assign __m16__ = m1.core.tx_10G_wrap.tx_xgmii.wcnt == __ILA_SO_TX_WCNT ;
+assign __m17__ = m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini == __ILA_SO_TX_WCNT_INI ;
+assign __m18__ = m1.core.tx_10G_wrap.tx_xgmii.txc == __ILA_SO_XGMII_COUT_REG ;
+assign __m19__ = m1.core.tx_10G_wrap.tx_xgmii.txd == __ILA_SO_XGMII_DOUT_REG ;
+assign __m20__ = m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32 == __ILA_SO_CRC ;
+assign __m21__ = m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in == __ILA_SO_CRC_IN ;
+assign __m22__ = ( __ILA_SO_TXFIFO_BUFF_0 == m1.core.txfifo.tx_f.mem[0])&&( __ILA_SO_TXFIFO_BUFF_1 == m1.core.txfifo.tx_f.mem[1])&&( __ILA_SO_TXFIFO_BUFF_2 == m1.core.txfifo.tx_f.mem[2])&&( __ILA_SO_TXFIFO_BUFF_3 == m1.core.txfifo.tx_f.mem[3])&&( __ILA_SO_TXFIFO_BUFF_4 == m1.core.txfifo.tx_f.mem[4])&&( __ILA_SO_TXFIFO_BUFF_5 == m1.core.txfifo.tx_f.mem[5])&&( __ILA_SO_TXFIFO_BUFF_6 == m1.core.txfifo.tx_f.mem[6])&&( __ILA_SO_TXFIFO_BUFF_7 == m1.core.txfifo.tx_f.mem[7])&&( __ILA_SO_TXFIFO_BUFF_8 == m1.core.txfifo.tx_f.mem[8])&&( __ILA_SO_TXFIFO_BUFF_9 == m1.core.txfifo.tx_f.mem[9])&&( __ILA_SO_TXFIFO_BUFF_10 == m1.core.txfifo.tx_f.mem[10])&&( __ILA_SO_TXFIFO_BUFF_11 == m1.core.txfifo.tx_f.mem[11])&&( __ILA_SO_TXFIFO_BUFF_12 == m1.core.txfifo.tx_f.mem[12])&&( __ILA_SO_TXFIFO_BUFF_13 == m1.core.txfifo.tx_f.mem[13])&&( __ILA_SO_TXFIFO_BUFF_14 == m1.core.txfifo.tx_f.mem[14])&&( __ILA_SO_TXFIFO_BUFF_15 == m1.core.txfifo.tx_f.mem[15]) ;
+assign __m23__ = m1.core.txfifo.tx_f.rd_ptr == __ILA_SO_TXFIFO_BUFF_RD_PTR ;
+assign __m24__ = m1.core.txfifo.tx_f.dataout == __ILA_SO_TXFIFO_RD_OUTPUT ;
+assign __m25__ = m1.tx_mac_usedw == __ILA_SO_TXFIFO_WUSED_QWD ;
+assign __m26__ = m1.core.tx_10G_wrap.tx_encap.b2b_counter == __ILA_SO_TX_B2B_CNTR ;
+assign __m27__ = m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg == __ILA_SO_TX_PACKET_BYTE_CNT ;
+assign __m28__ = m1.core.tx_10G_wrap.tx_xgmii.state == __ILA_SO_TX_STATE ;
+assign __m29__ = m1.core.tx_10G_wrap.tx_encap.state == __ILA_SO_TX_STATE_ENCAP ;
+assign __m30__ = m1.core.tx_10G_wrap.tx_xgmii.wcnt == __ILA_SO_TX_WCNT ;
+assign __m31__ = m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini == __ILA_SO_TX_WCNT_INI ;
+assign __m32__ = m1.core.tx_10G_wrap.tx_xgmii.txc == __ILA_SO_XGMII_COUT_REG ;
+assign __m33__ = m1.core.tx_10G_wrap.tx_xgmii.txd == __ILA_SO_XGMII_DOUT_REG ;
 assign __EDCOND__ = (`false|| ( __CYCLE_CNT__ == 4'd6)) && __STARTED__  ;
 assign __IEND__ = (`false|| ( __CYCLE_CNT__ == 4'd6)) && __STARTED__ && __RESETED__ && (~ __ENDED__) ;
 assign __ISSUE__ = 1 ;
