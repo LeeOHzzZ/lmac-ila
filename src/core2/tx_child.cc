@@ -73,8 +73,9 @@ namespace ilang {
       auto wr_ptr = m.state(TXFIFO_BUFF_WR_PTR);
 
       // update
-      instr.SetUpdate(fifo, Store(fifo, wr_ptr, data_in));
-      instr.SetUpdate(wr_ptr, Ite((wr_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x0, TXFIFO_BUFF_WR_PTR_BWID), wr_ptr + 0x1));
+      auto wr_entry = Ite((wr_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x0, TXFIFO_BUFF_WR_PTR_BWID), wr_ptr);
+      instr.SetUpdate(fifo, Store(fifo, wr_entry, data_in));
+      instr.SetUpdate(wr_ptr, Ite((wr_ptr >= TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_WR_PTR_BWID), wr_ptr + 0x1));
       instr.SetUpdate(txfifo_wused, txfifo_wused + 0x1);
       instr.SetUpdate(txfifo_full, Ite((txfifo_wused == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID)));
 

@@ -66,8 +66,10 @@ additional_mapping_control_assume__m24__,
 additional_mapping_control_assume__m25__,
 additional_mapping_control_assume__m26__,
 additional_mapping_control_assume__m27__,
-issue_decode__m28__,
-issue_valid__m29__,
+additional_mapping_control_assume__m28__,
+additional_mapping_control_assume__m29__,
+issue_decode__m30__,
+issue_valid__m31__,
 m1__DOT__SYS_ADDR,
 m1__DOT__TCORE_MODE,
 m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout,
@@ -89,6 +91,7 @@ m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_,
 m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_,
 m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr,
 m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr,
+m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw,
 m1__DOT__core__DOT__txfifo_rd_en,
 m1__DOT__mode_10G,
 m1__DOT__mode_1G,
@@ -176,8 +179,10 @@ output            additional_mapping_control_assume__m24__;
 output            additional_mapping_control_assume__m25__;
 output            additional_mapping_control_assume__m26__;
 output            additional_mapping_control_assume__m27__;
-output            issue_decode__m28__;
-output            issue_valid__m29__;
+output            additional_mapping_control_assume__m28__;
+output            additional_mapping_control_assume__m29__;
+output            issue_decode__m30__;
+output            issue_valid__m31__;
 output      [3:0] m1__DOT__SYS_ADDR;
 output            m1__DOT__TCORE_MODE;
 output     [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout;
@@ -199,6 +204,7 @@ output     [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_;
 output     [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_;
 output      [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr;
 output      [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr;
+output      [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw;
 output            m1__DOT__core__DOT__txfifo_rd_en;
 output            m1__DOT__mode_10G;
 output            m1__DOT__mode_1G;
@@ -320,10 +326,12 @@ wire            __2ndIEND__;
 (* keep *) wire            additional_mapping_control_assume__m25__;
 (* keep *) wire            additional_mapping_control_assume__m26__;
 (* keep *) wire            additional_mapping_control_assume__m27__;
+(* keep *) wire            additional_mapping_control_assume__m28__;
+(* keep *) wire            additional_mapping_control_assume__m29__;
 wire            clk;
 (* keep *) wire            dummy_reset;
-(* keep *) wire            issue_decode__m28__;
-(* keep *) wire            issue_valid__m29__;
+(* keep *) wire            issue_decode__m30__;
+(* keep *) wire            issue_valid__m31__;
 (* keep *) wire      [3:0] m1__DOT__SYS_ADDR;
 (* keep *) wire            m1__DOT__TCORE_MODE;
 (* keep *) wire     [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout;
@@ -345,6 +353,7 @@ wire            clk;
 (* keep *) wire     [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_;
 (* keep *) wire      [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr;
 (* keep *) wire      [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr;
+(* keep *) wire      [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw;
 (* keep *) wire            m1__DOT__core__DOT__txfifo_rd_en;
 (* keep *) wire            m1__DOT__mode_10G;
 (* keep *) wire            m1__DOT__mode_1G;
@@ -418,10 +427,12 @@ assign additional_mapping_control_assume__m24__ = (m1__DOT__mode_5G == 0) ;
 assign additional_mapping_control_assume__m25__ = (m1__DOT__mode_2p5G == 0) ;
 assign additional_mapping_control_assume__m26__ = (m1__DOT__mode_1G == 0) ;
 assign additional_mapping_control_assume__m27__ = (m1__DOT__core__DOT__txfifo_rd_en == 0) ;
+assign additional_mapping_control_assume__m28__ = (m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr <= 16 && m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr >= 0) ;
+assign additional_mapping_control_assume__m29__ = (m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw <= 16 && m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw >= 0) ;
 assign __EDCOND__ = (`false|| ( __CYCLE_CNT__ == 4'd1)) && __STARTED__  ;
 assign __IEND__ = (`false|| ( __CYCLE_CNT__ == 4'd1)) && __STARTED__ && __RESETED__ && (~ __ENDED__) ;
-assign issue_decode__m28__ = (~ __START__) || (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) ;
-assign issue_valid__m29__ = (~ __START__) || (__ILA_TX_FIFO_valid__) ;
+assign issue_decode__m30__ = (~ __START__) || (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) ;
+assign issue_valid__m31__ = (~ __START__) || (__ILA_TX_FIFO_valid__) ;
 assign __ISSUE__ = 1 ;
 
 TX_FIFO__DOT__TX_WR_PKT_DATA_FIFO m0 (
@@ -511,6 +522,7 @@ LMAC_CORE_TOP m1(
     .m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_),
     .m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr),
     .m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr),
+    .m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw),
     .m1__DOT__core__DOT__txfifo_rd_en(m1__DOT__core__DOT__txfifo_rd_en),
     .m1__DOT__mode_10G(m1__DOT__mode_10G),
     .m1__DOT__mode_1G(m1__DOT__mode_1G),
@@ -702,16 +714,20 @@ wire            __ILA_TX_FIFO_valid__;
 wire            __START__;
 wire            clk;
 wire            n0____DOLLAR__43;
-wire      [4:0] n10____DOLLAR__68;
-wire      [4:0] n11____DOLLAR__75;
+wire      [4:0] n10____DOLLAR__71;
+wire            n11____DOLLAR__80;
+wire            n12____DOLLAR__82;
+wire            n13____DOLLAR__84;
+wire      [4:0] n14____DOLLAR__75;
+wire      [4:0] n15____DOLLAR__85;
 wire            n1____DOLLAR__51;
 wire            n2____DOLLAR__56;
 wire            n3____DOLLAR__58;
 wire            n4____DOLLAR__59;
-wire            n6____DOLLAR__85;
-wire            n7____DOLLAR__87;
-wire     [12:0] n8____DOLLAR__78;
-wire            n9____DOLLAR__73;
+wire            n6____DOLLAR__95;
+wire            n7____DOLLAR__97;
+wire     [12:0] n8____DOLLAR__88;
+wire            n9____DOLLAR__69;
 wire            rst;
 reg     [63:0] TXFIFO_BUFF[31:0];
 assign TXFIFO_BUFF_0 = TXFIFO_BUFF[0] ;
@@ -753,15 +769,19 @@ assign n2____DOLLAR__56 =  ( TXFIFO_FULL ) == ( 1'b1 )  ;
 assign n3____DOLLAR__58 = ~ ( n2____DOLLAR__56 )  ;
 assign n4____DOLLAR__59 =  ( n1____DOLLAR__51 ) & (n3____DOLLAR__58 )  ;
 assign __ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__ = n4____DOLLAR__59 ;
-assign n6____DOLLAR__85 =  ( TXFIFO_WUSED_QWD ) == ( 13'd16 )  ;
-assign n7____DOLLAR__87 =  ( n6____DOLLAR__85 ) ? ( 1'd1 ) : ( 1'd0 ) ;
-assign n8____DOLLAR__78 =  ( TXFIFO_WUSED_QWD ) + ( 13'd1 )  ;
-assign TXFIFO_BUFF_addr0 = n4____DOLLAR__59 ? (TXFIFO_BUFF_WR_PTR) : (0) ;
+assign n6____DOLLAR__95 =  ( TXFIFO_WUSED_QWD ) == ( 13'd16 )  ;
+assign n7____DOLLAR__97 =  ( n6____DOLLAR__95 ) ? ( 1'd1 ) : ( 1'd0 ) ;
+assign n8____DOLLAR__88 =  ( TXFIFO_WUSED_QWD ) + ( 13'd1 )  ;
+assign n9____DOLLAR__69 =  ( TXFIFO_BUFF_WR_PTR ) == ( 5'd16 )  ;
+assign n10____DOLLAR__71 =  ( n9____DOLLAR__69 ) ? ( 5'd0 ) : ( TXFIFO_BUFF_WR_PTR ) ;
+assign TXFIFO_BUFF_addr0 = n4____DOLLAR__59 ? (n10____DOLLAR__71) : (0) ;
 assign TXFIFO_BUFF_data0 = n4____DOLLAR__59 ? (TX_DATA) : ('d0) ;
 assign TXFIFO_BUFF_wen0 = (n4____DOLLAR__59)&&__START__ ? ( 1'b1 ) : (1'b0) ;
-assign n9____DOLLAR__73 =  ( TXFIFO_BUFF_WR_PTR ) == ( 5'd16 )  ;
-assign n10____DOLLAR__68 =  ( TXFIFO_BUFF_WR_PTR ) + ( 5'd1 )  ;
-assign n11____DOLLAR__75 =  ( n9____DOLLAR__73 ) ? ( 5'd0 ) : ( n10____DOLLAR__68 ) ;
+assign n11____DOLLAR__80 =  ( TXFIFO_BUFF_WR_PTR ) == ( 5'd16 )  ;
+assign n12____DOLLAR__82 =  $signed( TXFIFO_BUFF_WR_PTR ) > $signed( 5'd16 )  ;
+assign n13____DOLLAR__84 =  ( n11____DOLLAR__80 ) | ( n12____DOLLAR__82 )  ;
+assign n14____DOLLAR__75 =  ( TXFIFO_BUFF_WR_PTR ) + ( 5'd1 )  ;
+assign n15____DOLLAR__85 =  ( n13____DOLLAR__84 ) ? ( 5'd1 ) : ( n14____DOLLAR__75 ) ;
 always @(posedge clk) begin
    if(rst) begin
        TXFIFO_FULL <= TXFIFO_FULL_randinit ;
@@ -777,10 +797,10 @@ always @(posedge clk) begin
        else if( (__COUNTER_start__n5 >= 1 ) && ( __COUNTER_start__n5 < 255 )) begin
            __COUNTER_start__n5 <= __COUNTER_start__n5 + 1; end
        if (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) begin
-           TXFIFO_FULL <= n7____DOLLAR__87 ;
+           TXFIFO_FULL <= n7____DOLLAR__97 ;
        end
        if (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) begin
-           TXFIFO_WUSED_QWD <= n8____DOLLAR__78 ;
+           TXFIFO_WUSED_QWD <= n8____DOLLAR__88 ;
        end
        if (TXFIFO_BUFF_wen0) begin
            TXFIFO_BUFF [ TXFIFO_BUFF_addr0 ] <= TXFIFO_BUFF_data0 ;
@@ -789,7 +809,7 @@ always @(posedge clk) begin
            TXFIFO_BUFF_RD_PTR <= TXFIFO_BUFF_RD_PTR ;
        end
        if (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) begin
-           TXFIFO_BUFF_WR_PTR <= n11____DOLLAR__75 ;
+           TXFIFO_BUFF_WR_PTR <= n15____DOLLAR__85 ;
        end
        if (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) begin
            TXFIFO_RD_OUTPUT <= TXFIFO_RD_OUTPUT ;
@@ -895,7 +915,7 @@ module LMAC_CORE_TOP
 		reg_rd_done_out,		// o-1		
 		                    	
 		FMAC_REGDOUT,			// o-32
-		FIFO_OV_IPEND, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, m1__DOT__tx_mac_usedw, m1__DOT__tx_mac_full, m1__DOT__mode_5G, m1__DOT__mode_2p5G, m1__DOT__mode_1G, m1__DOT__mode_10G, m1__DOT__core__DOT__txfifo_rd_en, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_, m1__DOT__SYS_ADDR, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout, m1__DOT__TCORE_MODE);
+		FIFO_OV_IPEND, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, m1__DOT__tx_mac_usedw, m1__DOT__tx_mac_full, m1__DOT__mode_5G, m1__DOT__mode_2p5G, m1__DOT__mode_1G, m1__DOT__mode_10G, m1__DOT__core__DOT__txfifo_rd_en, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_, m1__DOT__SYS_ADDR, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout, m1__DOT__TCORE_MODE);
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_;
  output [12:0] m1__DOT__tx_mac_usedw;
  output  m1__DOT__tx_mac_full;
@@ -904,6 +924,7 @@ module LMAC_CORE_TOP
  output  m1__DOT__mode_1G;
  output  m1__DOT__mode_10G;
  output  m1__DOT__core__DOT__txfifo_rd_en;
+ output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw;
  output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr;
  output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_;
@@ -1283,7 +1304,7 @@ tcore_fmac_core #(FMAC_ID) core(
 .FMAC_RX_PKT_CNT9199P_HI	(FMAC_RX_PKT_CNT9199P_HI)
 
 
- ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_) ,.m1__DOT__core__DOT__txfifo_rd_en(m1__DOT__core__DOT__txfifo_rd_en) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_));
+ ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_) ,.m1__DOT__core__DOT__txfifo_rd_en(m1__DOT__core__DOT__txfifo_rd_en) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_));
 
 
 	reg			reg_rd_delay1;
@@ -1503,7 +1524,7 @@ module asynch_fifo # (parameter WIDTH = 8,         // considering 8X8 fifo
 			input  wire [WIDTH-1 : 0]	datain,       // Data coming in 
 			output reg					wrfull,       // indicates fifo is full or not (To avoid overiding)
 			output reg 			 		wrempty,      // 0- some data is present (atleast 1 data is present)                                          
-			output reg	[PTR  : 0]		wrusedw,      // number of slots currently in use for writing                                                                                                
+(* keep *)			output reg	[PTR  : 0]		wrusedw,      // number of slots currently in use for writing                                                                                                
                                                     
 			
 			//=== Signals for READ
@@ -1515,7 +1536,7 @@ module asynch_fifo # (parameter WIDTH = 8,         // considering 8X8 fifo
 			output reg 					rdempty,      // indicates fifo is empty or not (to avoid underflow)
 			output reg [PTR  : 0] 		rdusedw,      // number of slots currently in use for reading
 
-			output 	 		dbg, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_, output wire [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr, output wire [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_);
+			output 	 		dbg, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_, output wire [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw, output wire [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr, output wire [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_, output wire [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_);
 
 
 
@@ -1693,8 +1714,8 @@ assign rdfull  = wrfull ? 1'b1 : 1'b0;
  assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_ = mem[14];
  assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_ = mem[15];
  assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_ = mem[1];
+ assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_ = mem[2];
  assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout = dataout;
- assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_ = mem[3];
  assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_ = mem[4];
  assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_ = mem[5];
  assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_ = mem[6];
@@ -1703,7 +1724,8 @@ assign rdfull  = wrfull ? 1'b1 : 1'b0;
  assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_ = mem[9];
  assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr = rd_ptr;
  assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr = wr_ptr;
- assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_ = mem[2];
+ assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw = wrusedw;
+ assign m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_ = mem[3];
 endmodule
 
 
@@ -10824,9 +10846,10 @@ FMAC_RX_PKT_CNT9022_LO,
 FMAC_RX_PKT_CNT9022_HI, 
                         
 FMAC_RX_PKT_CNT9199P_LO,
-FMAC_RX_PKT_CNT9199P_HI, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_, m1__DOT__core__DOT__txfifo_rd_en, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_);
+FMAC_RX_PKT_CNT9199P_HI, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_, m1__DOT__core__DOT__txfifo_rd_en, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_);
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_;
  output  m1__DOT__core__DOT__txfifo_rd_en;
+ output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw;
  output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr;
  output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_;
@@ -11127,7 +11150,7 @@ txfifo_1024x64 txfifo(
 	.wrfull(txfifo_full),
 	.rdempty(txfifo_empty),
 	.wrusedw(txfifo_usedw_int)
-	 ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_));
+	 ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_));
 	
 	
 	
@@ -13193,8 +13216,9 @@ module txfifo_1024x64
 		    rdclk,     	  // Clk for reading data 
 			rdreq,     	  // Request to read from FIFO
 			q, 	    	  // Data coming out 
-			rdempty , m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_);
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_;
+			rdempty , m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_);
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_;
+ output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw;
  output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr;
  output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_;
@@ -13203,8 +13227,8 @@ module txfifo_1024x64
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_;
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout;
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_;
@@ -13257,5 +13281,5 @@ asynch_fifo	#(.WIDTH ( WIDTH),
 
 			.dbg()
 
-		  ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_));
+		  ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_));
 endmodule

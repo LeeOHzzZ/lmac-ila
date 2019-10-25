@@ -1109,16 +1109,16 @@ wire            __ILA_TX_FUNC_decode_of_SET_B2B_CNTR_10G__;
 wire            __ILA_TX_FUNC_valid__;
 wire            __START__;
 wire            clk;
-wire            n0____DOLLAR__124;
-wire     [63:0] n10____DOLLAR__181;
-wire            n1____DOLLAR__150;
-wire            n2____DOLLAR__155;
-wire            n3____DOLLAR__167;
-wire            n4____DOLLAR__160;
-wire            n5____DOLLAR__168;
-wire            n6____DOLLAR__165;
-wire            n7____DOLLAR__169;
-wire      [5:0] n9____DOLLAR__172;
+wire            n0____DOLLAR__134;
+wire     [63:0] n10____DOLLAR__191;
+wire            n1____DOLLAR__160;
+wire            n2____DOLLAR__165;
+wire            n3____DOLLAR__177;
+wire            n4____DOLLAR__170;
+wire            n5____DOLLAR__178;
+wire            n6____DOLLAR__175;
+wire            n7____DOLLAR__179;
+wire      [5:0] n9____DOLLAR__182;
 wire            rst;
 reg     [63:0] TXFIFO_BUFF[31:0];
 assign TXFIFO_BUFF_0 = TXFIFO_BUFF[0] ;
@@ -1153,18 +1153,18 @@ assign TXFIFO_BUFF_28 = TXFIFO_BUFF[28] ;
 assign TXFIFO_BUFF_29 = TXFIFO_BUFF[29] ;
 assign TXFIFO_BUFF_30 = TXFIFO_BUFF[30] ;
 assign TXFIFO_BUFF_31 = TXFIFO_BUFF[31] ;
-assign n0____DOLLAR__124 =  ( RESETN ) == ( 1'b1 )  ;
-assign __ILA_TX_FUNC_valid__ = n0____DOLLAR__124 ;
-assign n1____DOLLAR__150 =  ( MODE_10G ) == ( 1'b1 )  ;
-assign n2____DOLLAR__155 =  ( TX_STATE ) == ( 5'd1 )  ;
-assign n3____DOLLAR__167 =  ( n1____DOLLAR__150 ) & (n2____DOLLAR__155 )  ;
-assign n4____DOLLAR__160 =  ( TX_STATE_ENCAP ) == ( 8'd1 )  ;
-assign n5____DOLLAR__168 =  ( n3____DOLLAR__167 ) & (n4____DOLLAR__160 )  ;
-assign n6____DOLLAR__165 =  $signed( TX_B2B_CNTR ) > $signed( 6'd0 )  ;
-assign n7____DOLLAR__169 =  ( n5____DOLLAR__168 ) & (n6____DOLLAR__165 )  ;
-assign __ILA_TX_FUNC_decode_of_SET_B2B_CNTR_10G__ = n7____DOLLAR__169 ;
-assign n9____DOLLAR__172 =  ( TX_B2B_CNTR ) - ( 6'd1 )  ;
-assign n10____DOLLAR__181 =  { ( 32'd117901063 ) , ( 32'd117901063 ) }  ;
+assign n0____DOLLAR__134 =  ( RESETN ) == ( 1'b1 )  ;
+assign __ILA_TX_FUNC_valid__ = n0____DOLLAR__134 ;
+assign n1____DOLLAR__160 =  ( MODE_10G ) == ( 1'b1 )  ;
+assign n2____DOLLAR__165 =  ( TX_STATE ) == ( 5'd1 )  ;
+assign n3____DOLLAR__177 =  ( n1____DOLLAR__160 ) & (n2____DOLLAR__165 )  ;
+assign n4____DOLLAR__170 =  ( TX_STATE_ENCAP ) == ( 8'd1 )  ;
+assign n5____DOLLAR__178 =  ( n3____DOLLAR__177 ) & (n4____DOLLAR__170 )  ;
+assign n6____DOLLAR__175 =  $signed( TX_B2B_CNTR ) > $signed( 6'd0 )  ;
+assign n7____DOLLAR__179 =  ( n5____DOLLAR__178 ) & (n6____DOLLAR__175 )  ;
+assign __ILA_TX_FUNC_decode_of_SET_B2B_CNTR_10G__ = n7____DOLLAR__179 ;
+assign n9____DOLLAR__182 =  ( TX_B2B_CNTR ) - ( 6'd1 )  ;
+assign n10____DOLLAR__191 =  { ( 32'd117901063 ) , ( 32'd117901063 ) }  ;
 always @(posedge clk) begin
    if(rst) begin
        TXFIFO_FULL <= TXFIFO_FULL_randinit ;
@@ -1215,7 +1215,7 @@ always @(posedge clk) begin
            TX_STATE_ENCAP <= TX_STATE_ENCAP ;
        end
        if (__ILA_TX_FUNC_decode_of_SET_B2B_CNTR_10G__) begin
-           TX_B2B_CNTR <= n9____DOLLAR__172 ;
+           TX_B2B_CNTR <= n9____DOLLAR__182 ;
        end
        if (__ILA_TX_FUNC_decode_of_SET_B2B_CNTR_10G__) begin
            TX_PACKET_BYTE_CNT <= TX_PACKET_BYTE_CNT ;
@@ -1224,7 +1224,7 @@ always @(posedge clk) begin
            TX_WCNT <= TX_WCNT ;
        end
        if (__ILA_TX_FUNC_decode_of_SET_B2B_CNTR_10G__) begin
-           XGMII_DOUT_REG <= n10____DOLLAR__181 ;
+           XGMII_DOUT_REG <= n10____DOLLAR__191 ;
        end
        if (__ILA_TX_FUNC_decode_of_SET_B2B_CNTR_10G__) begin
            XGMII_COUT_REG <= 8'd255 ;

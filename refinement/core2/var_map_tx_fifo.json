@@ -87,7 +87,10 @@
     "(m1.mode_5G == 0)", 
     "(m1.mode_2p5G == 0)",
     "(m1.mode_1G == 0)",
-    "(m1.core.txfifo_rd_en == 0)"
+    "(m1.core.txfifo_rd_en == 0)",
+    "(m1.core.txfifo.tx_f.wr_ptr <= 16 && m1.core.txfifo.tx_f.wr_ptr >= 0)",
+    "(m1.core.txfifo.tx_f.wrusedw <= 16 && m1.core.txfifo.tx_f.wrusedw >= 0)"
+    
   ],
 
   "functions": {}
