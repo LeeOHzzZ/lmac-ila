@@ -714,20 +714,22 @@ wire            __ILA_TX_FIFO_valid__;
 wire            __START__;
 wire            clk;
 wire            n0____DOLLAR__43;
-wire      [4:0] n10____DOLLAR__71;
-wire            n11____DOLLAR__80;
-wire            n12____DOLLAR__82;
-wire            n13____DOLLAR__84;
-wire      [4:0] n14____DOLLAR__75;
-wire      [4:0] n15____DOLLAR__85;
+wire     [12:0] n10____DOLLAR__88;
+wire            n11____DOLLAR__69;
+wire      [4:0] n12____DOLLAR__71;
+wire            n13____DOLLAR__80;
+wire            n14____DOLLAR__82;
+wire            n15____DOLLAR__84;
+wire      [4:0] n16____DOLLAR__75;
+wire      [4:0] n17____DOLLAR__85;
 wire            n1____DOLLAR__51;
 wire            n2____DOLLAR__56;
 wire            n3____DOLLAR__58;
 wire            n4____DOLLAR__59;
 wire            n6____DOLLAR__95;
 wire            n7____DOLLAR__97;
-wire     [12:0] n8____DOLLAR__88;
-wire            n9____DOLLAR__69;
+wire            n8____DOLLAR__99;
+wire            n9____DOLLAR__100;
 wire            rst;
 reg     [63:0] TXFIFO_BUFF[31:0];
 assign TXFIFO_BUFF_0 = TXFIFO_BUFF[0] ;
@@ -769,19 +771,21 @@ assign n2____DOLLAR__56 =  ( TXFIFO_FULL ) == ( 1'b1 )  ;
 assign n3____DOLLAR__58 = ~ ( n2____DOLLAR__56 )  ;
 assign n4____DOLLAR__59 =  ( n1____DOLLAR__51 ) & (n3____DOLLAR__58 )  ;
 assign __ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__ = n4____DOLLAR__59 ;
-assign n6____DOLLAR__95 =  ( TXFIFO_WUSED_QWD ) == ( 13'd16 )  ;
-assign n7____DOLLAR__97 =  ( n6____DOLLAR__95 ) ? ( 1'd1 ) : ( 1'd0 ) ;
-assign n8____DOLLAR__88 =  ( TXFIFO_WUSED_QWD ) + ( 13'd1 )  ;
-assign n9____DOLLAR__69 =  ( TXFIFO_BUFF_WR_PTR ) == ( 5'd16 )  ;
-assign n10____DOLLAR__71 =  ( n9____DOLLAR__69 ) ? ( 5'd0 ) : ( TXFIFO_BUFF_WR_PTR ) ;
-assign TXFIFO_BUFF_addr0 = n4____DOLLAR__59 ? (n10____DOLLAR__71) : (0) ;
+assign n6____DOLLAR__95 =  ( TXFIFO_WUSED_QWD ) == ( 13'd15 )  ;
+assign n7____DOLLAR__97 =  ( TXFIFO_WUSED_QWD ) > ( 13'd15 )  ;
+assign n8____DOLLAR__99 =  ( n6____DOLLAR__95 ) | ( n7____DOLLAR__97 )  ;
+assign n9____DOLLAR__100 =  ( n8____DOLLAR__99 ) ? ( 1'd1 ) : ( 1'd0 ) ;
+assign n10____DOLLAR__88 =  ( TXFIFO_WUSED_QWD ) + ( 13'd1 )  ;
+assign n11____DOLLAR__69 =  ( TXFIFO_BUFF_WR_PTR ) == ( 5'd16 )  ;
+assign n12____DOLLAR__71 =  ( n11____DOLLAR__69 ) ? ( 5'd0 ) : ( TXFIFO_BUFF_WR_PTR ) ;
+assign TXFIFO_BUFF_addr0 = n4____DOLLAR__59 ? (n12____DOLLAR__71) : (0) ;
 assign TXFIFO_BUFF_data0 = n4____DOLLAR__59 ? (TX_DATA) : ('d0) ;
 assign TXFIFO_BUFF_wen0 = (n4____DOLLAR__59)&&__START__ ? ( 1'b1 ) : (1'b0) ;
-assign n11____DOLLAR__80 =  ( TXFIFO_BUFF_WR_PTR ) == ( 5'd16 )  ;
-assign n12____DOLLAR__82 =  ( TXFIFO_BUFF_WR_PTR ) > ( 5'd16 )  ;
-assign n13____DOLLAR__84 =  ( n11____DOLLAR__80 ) | ( n12____DOLLAR__82 )  ;
-assign n14____DOLLAR__75 =  ( TXFIFO_BUFF_WR_PTR ) + ( 5'd1 )  ;
-assign n15____DOLLAR__85 =  ( n13____DOLLAR__84 ) ? ( 5'd1 ) : ( n14____DOLLAR__75 ) ;
+assign n13____DOLLAR__80 =  ( TXFIFO_BUFF_WR_PTR ) == ( 5'd16 )  ;
+assign n14____DOLLAR__82 =  ( TXFIFO_BUFF_WR_PTR ) > ( 5'd16 )  ;
+assign n15____DOLLAR__84 =  ( n13____DOLLAR__80 ) | ( n14____DOLLAR__82 )  ;
+assign n16____DOLLAR__75 =  ( TXFIFO_BUFF_WR_PTR ) + ( 5'd1 )  ;
+assign n17____DOLLAR__85 =  ( n15____DOLLAR__84 ) ? ( 5'd1 ) : ( n16____DOLLAR__75 ) ;
 always @(posedge clk) begin
    if(rst) begin
        TXFIFO_FULL <= TXFIFO_FULL_randinit ;
@@ -797,10 +801,10 @@ always @(posedge clk) begin
        else if( (__COUNTER_start__n5 >= 1 ) && ( __COUNTER_start__n5 < 255 )) begin
            __COUNTER_start__n5 <= __COUNTER_start__n5 + 1; end
        if (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) begin
-           TXFIFO_FULL <= n7____DOLLAR__97 ;
+           TXFIFO_FULL <= n9____DOLLAR__100 ;
        end
        if (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) begin
-           TXFIFO_WUSED_QWD <= n8____DOLLAR__88 ;
+           TXFIFO_WUSED_QWD <= n10____DOLLAR__88 ;
        end
        if (TXFIFO_BUFF_wen0) begin
            TXFIFO_BUFF [ TXFIFO_BUFF_addr0 ] <= TXFIFO_BUFF_data0 ;
@@ -809,7 +813,7 @@ always @(posedge clk) begin
            TXFIFO_BUFF_RD_PTR <= TXFIFO_BUFF_RD_PTR ;
        end
        if (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) begin
-           TXFIFO_BUFF_WR_PTR <= n15____DOLLAR__85 ;
+           TXFIFO_BUFF_WR_PTR <= n17____DOLLAR__85 ;
        end
        if (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) begin
            TXFIFO_RD_OUTPUT <= TXFIFO_RD_OUTPUT ;
