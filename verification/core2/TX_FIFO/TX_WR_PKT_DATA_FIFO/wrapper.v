@@ -778,7 +778,7 @@ assign TXFIFO_BUFF_addr0 = n4____DOLLAR__59 ? (n10____DOLLAR__71) : (0) ;
 assign TXFIFO_BUFF_data0 = n4____DOLLAR__59 ? (TX_DATA) : ('d0) ;
 assign TXFIFO_BUFF_wen0 = (n4____DOLLAR__59)&&__START__ ? ( 1'b1 ) : (1'b0) ;
 assign n11____DOLLAR__80 =  ( TXFIFO_BUFF_WR_PTR ) == ( 5'd16 )  ;
-assign n12____DOLLAR__82 =  $signed( TXFIFO_BUFF_WR_PTR ) > $signed( 5'd16 )  ;
+assign n12____DOLLAR__82 =  ( TXFIFO_BUFF_WR_PTR ) > ( 5'd16 )  ;
 assign n13____DOLLAR__84 =  ( n11____DOLLAR__80 ) | ( n12____DOLLAR__82 )  ;
 assign n14____DOLLAR__75 =  ( TXFIFO_BUFF_WR_PTR ) + ( 5'd1 )  ;
 assign n15____DOLLAR__85 =  ( n13____DOLLAR__84 ) ? ( 5'd1 ) : ( n14____DOLLAR__75 ) ;
