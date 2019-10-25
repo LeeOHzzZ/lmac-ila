@@ -77,7 +77,7 @@ namespace ilang {
       instr.SetUpdate(fifo, Store(fifo, wr_entry, data_in));
       instr.SetUpdate(wr_ptr, Ite((Uge(wr_ptr, TXFIFO_BUFF_DEPTH)), BvConst(0x1, TXFIFO_BUFF_WR_PTR_BWID), wr_ptr + 0x1));
       instr.SetUpdate(txfifo_wused, txfifo_wused + 0x1);
-      instr.SetUpdate(txfifo_full, Ite((Uge(txfifo_wused, TXFIFO_BUFF_DEPTH - 1)), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID)));
+//      instr.SetUpdate(txfifo_full, Ite((Uge(txfifo_wused, TXFIFO_BUFF_DEPTH - 1)), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID)));
 
     }
 

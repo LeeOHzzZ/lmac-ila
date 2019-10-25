@@ -53,12 +53,13 @@ __m11__,
 __m13__,
 __m15__,
 __m17__,
-__m19__,
 __m1__,
 __m3__,
 __m5__,
 __m7__,
 __m9__,
+additional_mapping_control_assume__m19__,
+additional_mapping_control_assume__m20__,
 additional_mapping_control_assume__m21__,
 additional_mapping_control_assume__m22__,
 additional_mapping_control_assume__m23__,
@@ -67,9 +68,8 @@ additional_mapping_control_assume__m25__,
 additional_mapping_control_assume__m26__,
 additional_mapping_control_assume__m27__,
 additional_mapping_control_assume__m28__,
-additional_mapping_control_assume__m29__,
-issue_decode__m30__,
-issue_valid__m31__,
+issue_decode__m29__,
+issue_valid__m30__,
 m1__DOT__SYS_ADDR,
 m1__DOT__TCORE_MODE,
 m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout,
@@ -105,7 +105,6 @@ tx_mac_usedw,
 variable_map_assert__p14__,
 variable_map_assert__p16__,
 variable_map_assert__p18__,
-variable_map_assert__p20__,
 variable_map_assume__m10__,
 variable_map_assume__m12__,
 variable_map_assume__m2__,
@@ -166,12 +165,13 @@ output            __m11__;
 output            __m13__;
 output            __m15__;
 output            __m17__;
-output            __m19__;
 output            __m1__;
 output            __m3__;
 output            __m5__;
 output            __m7__;
 output            __m9__;
+output            additional_mapping_control_assume__m19__;
+output            additional_mapping_control_assume__m20__;
 output            additional_mapping_control_assume__m21__;
 output            additional_mapping_control_assume__m22__;
 output            additional_mapping_control_assume__m23__;
@@ -180,9 +180,8 @@ output            additional_mapping_control_assume__m25__;
 output            additional_mapping_control_assume__m26__;
 output            additional_mapping_control_assume__m27__;
 output            additional_mapping_control_assume__m28__;
-output            additional_mapping_control_assume__m29__;
-output            issue_decode__m30__;
-output            issue_valid__m31__;
+output            issue_decode__m29__;
+output            issue_valid__m30__;
 output      [3:0] m1__DOT__SYS_ADDR;
 output            m1__DOT__TCORE_MODE;
 output     [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout;
@@ -218,7 +217,6 @@ output     [12:0] tx_mac_usedw;
 output            variable_map_assert__p14__;
 output            variable_map_assert__p16__;
 output            variable_map_assert__p18__;
-output            variable_map_assert__p20__;
 output            variable_map_assume__m10__;
 output            variable_map_assume__m12__;
 output            variable_map_assume__m2__;
@@ -313,12 +311,13 @@ wire            __2ndIEND__;
 (* keep *) wire            __m13__;
 (* keep *) wire            __m15__;
 (* keep *) wire            __m17__;
-(* keep *) wire            __m19__;
 (* keep *) wire            __m1__;
 (* keep *) wire            __m3__;
 (* keep *) wire            __m5__;
 (* keep *) wire            __m7__;
 (* keep *) wire            __m9__;
+(* keep *) wire            additional_mapping_control_assume__m19__;
+(* keep *) wire            additional_mapping_control_assume__m20__;
 (* keep *) wire            additional_mapping_control_assume__m21__;
 (* keep *) wire            additional_mapping_control_assume__m22__;
 (* keep *) wire            additional_mapping_control_assume__m23__;
@@ -327,11 +326,10 @@ wire            __2ndIEND__;
 (* keep *) wire            additional_mapping_control_assume__m26__;
 (* keep *) wire            additional_mapping_control_assume__m27__;
 (* keep *) wire            additional_mapping_control_assume__m28__;
-(* keep *) wire            additional_mapping_control_assume__m29__;
 wire            clk;
 (* keep *) wire            dummy_reset;
-(* keep *) wire            issue_decode__m30__;
-(* keep *) wire            issue_valid__m31__;
+(* keep *) wire            issue_decode__m29__;
+(* keep *) wire            issue_valid__m30__;
 (* keep *) wire      [3:0] m1__DOT__SYS_ADDR;
 (* keep *) wire            m1__DOT__TCORE_MODE;
 (* keep *) wire     [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout;
@@ -368,7 +366,6 @@ wire            rst;
 (* keep *) wire            variable_map_assert__p14__;
 (* keep *) wire            variable_map_assert__p16__;
 (* keep *) wire            variable_map_assert__p18__;
-(* keep *) wire            variable_map_assert__p20__;
 (* keep *) wire            variable_map_assume__m10__;
 (* keep *) wire            variable_map_assume__m12__;
 (* keep *) wire            variable_map_assume__m2__;
@@ -416,23 +413,22 @@ assign __m13__ = ( __ILA_SO_TXFIFO_BUFF_0 == m1__DOT__core__DOT__txfifo__DOT__tx
 assign variable_map_assert__p14__ = (~ __IEND__) || (__m13__) ;
 assign __m15__ = m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr == __ILA_SO_TXFIFO_BUFF_WR_PTR ;
 assign variable_map_assert__p16__ = (~ __IEND__) || (__m15__) ;
-assign __m17__ = m1__DOT__tx_mac_full == __ILA_SO_TXFIFO_FULL ;
+assign __m17__ = m1__DOT__tx_mac_usedw == __ILA_SO_TXFIFO_WUSED_QWD ;
 assign variable_map_assert__p18__ = (~ __IEND__) || (__m17__) ;
-assign __m19__ = m1__DOT__tx_mac_usedw == __ILA_SO_TXFIFO_WUSED_QWD ;
-assign variable_map_assert__p20__ = (~ __IEND__) || (__m19__) ;
-assign additional_mapping_control_assume__m21__ = (m1__DOT__TCORE_MODE == 1) ;
-assign additional_mapping_control_assume__m22__ = (m1__DOT__SYS_ADDR == 1) ;
-assign additional_mapping_control_assume__m23__ = (m1__DOT__mode_10G == 1) ;
-assign additional_mapping_control_assume__m24__ = (m1__DOT__mode_5G == 0) ;
-assign additional_mapping_control_assume__m25__ = (m1__DOT__mode_2p5G == 0) ;
-assign additional_mapping_control_assume__m26__ = (m1__DOT__mode_1G == 0) ;
-assign additional_mapping_control_assume__m27__ = (m1__DOT__core__DOT__txfifo_rd_en == 0) ;
-assign additional_mapping_control_assume__m28__ = (m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr <= 16 && m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr >= 0) ;
-assign additional_mapping_control_assume__m29__ = (m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw <= 16 && m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw >= 0) ;
+assign additional_mapping_control_assume__m19__ = (m1__DOT__TCORE_MODE == 1) ;
+assign additional_mapping_control_assume__m20__ = (m1__DOT__SYS_ADDR == 1) ;
+assign additional_mapping_control_assume__m21__ = (m1__DOT__mode_10G == 1) ;
+assign additional_mapping_control_assume__m22__ = (m1__DOT__mode_5G == 0) ;
+assign additional_mapping_control_assume__m23__ = (m1__DOT__mode_2p5G == 0) ;
+assign additional_mapping_control_assume__m24__ = (m1__DOT__mode_1G == 0) ;
+assign additional_mapping_control_assume__m25__ = (m1__DOT__core__DOT__txfifo_rd_en == 0) ;
+assign additional_mapping_control_assume__m26__ = (m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr <= 16 && m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr >= 0) ;
+assign additional_mapping_control_assume__m27__ = (m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw <= 16 && m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw >= 0) ;
+assign additional_mapping_control_assume__m28__ = (__ILA_SO_TXFIFO_FULL == (__ILA_SO_TXFIFO_WUSED_QWD == 16)) ;
 assign __EDCOND__ = (`false|| ( __CYCLE_CNT__ == 4'd1)) && __STARTED__  ;
 assign __IEND__ = (`false|| ( __CYCLE_CNT__ == 4'd1)) && __STARTED__ && __RESETED__ && (~ __ENDED__) ;
-assign issue_decode__m30__ = (~ __START__) || (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) ;
-assign issue_valid__m31__ = (~ __START__) || (__ILA_TX_FIFO_valid__) ;
+assign issue_decode__m29__ = (~ __START__) || (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) ;
+assign issue_valid__m30__ = (~ __START__) || (__ILA_TX_FIFO_valid__) ;
 assign __ISSUE__ = 1 ;
 
 TX_FIFO__DOT__TX_WR_PKT_DATA_FIFO m0 (
@@ -714,22 +710,18 @@ wire            __ILA_TX_FIFO_valid__;
 wire            __START__;
 wire            clk;
 wire            n0____DOLLAR__43;
-wire     [12:0] n10____DOLLAR__88;
-wire            n11____DOLLAR__69;
-wire      [4:0] n12____DOLLAR__71;
-wire            n13____DOLLAR__80;
-wire            n14____DOLLAR__82;
-wire            n15____DOLLAR__84;
-wire      [4:0] n16____DOLLAR__75;
-wire      [4:0] n17____DOLLAR__85;
+wire            n10____DOLLAR__82;
+wire            n11____DOLLAR__84;
+wire      [4:0] n12____DOLLAR__75;
+wire      [4:0] n13____DOLLAR__85;
 wire            n1____DOLLAR__51;
 wire            n2____DOLLAR__56;
 wire            n3____DOLLAR__58;
 wire            n4____DOLLAR__59;
-wire            n6____DOLLAR__95;
-wire            n7____DOLLAR__97;
-wire            n8____DOLLAR__99;
-wire            n9____DOLLAR__100;
+wire     [12:0] n6____DOLLAR__88;
+wire            n7____DOLLAR__69;
+wire      [4:0] n8____DOLLAR__71;
+wire            n9____DOLLAR__80;
 wire            rst;
 reg     [63:0] TXFIFO_BUFF[31:0];
 assign TXFIFO_BUFF_0 = TXFIFO_BUFF[0] ;
@@ -771,21 +763,17 @@ assign n2____DOLLAR__56 =  ( TXFIFO_FULL ) == ( 1'b1 )  ;
 assign n3____DOLLAR__58 = ~ ( n2____DOLLAR__56 )  ;
 assign n4____DOLLAR__59 =  ( n1____DOLLAR__51 ) & (n3____DOLLAR__58 )  ;
 assign __ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__ = n4____DOLLAR__59 ;
-assign n6____DOLLAR__95 =  ( TXFIFO_WUSED_QWD ) == ( 13'd15 )  ;
-assign n7____DOLLAR__97 =  ( TXFIFO_WUSED_QWD ) > ( 13'd15 )  ;
-assign n8____DOLLAR__99 =  ( n6____DOLLAR__95 ) | ( n7____DOLLAR__97 )  ;
-assign n9____DOLLAR__100 =  ( n8____DOLLAR__99 ) ? ( 1'd1 ) : ( 1'd0 ) ;
-assign n10____DOLLAR__88 =  ( TXFIFO_WUSED_QWD ) + ( 13'd1 )  ;
-assign n11____DOLLAR__69 =  ( TXFIFO_BUFF_WR_PTR ) == ( 5'd16 )  ;
-assign n12____DOLLAR__71 =  ( n11____DOLLAR__69 ) ? ( 5'd0 ) : ( TXFIFO_BUFF_WR_PTR ) ;
-assign TXFIFO_BUFF_addr0 = n4____DOLLAR__59 ? (n12____DOLLAR__71) : (0) ;
+assign n6____DOLLAR__88 =  ( TXFIFO_WUSED_QWD ) + ( 13'd1 )  ;
+assign n7____DOLLAR__69 =  ( TXFIFO_BUFF_WR_PTR ) == ( 5'd16 )  ;
+assign n8____DOLLAR__71 =  ( n7____DOLLAR__69 ) ? ( 5'd0 ) : ( TXFIFO_BUFF_WR_PTR ) ;
+assign TXFIFO_BUFF_addr0 = n4____DOLLAR__59 ? (n8____DOLLAR__71) : (0) ;
 assign TXFIFO_BUFF_data0 = n4____DOLLAR__59 ? (TX_DATA) : ('d0) ;
 assign TXFIFO_BUFF_wen0 = (n4____DOLLAR__59)&&__START__ ? ( 1'b1 ) : (1'b0) ;
-assign n13____DOLLAR__80 =  ( TXFIFO_BUFF_WR_PTR ) == ( 5'd16 )  ;
-assign n14____DOLLAR__82 =  ( TXFIFO_BUFF_WR_PTR ) > ( 5'd16 )  ;
-assign n15____DOLLAR__84 =  ( n13____DOLLAR__80 ) | ( n14____DOLLAR__82 )  ;
-assign n16____DOLLAR__75 =  ( TXFIFO_BUFF_WR_PTR ) + ( 5'd1 )  ;
-assign n17____DOLLAR__85 =  ( n15____DOLLAR__84 ) ? ( 5'd1 ) : ( n16____DOLLAR__75 ) ;
+assign n9____DOLLAR__80 =  ( TXFIFO_BUFF_WR_PTR ) == ( 5'd16 )  ;
+assign n10____DOLLAR__82 =  ( TXFIFO_BUFF_WR_PTR ) > ( 5'd16 )  ;
+assign n11____DOLLAR__84 =  ( n9____DOLLAR__80 ) | ( n10____DOLLAR__82 )  ;
+assign n12____DOLLAR__75 =  ( TXFIFO_BUFF_WR_PTR ) + ( 5'd1 )  ;
+assign n13____DOLLAR__85 =  ( n11____DOLLAR__84 ) ? ( 5'd1 ) : ( n12____DOLLAR__75 ) ;
 always @(posedge clk) begin
    if(rst) begin
        TXFIFO_FULL <= TXFIFO_FULL_randinit ;
@@ -801,10 +789,10 @@ always @(posedge clk) begin
        else if( (__COUNTER_start__n5 >= 1 ) && ( __COUNTER_start__n5 < 255 )) begin
            __COUNTER_start__n5 <= __COUNTER_start__n5 + 1; end
        if (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) begin
-           TXFIFO_FULL <= n9____DOLLAR__100 ;
+           TXFIFO_FULL <= TXFIFO_FULL ;
        end
        if (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) begin
-           TXFIFO_WUSED_QWD <= n10____DOLLAR__88 ;
+           TXFIFO_WUSED_QWD <= n6____DOLLAR__88 ;
        end
        if (TXFIFO_BUFF_wen0) begin
            TXFIFO_BUFF [ TXFIFO_BUFF_addr0 ] <= TXFIFO_BUFF_data0 ;
@@ -813,7 +801,7 @@ always @(posedge clk) begin
            TXFIFO_BUFF_RD_PTR <= TXFIFO_BUFF_RD_PTR ;
        end
        if (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) begin
-           TXFIFO_BUFF_WR_PTR <= n17____DOLLAR__85 ;
+           TXFIFO_BUFF_WR_PTR <= n13____DOLLAR__85 ;
        end
        if (__ILA_TX_FIFO_decode_of_TX_WR_PKT_DATA_FIFO__) begin
            TXFIFO_RD_OUTPUT <= TXFIFO_RD_OUTPUT ;

@@ -1189,71 +1189,71 @@ wire            __ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__;
 wire            __ILA_TX_FUNC_valid__;
 wire            __START__;
 wire            clk;
-wire            n0____DOLLAR__137;
-wire     [12:0] n11____DOLLAR__236;
-wire            n12____DOLLAR__231;
-wire      [4:0] n13____DOLLAR__226;
-wire      [4:0] n14____DOLLAR__233;
-wire     [63:0] n15____DOLLAR__222;
-wire     [15:0] n16____DOLLAR__237;
-wire      [2:0] n17____DOLLAR__241;
-wire            n18____DOLLAR__264;
-wire     [12:0] n19____DOLLAR__239;
-wire            n1____DOLLAR__202;
-wire     [12:0] n20____DOLLAR__255;
-wire     [15:0] n21____DOLLAR__260;
-wire     [15:0] n22____DOLLAR__249;
-wire     [15:0] n23____DOLLAR__266;
-wire     [15:0] n24____DOLLAR__269;
-wire     [47:0] n25____DOLLAR__286;
-wire     [63:0] n26____DOLLAR__294;
-wire      [2:0] n27____DOLLAR__300;
-wire            n28____DOLLAR__366;
-wire            n29____DOLLAR__359;
-wire            n2____DOLLAR__216;
-wire            n30____DOLLAR__352;
-wire     [31:0] n31____DOLLAR__348;
-wire            n32____DOLLAR__337;
-wire            n33____DOLLAR__330;
-wire     [31:0] n34____DOLLAR__326;
-wire            n35____DOLLAR__315;
-wire            n36____DOLLAR__308;
-wire     [31:0] n37____DOLLAR__310;
-wire     [31:0] n38____DOLLAR__317;
-wire     [31:0] n39____DOLLAR__332;
-wire            n3____DOLLAR__218;
-wire     [31:0] n40____DOLLAR__339;
-wire     [31:0] n41____DOLLAR__354;
-wire     [31:0] n42____DOLLAR__361;
-wire     [31:0] n43____DOLLAR__368;
-wire            n44____DOLLAR__473;
-wire     [31:0] n45____DOLLAR__469;
-wire            n46____DOLLAR__458;
-wire            n47____DOLLAR__451;
-wire     [31:0] n48____DOLLAR__447;
-wire            n49____DOLLAR__436;
-wire            n4____DOLLAR__207;
-wire     [31:0] n50____DOLLAR__432;
-wire            n51____DOLLAR__421;
-wire     [31:0] n52____DOLLAR__417;
-wire            n53____DOLLAR__406;
-wire     [31:0] n54____DOLLAR__402;
-wire            n55____DOLLAR__391;
-wire     [31:0] n56____DOLLAR__387;
-wire     [31:0] n57____DOLLAR__377;
-wire     [31:0] n58____DOLLAR__393;
-wire     [31:0] n59____DOLLAR__408;
-wire            n5____DOLLAR__219;
-wire     [31:0] n60____DOLLAR__423;
-wire     [31:0] n61____DOLLAR__438;
-wire     [31:0] n62____DOLLAR__453;
-wire     [31:0] n63____DOLLAR__460;
-wire     [31:0] n64____DOLLAR__475;
-wire     [15:0] n65____DOLLAR__272;
-wire            n6____DOLLAR__212;
-wire            n7____DOLLAR__220;
-wire            n8____DOLLAR__144;
-wire            n9____DOLLAR__221;
+wire            n0____DOLLAR__125;
+wire     [12:0] n11____DOLLAR__224;
+wire            n12____DOLLAR__219;
+wire      [4:0] n13____DOLLAR__214;
+wire      [4:0] n14____DOLLAR__221;
+wire     [63:0] n15____DOLLAR__210;
+wire     [15:0] n16____DOLLAR__225;
+wire      [2:0] n17____DOLLAR__229;
+wire            n18____DOLLAR__252;
+wire     [12:0] n19____DOLLAR__227;
+wire            n1____DOLLAR__190;
+wire     [12:0] n20____DOLLAR__243;
+wire     [15:0] n21____DOLLAR__248;
+wire     [15:0] n22____DOLLAR__237;
+wire     [15:0] n23____DOLLAR__254;
+wire     [15:0] n24____DOLLAR__257;
+wire     [47:0] n25____DOLLAR__274;
+wire     [63:0] n26____DOLLAR__282;
+wire      [2:0] n27____DOLLAR__288;
+wire            n28____DOLLAR__354;
+wire            n29____DOLLAR__347;
+wire            n2____DOLLAR__204;
+wire            n30____DOLLAR__340;
+wire     [31:0] n31____DOLLAR__336;
+wire            n32____DOLLAR__325;
+wire            n33____DOLLAR__318;
+wire     [31:0] n34____DOLLAR__314;
+wire            n35____DOLLAR__303;
+wire            n36____DOLLAR__296;
+wire     [31:0] n37____DOLLAR__298;
+wire     [31:0] n38____DOLLAR__305;
+wire     [31:0] n39____DOLLAR__320;
+wire            n3____DOLLAR__206;
+wire     [31:0] n40____DOLLAR__327;
+wire     [31:0] n41____DOLLAR__342;
+wire     [31:0] n42____DOLLAR__349;
+wire     [31:0] n43____DOLLAR__356;
+wire            n44____DOLLAR__461;
+wire     [31:0] n45____DOLLAR__457;
+wire            n46____DOLLAR__446;
+wire            n47____DOLLAR__439;
+wire     [31:0] n48____DOLLAR__435;
+wire            n49____DOLLAR__424;
+wire            n4____DOLLAR__195;
+wire     [31:0] n50____DOLLAR__420;
+wire            n51____DOLLAR__409;
+wire     [31:0] n52____DOLLAR__405;
+wire            n53____DOLLAR__394;
+wire     [31:0] n54____DOLLAR__390;
+wire            n55____DOLLAR__379;
+wire     [31:0] n56____DOLLAR__375;
+wire     [31:0] n57____DOLLAR__365;
+wire     [31:0] n58____DOLLAR__381;
+wire     [31:0] n59____DOLLAR__396;
+wire            n5____DOLLAR__207;
+wire     [31:0] n60____DOLLAR__411;
+wire     [31:0] n61____DOLLAR__426;
+wire     [31:0] n62____DOLLAR__441;
+wire     [31:0] n63____DOLLAR__448;
+wire     [31:0] n64____DOLLAR__463;
+wire     [15:0] n65____DOLLAR__260;
+wire            n6____DOLLAR__200;
+wire            n7____DOLLAR__208;
+wire            n8____DOLLAR__132;
+wire            n9____DOLLAR__209;
 wire            rst;
 reg     [63:0] TXFIFO_BUFF[31:0];
 assign TXFIFO_BUFF_0 = TXFIFO_BUFF[0] ;
@@ -1288,73 +1288,73 @@ assign TXFIFO_BUFF_28 = TXFIFO_BUFF[28] ;
 assign TXFIFO_BUFF_29 = TXFIFO_BUFF[29] ;
 assign TXFIFO_BUFF_30 = TXFIFO_BUFF[30] ;
 assign TXFIFO_BUFF_31 = TXFIFO_BUFF[31] ;
-assign n0____DOLLAR__137 =  ( RESETN ) == ( 1'b1 )  ;
-assign __ILA_TX_FUNC_valid__ = n0____DOLLAR__137 ;
-assign n1____DOLLAR__202 =  ( MODE_10G ) == ( 1'b1 )  ;
-assign n2____DOLLAR__216 =  ( TX_B2B_CNTR ) == ( 6'd0 )  ;
-assign n3____DOLLAR__218 =  ( n1____DOLLAR__202 ) & (n2____DOLLAR__216 )  ;
-assign n4____DOLLAR__207 =  ( TX_STATE ) == ( 5'd1 )  ;
-assign n5____DOLLAR__219 =  ( n3____DOLLAR__218 ) & (n4____DOLLAR__207 )  ;
-assign n6____DOLLAR__212 =  ( TX_STATE_ENCAP ) == ( 8'd1 )  ;
-assign n7____DOLLAR__220 =  ( n5____DOLLAR__219 ) & (n6____DOLLAR__212 )  ;
-assign n8____DOLLAR__144 =  $signed( TXFIFO_WUSED_QWD ) > $signed( 13'd0 )  ;
-assign n9____DOLLAR__221 =  ( n7____DOLLAR__220 ) & (n8____DOLLAR__144 )  ;
-assign __ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__ = n9____DOLLAR__221 ;
-assign n11____DOLLAR__236 =  ( TXFIFO_WUSED_QWD ) - ( 13'd1 )  ;
-assign n12____DOLLAR__231 =  ( TXFIFO_BUFF_RD_PTR ) == ( 5'd16 )  ;
-assign n13____DOLLAR__226 =  ( TXFIFO_BUFF_RD_PTR ) + ( 5'd1 )  ;
-assign n14____DOLLAR__233 =  ( n12____DOLLAR__231 ) ? ( 5'd0 ) : ( n13____DOLLAR__226 ) ;
-assign n15____DOLLAR__222 =  (  TXFIFO_BUFF [ TXFIFO_BUFF_RD_PTR ] )  ;
-assign n16____DOLLAR__237 = TXFIFO_RD_OUTPUT[15:0] ;
-assign n17____DOLLAR__241 = TX_PACKET_BYTE_CNT[2:0] ;
-assign n18____DOLLAR__264 =  $signed( n17____DOLLAR__241 ) > $signed( 3'd0 )  ;
-assign n19____DOLLAR__239 = TX_PACKET_BYTE_CNT[15:3] ;
-assign n20____DOLLAR__255 =  ( n19____DOLLAR__239 ) + ( 13'd1 )  ;
-assign n21____DOLLAR__260 =  { ( n20____DOLLAR__255 ) , ( 3'd0 ) }  ;
-assign n22____DOLLAR__249 =  { ( n19____DOLLAR__239 ) , ( 3'd0 ) }  ;
-assign n23____DOLLAR__266 =  ( n18____DOLLAR__264 ) ? ( n21____DOLLAR__260 ) : ( n22____DOLLAR__249 ) ;
-assign n24____DOLLAR__269 =  ( n23____DOLLAR__266 ) - ( 16'd1 )  ;
-assign n25____DOLLAR__286 =  { ( 16'd21845 ) , ( 32'd1431655931 ) }  ;
-assign n26____DOLLAR__294 =  { ( 16'd54613 ) , ( n25____DOLLAR__286 ) }  ;
-assign n27____DOLLAR__300 = TX_PACKET_BYTE_CNT[2:0] ;
-assign n28____DOLLAR__366 =  ( n27____DOLLAR__300 ) == ( 3'd0 )  ;
-assign n29____DOLLAR__359 =  ( n27____DOLLAR__300 ) == ( 3'd1 )  ;
-assign n30____DOLLAR__352 =  ( n27____DOLLAR__300 ) == ( 3'd2 )  ;
-assign n31____DOLLAR__348 =  { ( 16'd59746 ) , ( 16'd45904 ) }  ;
-assign n32____DOLLAR__337 =  ( n27____DOLLAR__300 ) == ( 3'd3 )  ;
-assign n33____DOLLAR__330 =  ( n27____DOLLAR__300 ) == ( 3'd4 )  ;
-assign n34____DOLLAR__326 =  { ( 16'd40202 ) , ( 16'd55661 ) }  ;
-assign n35____DOLLAR__315 =  ( n27____DOLLAR__300 ) == ( 3'd5 )  ;
-assign n36____DOLLAR__308 =  ( n27____DOLLAR__300 ) == ( 3'd6 )  ;
-assign n37____DOLLAR__310 =  ( n36____DOLLAR__308 ) ? ( 32'd1868751717 ) : ( 32'd644901391 ) ;
-assign n38____DOLLAR__317 =  ( n35____DOLLAR__315 ) ? ( 32'd2128204124 ) : ( n37____DOLLAR__310 ) ;
-assign n39____DOLLAR__332 =  ( n33____DOLLAR__330 ) ? ( n34____DOLLAR__326 ) : ( n38____DOLLAR__317 ) ;
-assign n40____DOLLAR__339 =  ( n32____DOLLAR__337 ) ? ( 32'd856065035 ) : ( n39____DOLLAR__332 ) ;
-assign n41____DOLLAR__354 =  ( n30____DOLLAR__352 ) ? ( n31____DOLLAR__348 ) : ( n40____DOLLAR__339 ) ;
-assign n42____DOLLAR__361 =  ( n29____DOLLAR__359 ) ? ( 32'd1453685177 ) : ( n41____DOLLAR__354 ) ;
-assign n43____DOLLAR__368 =  ( n28____DOLLAR__366 ) ? ( 32'd0 ) : ( n42____DOLLAR__361 ) ;
-assign n44____DOLLAR__473 =  ( n27____DOLLAR__300 ) == ( 3'd0 )  ;
-assign n45____DOLLAR__469 =  { ( 16'd65535 ) , ( 16'd65535 ) }  ;
-assign n46____DOLLAR__458 =  ( n27____DOLLAR__300 ) == ( 3'd1 )  ;
-assign n47____DOLLAR__451 =  ( n27____DOLLAR__300 ) == ( 3'd2 )  ;
-assign n48____DOLLAR__447 =  { ( 16'd44876 ) , ( 16'd40214 ) }  ;
-assign n49____DOLLAR__436 =  ( n27____DOLLAR__300 ) == ( 3'd3 )  ;
-assign n50____DOLLAR__432 =  { ( 16'd62587 ) , ( 16'd63948 ) }  ;
-assign n51____DOLLAR__421 =  ( n27____DOLLAR__300 ) == ( 3'd4 )  ;
-assign n52____DOLLAR__417 =  { ( 16'd37414 ) , ( 16'd62818 ) }  ;
-assign n53____DOLLAR__406 =  ( n27____DOLLAR__300 ) == ( 3'd5 )  ;
-assign n54____DOLLAR__402 =  { ( 16'd41774 ) , ( 16'd9857 ) }  ;
-assign n55____DOLLAR__391 =  ( n27____DOLLAR__300 ) == ( 3'd6 )  ;
-assign n56____DOLLAR__387 =  { ( 16'd39452 ) , ( 16'd40336 ) }  ;
-assign n57____DOLLAR__377 =  { ( 16'd61589 ) , ( 16'd36825 ) }  ;
-assign n58____DOLLAR__393 =  ( n55____DOLLAR__391 ) ? ( n56____DOLLAR__387 ) : ( n57____DOLLAR__377 ) ;
-assign n59____DOLLAR__408 =  ( n53____DOLLAR__406 ) ? ( n54____DOLLAR__402 ) : ( n58____DOLLAR__393 ) ;
-assign n60____DOLLAR__423 =  ( n51____DOLLAR__421 ) ? ( n52____DOLLAR__417 ) : ( n59____DOLLAR__408 ) ;
-assign n61____DOLLAR__438 =  ( n49____DOLLAR__436 ) ? ( n50____DOLLAR__432 ) : ( n60____DOLLAR__423 ) ;
-assign n62____DOLLAR__453 =  ( n47____DOLLAR__451 ) ? ( n48____DOLLAR__447 ) : ( n61____DOLLAR__438 ) ;
-assign n63____DOLLAR__460 =  ( n46____DOLLAR__458 ) ? ( 32'd1183210153 ) : ( n62____DOLLAR__453 ) ;
-assign n64____DOLLAR__475 =  ( n44____DOLLAR__473 ) ? ( n45____DOLLAR__469 ) : ( n63____DOLLAR__460 ) ;
-assign n65____DOLLAR__272 =  ( n23____DOLLAR__266 ) - ( 16'd1 )  ;
+assign n0____DOLLAR__125 =  ( RESETN ) == ( 1'b1 )  ;
+assign __ILA_TX_FUNC_valid__ = n0____DOLLAR__125 ;
+assign n1____DOLLAR__190 =  ( MODE_10G ) == ( 1'b1 )  ;
+assign n2____DOLLAR__204 =  ( TX_B2B_CNTR ) == ( 6'd0 )  ;
+assign n3____DOLLAR__206 =  ( n1____DOLLAR__190 ) & (n2____DOLLAR__204 )  ;
+assign n4____DOLLAR__195 =  ( TX_STATE ) == ( 5'd1 )  ;
+assign n5____DOLLAR__207 =  ( n3____DOLLAR__206 ) & (n4____DOLLAR__195 )  ;
+assign n6____DOLLAR__200 =  ( TX_STATE_ENCAP ) == ( 8'd1 )  ;
+assign n7____DOLLAR__208 =  ( n5____DOLLAR__207 ) & (n6____DOLLAR__200 )  ;
+assign n8____DOLLAR__132 =  $signed( TXFIFO_WUSED_QWD ) > $signed( 13'd0 )  ;
+assign n9____DOLLAR__209 =  ( n7____DOLLAR__208 ) & (n8____DOLLAR__132 )  ;
+assign __ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__ = n9____DOLLAR__209 ;
+assign n11____DOLLAR__224 =  ( TXFIFO_WUSED_QWD ) - ( 13'd1 )  ;
+assign n12____DOLLAR__219 =  ( TXFIFO_BUFF_RD_PTR ) == ( 5'd16 )  ;
+assign n13____DOLLAR__214 =  ( TXFIFO_BUFF_RD_PTR ) + ( 5'd1 )  ;
+assign n14____DOLLAR__221 =  ( n12____DOLLAR__219 ) ? ( 5'd0 ) : ( n13____DOLLAR__214 ) ;
+assign n15____DOLLAR__210 =  (  TXFIFO_BUFF [ TXFIFO_BUFF_RD_PTR ] )  ;
+assign n16____DOLLAR__225 = TXFIFO_RD_OUTPUT[15:0] ;
+assign n17____DOLLAR__229 = TX_PACKET_BYTE_CNT[2:0] ;
+assign n18____DOLLAR__252 =  $signed( n17____DOLLAR__229 ) > $signed( 3'd0 )  ;
+assign n19____DOLLAR__227 = TX_PACKET_BYTE_CNT[15:3] ;
+assign n20____DOLLAR__243 =  ( n19____DOLLAR__227 ) + ( 13'd1 )  ;
+assign n21____DOLLAR__248 =  { ( n20____DOLLAR__243 ) , ( 3'd0 ) }  ;
+assign n22____DOLLAR__237 =  { ( n19____DOLLAR__227 ) , ( 3'd0 ) }  ;
+assign n23____DOLLAR__254 =  ( n18____DOLLAR__252 ) ? ( n21____DOLLAR__248 ) : ( n22____DOLLAR__237 ) ;
+assign n24____DOLLAR__257 =  ( n23____DOLLAR__254 ) - ( 16'd1 )  ;
+assign n25____DOLLAR__274 =  { ( 16'd21845 ) , ( 32'd1431655931 ) }  ;
+assign n26____DOLLAR__282 =  { ( 16'd54613 ) , ( n25____DOLLAR__274 ) }  ;
+assign n27____DOLLAR__288 = TX_PACKET_BYTE_CNT[2:0] ;
+assign n28____DOLLAR__354 =  ( n27____DOLLAR__288 ) == ( 3'd0 )  ;
+assign n29____DOLLAR__347 =  ( n27____DOLLAR__288 ) == ( 3'd1 )  ;
+assign n30____DOLLAR__340 =  ( n27____DOLLAR__288 ) == ( 3'd2 )  ;
+assign n31____DOLLAR__336 =  { ( 16'd59746 ) , ( 16'd45904 ) }  ;
+assign n32____DOLLAR__325 =  ( n27____DOLLAR__288 ) == ( 3'd3 )  ;
+assign n33____DOLLAR__318 =  ( n27____DOLLAR__288 ) == ( 3'd4 )  ;
+assign n34____DOLLAR__314 =  { ( 16'd40202 ) , ( 16'd55661 ) }  ;
+assign n35____DOLLAR__303 =  ( n27____DOLLAR__288 ) == ( 3'd5 )  ;
+assign n36____DOLLAR__296 =  ( n27____DOLLAR__288 ) == ( 3'd6 )  ;
+assign n37____DOLLAR__298 =  ( n36____DOLLAR__296 ) ? ( 32'd1868751717 ) : ( 32'd644901391 ) ;
+assign n38____DOLLAR__305 =  ( n35____DOLLAR__303 ) ? ( 32'd2128204124 ) : ( n37____DOLLAR__298 ) ;
+assign n39____DOLLAR__320 =  ( n33____DOLLAR__318 ) ? ( n34____DOLLAR__314 ) : ( n38____DOLLAR__305 ) ;
+assign n40____DOLLAR__327 =  ( n32____DOLLAR__325 ) ? ( 32'd856065035 ) : ( n39____DOLLAR__320 ) ;
+assign n41____DOLLAR__342 =  ( n30____DOLLAR__340 ) ? ( n31____DOLLAR__336 ) : ( n40____DOLLAR__327 ) ;
+assign n42____DOLLAR__349 =  ( n29____DOLLAR__347 ) ? ( 32'd1453685177 ) : ( n41____DOLLAR__342 ) ;
+assign n43____DOLLAR__356 =  ( n28____DOLLAR__354 ) ? ( 32'd0 ) : ( n42____DOLLAR__349 ) ;
+assign n44____DOLLAR__461 =  ( n27____DOLLAR__288 ) == ( 3'd0 )  ;
+assign n45____DOLLAR__457 =  { ( 16'd65535 ) , ( 16'd65535 ) }  ;
+assign n46____DOLLAR__446 =  ( n27____DOLLAR__288 ) == ( 3'd1 )  ;
+assign n47____DOLLAR__439 =  ( n27____DOLLAR__288 ) == ( 3'd2 )  ;
+assign n48____DOLLAR__435 =  { ( 16'd44876 ) , ( 16'd40214 ) }  ;
+assign n49____DOLLAR__424 =  ( n27____DOLLAR__288 ) == ( 3'd3 )  ;
+assign n50____DOLLAR__420 =  { ( 16'd62587 ) , ( 16'd63948 ) }  ;
+assign n51____DOLLAR__409 =  ( n27____DOLLAR__288 ) == ( 3'd4 )  ;
+assign n52____DOLLAR__405 =  { ( 16'd37414 ) , ( 16'd62818 ) }  ;
+assign n53____DOLLAR__394 =  ( n27____DOLLAR__288 ) == ( 3'd5 )  ;
+assign n54____DOLLAR__390 =  { ( 16'd41774 ) , ( 16'd9857 ) }  ;
+assign n55____DOLLAR__379 =  ( n27____DOLLAR__288 ) == ( 3'd6 )  ;
+assign n56____DOLLAR__375 =  { ( 16'd39452 ) , ( 16'd40336 ) }  ;
+assign n57____DOLLAR__365 =  { ( 16'd61589 ) , ( 16'd36825 ) }  ;
+assign n58____DOLLAR__381 =  ( n55____DOLLAR__379 ) ? ( n56____DOLLAR__375 ) : ( n57____DOLLAR__365 ) ;
+assign n59____DOLLAR__396 =  ( n53____DOLLAR__394 ) ? ( n54____DOLLAR__390 ) : ( n58____DOLLAR__381 ) ;
+assign n60____DOLLAR__411 =  ( n51____DOLLAR__409 ) ? ( n52____DOLLAR__405 ) : ( n59____DOLLAR__396 ) ;
+assign n61____DOLLAR__426 =  ( n49____DOLLAR__424 ) ? ( n50____DOLLAR__420 ) : ( n60____DOLLAR__411 ) ;
+assign n62____DOLLAR__441 =  ( n47____DOLLAR__439 ) ? ( n48____DOLLAR__435 ) : ( n61____DOLLAR__426 ) ;
+assign n63____DOLLAR__448 =  ( n46____DOLLAR__446 ) ? ( 32'd1183210153 ) : ( n62____DOLLAR__441 ) ;
+assign n64____DOLLAR__463 =  ( n44____DOLLAR__461 ) ? ( n45____DOLLAR__457 ) : ( n63____DOLLAR__448 ) ;
+assign n65____DOLLAR__260 =  ( n23____DOLLAR__254 ) - ( 16'd1 )  ;
 always @(posedge clk) begin
    if(rst) begin
        TXFIFO_FULL <= TXFIFO_FULL_randinit ;
@@ -1387,16 +1387,16 @@ always @(posedge clk) begin
            TXFIFO_FULL <= TXFIFO_FULL ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
-           TXFIFO_WUSED_QWD <= n11____DOLLAR__236 ;
+           TXFIFO_WUSED_QWD <= n11____DOLLAR__224 ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
-           TXFIFO_BUFF_RD_PTR <= n14____DOLLAR__233 ;
+           TXFIFO_BUFF_RD_PTR <= n14____DOLLAR__221 ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
            TXFIFO_BUFF_WR_PTR <= TXFIFO_BUFF_WR_PTR ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
-           TXFIFO_RD_OUTPUT <= n15____DOLLAR__222 ;
+           TXFIFO_RD_OUTPUT <= n15____DOLLAR__210 ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
            TX_STATE <= 5'd8 ;
@@ -1408,13 +1408,13 @@ always @(posedge clk) begin
            TX_B2B_CNTR <= 6'd5 ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
-           TX_PACKET_BYTE_CNT <= n16____DOLLAR__237 ;
+           TX_PACKET_BYTE_CNT <= n16____DOLLAR__225 ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
-           TX_WCNT <= n24____DOLLAR__269 ;
+           TX_WCNT <= n24____DOLLAR__257 ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
-           XGMII_DOUT_REG <= n26____DOLLAR__294 ;
+           XGMII_DOUT_REG <= n26____DOLLAR__282 ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
            XGMII_COUT_REG <= 8'd1 ;
@@ -1426,16 +1426,16 @@ always @(posedge clk) begin
            TX_BYTE_SENT <= TX_BYTE_SENT ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
-           CRC <= n43____DOLLAR__368 ;
+           CRC <= n43____DOLLAR__356 ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
            CRC_DAT_IN <= CRC_DAT_IN ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
-           CRC_IN <= n64____DOLLAR__475 ;
+           CRC_IN <= n64____DOLLAR__463 ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
-           TX_WCNT_INI <= n65____DOLLAR__272 ;
+           TX_WCNT_INI <= n65____DOLLAR__260 ;
        end
        if (__ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__) begin
            TX_BUF <= TX_BUF ;
