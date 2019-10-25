@@ -78,8 +78,8 @@ void GenVerifTargetTX(Ila& model, const std::string& design_path,
       instr_map,       // conditions of start/ready
       output_path,     // output path
       model.get(),     // model
-      //VerilogVerificationTargetGenerator::backend_selector::COSA,
-      VerilogVerificationTargetGenerator::backend_selector::JASPERGOLD,
+      VerilogVerificationTargetGenerator::backend_selector::COSA,
+      //VerilogVerificationTargetGenerator::backend_selector::JASPERGOLD,
       vtg_cfg, // target generator configuration
       vlg_cfg  // verilog generator configuration
   );
