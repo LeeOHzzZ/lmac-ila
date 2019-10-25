@@ -39,7 +39,8 @@ VerilogVerificationTargetGenerator::vtg_config_t SetVerifGenConfig() {
   // config.CosaPath = "$HOME/CoSA";
 
   // other
-  config.PortDeclStyle = VlgVerifTgtGenBase::vtg_config_t::NEW;
+//  config.PortDeclStyle = VlgVerifTgtGenBase::vtg_config_t::NEW;
+  config.PortDeclStyle = VlgVerifTgtGenBase::vtg_config_t::OLD;
   config.CosaGenJgTesterScript = true;
   // config.CosaOtherSolverOptions = "--blackbox-array";
   // config.ForceInstCheckReset = true;
