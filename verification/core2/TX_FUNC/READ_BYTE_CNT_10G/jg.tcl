@@ -32,11 +32,11 @@ assume { additional_mapping_control_assume__m73__  }
 assume { additional_mapping_control_assume__m74__  }
 assume { additional_mapping_control_assume__m75__  }
 assume { additional_mapping_control_assume__m76__  }
-assume { issue_decode__m77__  }
-assume { issue_valid__m78__  }
-assume { post_value_holder__m79__  }
-assume { post_value_holder__m80__  }
-assume { post_value_holder__m81__  }
+assume { additional_mapping_control_assume__m77__  }
+assume { additional_mapping_control_assume__m78__  }
+assume { additional_mapping_control_assume__m79__  }
+assume { issue_decode__m80__  }
+assume { issue_valid__m81__  }
 assume { post_value_holder__m82__  }
 assume { post_value_holder__m83__  }
 assume { post_value_holder__m84__  }
@@ -45,4 +45,7 @@ assume { post_value_holder__m86__  }
 assume { post_value_holder__m87__  }
 assume { post_value_holder__m88__  }
 assume { post_value_holder__m89__  }
+assume { post_value_holder__m90__  }
+assume { post_value_holder__m91__  }
+assume { post_value_holder__m92__  }
 assert { (variable_map_assert__p42__ ) && (variable_map_assert__p44__ ) && (variable_map_assert__p47__ ) && (variable_map_assert__p49__ ) && (variable_map_assert__p51__ ) && (variable_map_assert__p53__ ) && (variable_map_assert__p55__ ) && (variable_map_assert__p57__ ) && (variable_map_assert__p59__ ) && (variable_map_assert__p61__ ) && (variable_map_assert__p63__ ) && (variable_map_assert__p65__ ) && (variable_map_assert__p67__ ) }

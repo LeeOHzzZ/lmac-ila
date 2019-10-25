@@ -32,11 +32,11 @@ assume { additional_mapping_control_assume__m53__  }
 assume { additional_mapping_control_assume__m54__  }
 assume { additional_mapping_control_assume__m55__  }
 assume { additional_mapping_control_assume__m56__  }
-assume { issue_decode__m57__  }
-assume { issue_valid__m58__  }
-assume { post_value_holder__m59__  }
-assume { post_value_holder__m60__  }
-assume { post_value_holder__m61__  }
+assume { additional_mapping_control_assume__m57__  }
+assume { additional_mapping_control_assume__m58__  }
+assume { additional_mapping_control_assume__m59__  }
+assume { issue_decode__m60__  }
+assume { issue_valid__m61__  }
 assume { post_value_holder__m62__  }
 assume { post_value_holder__m63__  }
 assume { post_value_holder__m64__  }
@@ -45,4 +45,7 @@ assume { post_value_holder__m66__  }
 assume { post_value_holder__m67__  }
 assume { post_value_holder__m68__  }
 assume { post_value_holder__m69__  }
+assume { post_value_holder__m70__  }
+assume { post_value_holder__m71__  }
+assume { post_value_holder__m72__  }
 assert { (variable_map_assert__p43__ ) && (variable_map_assert__p45__ ) && (variable_map_assert__p47__ ) }
