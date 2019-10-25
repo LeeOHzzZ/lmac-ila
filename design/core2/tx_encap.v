@@ -56,9 +56,7 @@ module tx_encap(
 	
 	xreq,				  // i-1
 	xon,				  // i-1
-	xdone				  // o-1
-	
-	);
+	xdone);
 	
 
 input [47:0] psaddr;		// pause source address, source mac address in the pause frame to transmit

@@ -96,9 +96,7 @@ module LMAC_CORE_TOP
 		reg_rd_done_out,		// o-1		
 		                    	
 		FMAC_REGDOUT,			// o-32
-		FIFO_OV_IPEND			// o-1
-		
-		);
+		FIFO_OV_IPEND);
 	
 input		clk;			   	// 156.25 Mhz
 input		xA_clk; 		    // 156.25 Mhz

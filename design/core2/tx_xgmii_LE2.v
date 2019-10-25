@@ -52,9 +52,7 @@ module tx_xgmii(
 	
 	FMAC_TX_PKT_CNT,  	   // o-32
 	FMAC_TX_BYTE_CNT,	   // o-32
-	fmac_tx_clr_en		   // i-1
-	
-	);
+	fmac_tx_clr_en	);
 
 	
 

@@ -50,9 +50,7 @@ module asynch_fifo # (parameter WIDTH = 8,         // considering 8X8 fifo
 			output reg 					rdempty,      // indicates fifo is empty or not (to avoid underflow)
 			output reg [PTR  : 0] 		rdusedw,      // number of slots currently in use for reading
 
-			output 	 		dbg						  //For Debug
-
-);
+			output 	 		dbg);
 
 
 

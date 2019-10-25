@@ -64,9 +64,7 @@ module tx_10G_wrap(
     PRE_FMAC_TX_PKT_CNT_10G,   //o-32 output to tcore
     PRE_FMAC_TX_BYTE_CNT_10G,  //o-32 output to tcore
     
-    fmac_tx_clr_en	  		   //i-1 output to internal wire in tcore
-    
-    );
+    fmac_tx_clr_en);
     
 	input 			usr_clk;
 	input 			x_clk;

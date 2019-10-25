@@ -44,9 +44,7 @@ module txfifo_1024x64
 		    rdclk,     	  // Clk for reading data 
 			rdreq,     	  // Request to read from FIFO
 			q, 	    	  // Data coming out 
-			rdempty  	  // indicates fifo is empty or not (to avoid underflow)
-
-);
+			rdempty );
 
 
 	parameter WIDTH = 64,

@@ -44,8 +44,7 @@ module tx_mac10g_crc32x64(
    	mode_10G,       //i-1
    	
    	crc32,          //o-32
-   	crc32_vld_      //o-1 
-    );
+   	crc32_vld_      );
    
 input clk;
 input rst_;
