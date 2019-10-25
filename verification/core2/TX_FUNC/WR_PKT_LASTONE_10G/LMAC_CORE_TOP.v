@@ -489,7 +489,7 @@ tcore_fmac_core #(FMAC_ID) core(
 	   end
 	end
 
-
+/*
 
 tcore_byte_reordering byte_reordering(
 	.clk250 			(clk), 					// i-1
@@ -627,6 +627,6 @@ fmac_register_if fmac_register_if(
 		
     );
     
-    
+*/    
     
 endmodule
