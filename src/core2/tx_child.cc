@@ -148,7 +148,7 @@ namespace ilang {
 
       // State Update
       instr.SetUpdate(b2b_cntr, b2b_cntr - 1); // 1 clk
-      instr.SetUpdate(txd, Concat(BvConst(0xD5555555, 32), BvConst(0x555555FB, 32))); // 1 clk
+      instr.SetUpdate(txd, Concat(Concat(BvConst(0xD555,16), BvConst(0x5555, 16)), BvConst(0x555555FB, 32))); // 1 clk
       instr.SetUpdate(txc, BvConst(0xFF, XGMII_COUT_REG_BWID)); // 1 clk
 
     }
@@ -172,9 +172,9 @@ namespace ilang {
       // read FIFO
       // For the wr_ptr, rd_ptr, fifo_output, we don't care about the value of them.
       // But the fifo_wused is required to write the refinement relation.
-      instr.SetUpdate(fifo_output, Load(fifo, fifo_rd_ptr));
-      instr.SetUpdate(fifo_rd_ptr, Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1));
-      instr.SetUpdate(fifo_wused, fifo_wused - 1);
+      instr.SetUpdate(fifo_output, Load(fifo, fifo_rd_ptr));// 1 clk
+      instr.SetUpdate(fifo_rd_ptr, Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1));//1 clk
+      instr.SetUpdate(fifo_wused, fifo_wused - 1);// 1 clk
 
       // states update
       // Updating the qword count in bytes
@@ -202,6 +202,7 @@ namespace ilang {
 
 
       // Set initial value of the CRC. This initial value is the output data. However the one that participates in the generation is different.
+      // crc and crc_in both has 3 clk delay.
       auto rb = Extract(byte_cnt, 2, 0); // rb stands for residual bytes
       instr.SetUpdate(crc, Ite((rb == 0x0), BvConst(0x00000000, 32), 
                                     Ite((rb == 0x1), BvConst(0x56a579b9, 32),
