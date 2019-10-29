@@ -151,6 +151,8 @@ namespace ilang {
       instr.SetUpdate(txd, Concat(Concat(BvConst(0xD555,16), BvConst(0x5555, 16)), BvConst(0x555555FB, 32))); // 1 clk
       instr.SetUpdate(txc, BvConst(0xFF, XGMII_COUT_REG_BWID)); // 1 clk
 
+      instr.SetUpdate(cm.state("TX_FUNC_INSTR"), BvConst(0x0, 3));
+
     }
 
     // This instruction is to read the first qword of the packet from user, which contains the size of the packet
@@ -195,9 +197,11 @@ namespace ilang {
       // Be Careful!!! The output state is actually 1 clk behind the other arch states in this step!
 
       // I put the B2B CNTR here 
+      instr.SetUpdate(b2b_cntr, TX_B2B_CNTR_INITIAL); // 5 clk
+            
       instr.SetUpdate(txd, Concat(BvConst(0xD555, 16), Concat(BvConst(0x5555, 16), BvConst(0x555555FB,32)))); // 6 clk
       instr.SetUpdate(txc, BvConst(0x01, XGMII_COUT_REG_BWID)); // 6 clk 
-      instr.SetUpdate(b2b_cntr, TX_B2B_CNTR_INITIAL);
+
 
 
 
@@ -224,6 +228,8 @@ namespace ilang {
                                     Ite((rb == 0x6), Concat(BvConst(0x9a1c, 16), BvConst(0x9d90, 16)),
                                                      Concat(BvConst(0xf095, 16), BvConst(0x8fd9, 16)))))))))
                       );
+
+      instr.SetUpdate(cm.state("TX_FUNC_INSTR"), BvConst(0x1, 3));
     }
 
     
@@ -371,6 +377,9 @@ namespace ilang {
       instr.SetUpdate(tx_state, Ite((wcnt < 0), TX_STATE_DAT, TX_STATE_CRC)); // 1 clk
       instr.SetUpdate(tx_encap_state, Ite((wcnt < 16), TX_STATE_ENCAP_IDLE, tx_encap_state)); // 1 clk
       instr.SetUpdate(wcnt, wcnt - 8); // 1 clk
+
+
+      instr.SetUpdate(cm.state("TX_FUNC_INSTR"), BvConst(0x2, 3));
     }
 
     // This is for writing the EOF and CRC code at the end of the frame.
@@ -389,6 +398,9 @@ namespace ilang {
       instr.SetUpdate(cm.state(TX_BYTE_SENT), cm.state(TX_BYTE_SENT) + Concat(BvConst(0x0, 16), byte_cnt)); // 2 clk
       instr.SetUpdate(tx_state, TX_STATE_IDLE); // 1 clk
       instr.SetUpdate(b2b_cntr, Ite((tx_encap_state == TX_STATE_ENCAP_IDLE), b2b_cntr - 1, b2b_cntr)); // 1 clk
+
+
+      instr.SetUpdate(cm.state("TX_FUNC_INSTR"), BvConst(0x3, 3));
     }
 
     return;

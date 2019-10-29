@@ -80,6 +80,10 @@ namespace ilang {
     // Buffer for CRC Code generation
     NewState(cm, TX_BUF, TX_BUF_BWID);
 
+
+    // State for recording current instruction
+    NewState(cm, "TX_FUNC_INSTR", 3);
+
     return;
 
   }

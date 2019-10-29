@@ -69,6 +69,13 @@ reg [PTR : 0 ] wr_cnt, rd_cnt;
 // MEMORY FOR FIFO USING REG
 reg [WIDTH-1 : 0] mem[DEPTH-1:0] ;
 
+// MEMORY FOR ILA verification
+reg [WIDTH-1 : 0] ILA_mem_2clk[DEPTH-1:0] ;
+reg [WIDTH-1 : 0] ILA_mem_3clk[DEPTH-1:0] ;
+reg [WIDTH-1 : 0] ILA_mem_4clk[DEPTH-1:0] ;
+reg [WIDTH-1 : 0] ILA_mem_5clk[DEPTH-1:0] ;
+reg [WIDTH-1 : 0] ILA_mem_6clk[DEPTH-1:0] ;
+
 assign	dbg	=	1'b0;
 
 // MEMORY FOR FIFO USING REG
@@ -167,6 +174,19 @@ assign rdfull  = wrfull ? 1'b1 : 1'b0;
 			end
 
 	end
+
+	always @(posedge wrclk)
+	begin
+		for (int i = 0; i < DEPTH; i = i+1)
+			begin
+				ILA_mem_2clk[i] <= mem[i]
+				ILA_mem_3clk[i] <= ILA_mem_2clk[i]
+				ILA_mem_4clk[i] <= ILA_mem_3clk[i]
+				ILA_mem_5clk[i] <= ILA_mem_4clk[i]
+				ILA_mem_6clk[i] <= ILA_mem_5clk[i]
+			end
+	end
+
 //=== READ FROM FIFO
 
 	always @(rdclk, rdusedw_i )

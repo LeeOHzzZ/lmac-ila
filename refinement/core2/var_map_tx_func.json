@@ -5,26 +5,55 @@
   },
 
   "state mapping": { 
-    "TXFIFO_FULL"               : "m1.tx_mac_full",
-    "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw",
-    "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem",
-    "TXFIFO_BUFF_WR_PTR"        : "m1.core.txfifo.tx_f.wr_ptr",
-    "TXFIFO_BUFF_RD_PTR"        : "m1.core.txfifo.tx_f.rd_ptr",
-    "TXFIFO_RD_OUTPUT"          : "m1.core.txfifo.tx_f.dataout",
+    "TXFIFO_FULL"               : "m1.core.txfifo.tx_f.txfifo_full",
+
+    "TXFIFO_BUFF"               : [["__START__", "m1.core.txfifo.tx_f.mem"], 
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 0", "m1.core.txfifo.tx_f.mem"], 
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 1", "m1.core.txfifo.tx_f.ILA_mem_6clk"], 
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 2", "m1.core.txfifo.tx_f.ILA_mem_2clk"], 
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 3", "m1.core.txfifo.tx_f.ILA_mem_2clk"]],
+
+    "TXFIFO_WUSED_QWD"          : [["__START__", "m1.core.txfifo.tx_f.txfifo_usedw_int"], ["__IEND__", "#txfifo_wused_end#"]],
+    "TXFIFO_BUFF_WR_PTR"        : [["__START__", "m1.core.txfifo.tx_f.wr_ptr"], ["__IEND__", "#txfifo_buff_wr_ptr_end#"]],
+    "TXFIFO_BUFF_RD_PTR"        : [["__START__", "m1.core.txfifo.tx_f.rd_ptr"], ["__IEND__", "#txfifo_buff_rd_ptr_end#"]],
+    "TXFIFO_RD_OUTPUT"          : [["__START__", "m1.core.txfifo.tx_f.dataout"], ["__IEND__", "#txfifo_buff_rd_output_end#"]],
 
 
-    "TX_STATE"                  : "m1.core.tx_10G_wrap.tx_xgmii.state",
-    "TX_STATE_ENCAP"            : "m1.core.tx_10G_wrap.tx_encap.state",
-    "TX_B2B_CNTR"               : "m1.core.tx_10G_wrap.tx_encap.b2b_counter",
-    "TX_PACKET_BYTE_CNT"        : "m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg",
-    "TX_WCNT"                   : "m1.core.tx_10G_wrap.tx_xgmii.wcnt",
+    "TX_STATE"                  : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.state"], 
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 1", "#tx_state_RdByteCnt_end#"],
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 2", "#tx_state_WrPktPayload_end#"],
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 3", "#tx_state_LastOne_end#"]],
+
+    "TX_STATE_ENCAP"            : [["__START__", "m1.core.tx_10G_wrap.tx_encap.state"], 
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 1", "#tx_st_encap_RdByteCnt_end#"],
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 2", "#tx_st_encap_WrPktPayload_end#"]],
+
+
+    "TX_B2B_CNTR"               : [["__START__", "m1.core.tx_10G_wrap.tx_encap.b2b_counter"], 
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 1", "#b2b_counter_RdByteCnt_end#"],
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 2", "#b2b_counter_WrPktPayload_end#"],
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 3", "#b2b_counter_LastOne_end#"]],
+
+    "TX_PACKET_BYTE_CNT"        : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg"], ["__IEND__", "#tx_pkt_byte_cnt_RdByteCnt_end#"]],
+
+    "TX_WCNT"                   : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.wcnt"], 
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 1", "#tx_wcnt_RdByteCnt_end#"],
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 2", "#tx_wcnt_WrPktPaylaod_end#"]],
+
+
     "XGMII_DOUT_REG"            : "m1.core.tx_10G_wrap.tx_xgmii.txd",
     "XGMII_COUT_REG"            : "m1.core.tx_10G_wrap.tx_xgmii.txc",
     "TX_PKT_SENT"               : "m1.core.tx_10G_wrap.tx_xgmii.pkt_transmitted",
     "TX_BYTE_SENT"              : "m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt",
 
-    "CRC"                       : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32",
-    "CRC_IN"                    : "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in",
+    "CRC"                       : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32"], 
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 1", "#crc_RdByteCnt_end#"],
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 2", "#crc_WrPktPaylaod_end#"]],
+
+    "CRC_IN"                    : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in"], 
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 1", "#crc_in_RdByteCnt_end#"],
+                                    ["__IEND__ && m0.TX_FUNC_INSTR == 2", "#crc_in_WrPktPaylaod_end#"]],
+                                    
     "CRC_DAT_IN"                : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.bdin",
     "TX_WCNT_INI"               : "m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini",
     "TX_BUF"                    : "m1.core.tx_10G_wrap.tx_xgmii.bdata1"
@@ -34,12 +63,37 @@
 
   "annotation" : {
     "memory" : {
-	"TXFIFO_BUFF" : "internal"
+	    "TXFIFO_BUFF" : "internal"
     }
   },
 
 
   "post-value-holder" : {
+
+    "txfifo_wused_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.txfifo.tx_f.txfifo_usedw_int",
+      "width": 13
+    },
+
+    "txfifo_buff_wr_ptr_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.txfifo.tx_f.wr_ptr",
+      "width": 5
+    },
+
+    "txfifo_buff_rd_ptr_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.txfifo.tx_f.rd_ptr",
+      "width": 5
+    },
+
+    "txfifo_buff_rd_output_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.txfifo.tx_f.dataout",
+      "width": 64
+    },
+
 
     "tx_st_encap_RdByteCnt_end": {
       "cond" : "__CYCLE_CNT__ == 4",
@@ -83,6 +137,9 @@
       "width": 32
     },
 
+
+
+
     "b2b_counter_WrPktPayload_end": {
       "cond" : "__CYCLE_CNT__ == 1",
       "val"  : "m1.core.tx_10G_wrap.tx_encap.b2b_counter",
@@ -105,6 +162,18 @@
       "cond" : "__CYCLE_CNT__ == 1",
       "val"  : "m1.core.tx_10G_wrap.tx_xgmii.wcnt",
       "width": 16
+    },
+
+    "crc_WrPktPaylaod_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32",
+      "width": 32
+    },
+
+    "crc_in_WrPktPaylaod_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in",
+      "width": 32
     },
 
 
