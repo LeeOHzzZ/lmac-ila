@@ -78,6 +78,7 @@ namespace ilang {
       instr.SetUpdate(wr_ptr, Ite((Uge(wr_ptr, TXFIFO_BUFF_DEPTH)), BvConst(0x1, TXFIFO_BUFF_WR_PTR_BWID), wr_ptr + 0x1));
       instr.SetUpdate(txfifo_wused, txfifo_wused + 0x1);
 //      instr.SetUpdate(txfifo_full, Ite((Uge(txfifo_wused, TXFIFO_BUFF_DEPTH - 1)), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID)));
+//      txfifo_full is combinational logic in the verilog design. We need to add a post value holder to store the result for it.
 
     }
 
@@ -105,6 +106,7 @@ namespace ilang {
     
     auto resetn = m.input(RESETN);
     child_tx_func.SetValid(resetn == RESETN_VALID);
+    //child_tx_func.SetValid(BoolConst(true));
     child_tx_func.SetFetch(BvConst(0x1, 1));
 
     // add reference of chile_tx_func for convenience
@@ -146,7 +148,7 @@ namespace ilang {
 
       // State Update
       instr.SetUpdate(b2b_cntr, b2b_cntr - 1); // 1 clk
-      instr.SetUpdate(txd, Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32))); // 1 clk
+      instr.SetUpdate(txd, Concat(BvConst(0xD5555555, 32), BvConst(0x555555FB, 32))); // 1 clk
       instr.SetUpdate(txc, BvConst(0xFF, XGMII_COUT_REG_BWID)); // 1 clk
 
     }

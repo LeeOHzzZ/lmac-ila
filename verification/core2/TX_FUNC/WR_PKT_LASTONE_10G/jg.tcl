@@ -23,8 +23,8 @@ assume { variable_map_assume__m34__  }
 assume { variable_map_assume__m36__  }
 assume { variable_map_assume__m38__  }
 assume { variable_map_assume__m40__  }
-assume { additional_mapping_control_assume__m50__  }
-assume { additional_mapping_control_assume__m51__  }
+assume { invariant_assume__m50__  }
+assume { invariant_assume__m51__  }
 assume { additional_mapping_control_assume__m52__  }
 assume { additional_mapping_control_assume__m53__  }
 assume { additional_mapping_control_assume__m54__  }
@@ -35,10 +35,10 @@ assume { additional_mapping_control_assume__m58__  }
 assume { additional_mapping_control_assume__m59__  }
 assume { additional_mapping_control_assume__m60__  }
 assume { additional_mapping_control_assume__m61__  }
-assume { issue_decode__m62__  }
-assume { issue_valid__m63__  }
-assume { post_value_holder__m64__  }
-assume { post_value_holder__m65__  }
+assume { additional_mapping_control_assume__m62__  }
+assume { additional_mapping_control_assume__m63__  }
+assume { issue_decode__m64__  }
+assume { issue_valid__m65__  }
 assume { post_value_holder__m66__  }
 assume { post_value_holder__m67__  }
 assume { post_value_holder__m68__  }
@@ -48,4 +48,6 @@ assume { post_value_holder__m71__  }
 assume { post_value_holder__m72__  }
 assume { post_value_holder__m73__  }
 assume { post_value_holder__m74__  }
+assume { post_value_holder__m75__  }
+assume { post_value_holder__m76__  }
 assert { (variable_map_assert__p43__ ) && (variable_map_assert__p45__ ) && (variable_map_assert__p47__ ) && (variable_map_assert__p49__ ) }

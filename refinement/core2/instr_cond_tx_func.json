@@ -23,5 +23,8 @@
 
     ],
 
-    "global invariants" : []
+    "global invariants" : [
+   	"~(m1.core.tx_10G_wrap.tx_xgmii.state == 1) || (m1.core.tx_10G_wrap.tx_xgmii.txd == 64'hD5555555555555FB)",
+        "~(m1.core.tx_10G_wrap.tx_xgmii.state == 1) || (m1.core.tx_10G_wrap.tx_xgmii.txc == 8'hff)"	
+    ]
 }

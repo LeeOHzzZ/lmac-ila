@@ -110,8 +110,6 @@ __m64__,
 __m66__,
 __m7__,
 __m9__,
-additional_mapping_control_assume__m68__,
-additional_mapping_control_assume__m69__,
 additional_mapping_control_assume__m70__,
 additional_mapping_control_assume__m71__,
 additional_mapping_control_assume__m72__,
@@ -122,10 +120,18 @@ additional_mapping_control_assume__m76__,
 additional_mapping_control_assume__m77__,
 additional_mapping_control_assume__m78__,
 additional_mapping_control_assume__m79__,
-issue_decode__m80__,
-issue_valid__m81__,
+additional_mapping_control_assume__m80__,
+additional_mapping_control_assume__m81__,
+invariant_assume__m68__,
+invariant_assume__m69__,
+issue_decode__m82__,
+issue_valid__m83__,
 m1__DOT__SYS_ADDR,
 m1__DOT__TCORE_MODE,
+m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf,
+m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf,
+m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf,
+m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf,
 m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter,
 m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state,
 m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy,
@@ -163,15 +169,9 @@ m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr,
 m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr,
 m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw,
 m1__DOT__core__DOT__txfifo_wr_en,
-m1__DOT__mode_10G,
-m1__DOT__mode_1G,
-m1__DOT__mode_2p5G,
-m1__DOT__mode_5G,
 m1__DOT__tx_mac_full,
 m1__DOT__tx_mac_usedw,
 noreset__m0__,
-post_value_holder__m82__,
-post_value_holder__m83__,
 post_value_holder__m84__,
 post_value_holder__m85__,
 post_value_holder__m86__,
@@ -181,6 +181,8 @@ post_value_holder__m89__,
 post_value_holder__m90__,
 post_value_holder__m91__,
 post_value_holder__m92__,
+post_value_holder__m93__,
+post_value_holder__m94__,
 tx_mac_full,
 tx_mac_usedw,
 variable_map_assert__p42__,
@@ -338,8 +340,6 @@ output            __m64__;
 output            __m66__;
 output            __m7__;
 output            __m9__;
-output            additional_mapping_control_assume__m68__;
-output            additional_mapping_control_assume__m69__;
 output            additional_mapping_control_assume__m70__;
 output            additional_mapping_control_assume__m71__;
 output            additional_mapping_control_assume__m72__;
@@ -350,10 +350,18 @@ output            additional_mapping_control_assume__m76__;
 output            additional_mapping_control_assume__m77__;
 output            additional_mapping_control_assume__m78__;
 output            additional_mapping_control_assume__m79__;
-output            issue_decode__m80__;
-output            issue_valid__m81__;
+output            additional_mapping_control_assume__m80__;
+output            additional_mapping_control_assume__m81__;
+output            invariant_assume__m68__;
+output            invariant_assume__m69__;
+output            issue_decode__m82__;
+output            issue_valid__m83__;
 output      [3:0] m1__DOT__SYS_ADDR;
 output            m1__DOT__TCORE_MODE;
+output            m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf;
+output            m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf;
+output            m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf;
+output            m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf;
 output      [5:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter;
 output      [7:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state;
 output            m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy;
@@ -391,15 +399,9 @@ output      [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr;
 output      [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr;
 output      [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw;
 output            m1__DOT__core__DOT__txfifo_wr_en;
-output            m1__DOT__mode_10G;
-output            m1__DOT__mode_1G;
-output            m1__DOT__mode_2p5G;
-output            m1__DOT__mode_5G;
 output            m1__DOT__tx_mac_full;
 output     [12:0] m1__DOT__tx_mac_usedw;
 output            noreset__m0__;
-output            post_value_holder__m82__;
-output            post_value_holder__m83__;
 output            post_value_holder__m84__;
 output            post_value_holder__m85__;
 output            post_value_holder__m86__;
@@ -409,6 +411,8 @@ output            post_value_holder__m89__;
 output            post_value_holder__m90__;
 output            post_value_holder__m91__;
 output            post_value_holder__m92__;
+output            post_value_holder__m93__;
+output            post_value_holder__m94__;
 output            tx_mac_full;
 output     [12:0] tx_mac_usedw;
 output            variable_map_assert__p42__;
@@ -600,8 +604,6 @@ wire      [7:0] __tx_state_RdByteCnt_end_init__;
 wire      [7:0] __tx_state_WrPktPayload_end_init__;
 wire     [15:0] __tx_wcnt_RdByteCnt_end_init__;
 wire     [15:0] __tx_wcnt_WrPktPaylaod_end_init__;
-(* keep *) wire            additional_mapping_control_assume__m68__;
-(* keep *) wire            additional_mapping_control_assume__m69__;
 (* keep *) wire            additional_mapping_control_assume__m70__;
 (* keep *) wire            additional_mapping_control_assume__m71__;
 (* keep *) wire            additional_mapping_control_assume__m72__;
@@ -612,12 +614,20 @@ wire     [15:0] __tx_wcnt_WrPktPaylaod_end_init__;
 (* keep *) wire            additional_mapping_control_assume__m77__;
 (* keep *) wire            additional_mapping_control_assume__m78__;
 (* keep *) wire            additional_mapping_control_assume__m79__;
+(* keep *) wire            additional_mapping_control_assume__m80__;
+(* keep *) wire            additional_mapping_control_assume__m81__;
 wire            clk;
 (* keep *) wire            dummy_reset;
-(* keep *) wire            issue_decode__m80__;
-(* keep *) wire            issue_valid__m81__;
+(* keep *) wire            invariant_assume__m68__;
+(* keep *) wire            invariant_assume__m69__;
+(* keep *) wire            issue_decode__m82__;
+(* keep *) wire            issue_valid__m83__;
 (* keep *) wire      [3:0] m1__DOT__SYS_ADDR;
 (* keep *) wire            m1__DOT__TCORE_MODE;
+(* keep *) wire            m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf;
+(* keep *) wire            m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf;
+(* keep *) wire            m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf;
+(* keep *) wire            m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf;
 (* keep *) wire      [5:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter;
 (* keep *) wire      [7:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state;
 (* keep *) wire            m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy;
@@ -655,15 +665,9 @@ wire            clk;
 (* keep *) wire      [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr;
 (* keep *) wire      [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw;
 (* keep *) wire            m1__DOT__core__DOT__txfifo_wr_en;
-(* keep *) wire            m1__DOT__mode_10G;
-(* keep *) wire            m1__DOT__mode_1G;
-(* keep *) wire            m1__DOT__mode_2p5G;
-(* keep *) wire            m1__DOT__mode_5G;
 (* keep *) wire            m1__DOT__tx_mac_full;
 (* keep *) wire     [12:0] m1__DOT__tx_mac_usedw;
 (* keep *) wire            noreset__m0__;
-(* keep *) wire            post_value_holder__m82__;
-(* keep *) wire            post_value_holder__m83__;
 (* keep *) wire            post_value_holder__m84__;
 (* keep *) wire            post_value_holder__m85__;
 (* keep *) wire            post_value_holder__m86__;
@@ -673,6 +677,8 @@ wire            clk;
 (* keep *) wire            post_value_holder__m90__;
 (* keep *) wire            post_value_holder__m91__;
 (* keep *) wire            post_value_holder__m92__;
+(* keep *) wire            post_value_holder__m93__;
+(* keep *) wire            post_value_holder__m94__;
 wire            rst;
 (* keep *) wire            tx_mac_full;
 (* keep *) wire     [12:0] tx_mac_usedw;
@@ -801,34 +807,36 @@ assign __m64__ = m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc == __I
 assign variable_map_assert__p65__ = (~ __IEND__) || (__m64__) ;
 assign __m66__ = m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd == __ILA_SO_XGMII_DOUT_REG ;
 assign variable_map_assert__p67__ = (~ __IEND__) || (__m66__) ;
-assign additional_mapping_control_assume__m68__ = (m1__DOT__TCORE_MODE == 1) ;
-assign additional_mapping_control_assume__m69__ = (m1__DOT__SYS_ADDR == 1) ;
-assign additional_mapping_control_assume__m70__ = (m1__DOT__mode_10G == 1) ;
-assign additional_mapping_control_assume__m71__ = (m1__DOT__mode_5G == 0) ;
-assign additional_mapping_control_assume__m72__ = (m1__DOT__mode_2p5G == 0) ;
-assign additional_mapping_control_assume__m73__ = (m1__DOT__mode_1G == 0) ;
-assign additional_mapping_control_assume__m74__ = (m1__DOT__core__DOT__tx_b2b_dly == 2) ;
-assign additional_mapping_control_assume__m75__ = (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy == 1) ;
-assign additional_mapping_control_assume__m76__ = (m1__DOT__core__DOT__txfifo_wr_en == 0) ;
-assign additional_mapping_control_assume__m77__ = (m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr <= 16 && m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr >= 0) ;
-assign additional_mapping_control_assume__m78__ = (m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw <= 16 && m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw >= 0) ;
-assign additional_mapping_control_assume__m79__ = (__ILA_SO_TXFIFO_FULL == (__ILA_SO_TXFIFO_WUSED_QWD == 16)) ;
+assign invariant_assume__m68__ = ~(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state == 1) || (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd == 64'hD5555555555555FB) ;
+assign invariant_assume__m69__ = ~(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state == 1) || (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc == 8'hff) ;
+assign additional_mapping_control_assume__m70__ = (m1__DOT__TCORE_MODE == 1) ;
+assign additional_mapping_control_assume__m71__ = (m1__DOT__SYS_ADDR == 1) ;
+assign additional_mapping_control_assume__m72__ = (m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf == 1) ;
+assign additional_mapping_control_assume__m73__ = (m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf == 0) ;
+assign additional_mapping_control_assume__m74__ = (m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf == 0) ;
+assign additional_mapping_control_assume__m75__ = (m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf == 0) ;
+assign additional_mapping_control_assume__m76__ = (m1__DOT__core__DOT__tx_b2b_dly == 2) ;
+assign additional_mapping_control_assume__m77__ = (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy == 1) ;
+assign additional_mapping_control_assume__m78__ = (m1__DOT__core__DOT__txfifo_wr_en == 0) ;
+assign additional_mapping_control_assume__m79__ = (m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr <= 16 && m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr >= 0) ;
+assign additional_mapping_control_assume__m80__ = (m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw <= 16 && m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw >= 0) ;
+assign additional_mapping_control_assume__m81__ = (__ILA_SO_TXFIFO_FULL == (__ILA_SO_TXFIFO_WUSED_QWD == 16)) ;
 assign __EDCOND__ = (`false|| ( __CYCLE_CNT__ == 4'd2)) && __STARTED__  ;
 assign __IEND__ = (`false|| ( __CYCLE_CNT__ == 4'd2)) && __STARTED__ && __RESETED__ && (~ __ENDED__) ;
-assign issue_decode__m80__ = (~ __START__) || (__ILA_TX_FUNC_decode_of_WR_PKT_PAYLOAD_10G__) ;
-assign issue_valid__m81__ = (~ __START__) || (__ILA_TX_FUNC_valid__) ;
+assign issue_decode__m82__ = (~ __START__) || (__ILA_TX_FUNC_decode_of_WR_PKT_PAYLOAD_10G__) ;
+assign issue_valid__m83__ = (~ __START__) || (__ILA_TX_FUNC_valid__) ;
 assign __ISSUE__ = 1 ;
-assign post_value_holder__m82__ = (~(__CYCLE_CNT__ == 1) || ((b2b_counter_LastOne_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter))) ;
-assign post_value_holder__m83__ = (~(__CYCLE_CNT__ == 5) || ((b2b_counter_RdByteCnt_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter))) ;
-assign post_value_holder__m84__ = (~(__CYCLE_CNT__ == 1) || ((b2b_counter_WrPktPayload_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter))) ;
-assign post_value_holder__m85__ = (~(__CYCLE_CNT__ == 4) || ((tx_pkt_byte_cnt_RdByteCnt_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg))) ;
-assign post_value_holder__m86__ = (~(__CYCLE_CNT__ == 4) || ((tx_st_encap_RdByteCnt_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state))) ;
-assign post_value_holder__m87__ = (~(__CYCLE_CNT__ == 1) || ((tx_st_encap_WrPktPayload_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state))) ;
-assign post_value_holder__m88__ = (~(__CYCLE_CNT__ == 1) || ((tx_state_LastOne_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state))) ;
-assign post_value_holder__m89__ = (~(__CYCLE_CNT__ == 5) || ((tx_state_RdByteCnt_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state))) ;
-assign post_value_holder__m90__ = (~(__CYCLE_CNT__ == 1) || ((tx_state_WrPktPayload_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state))) ;
-assign post_value_holder__m91__ = (~(__CYCLE_CNT__ == 5) || ((tx_wcnt_RdByteCnt_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt))) ;
-assign post_value_holder__m92__ = (~(__CYCLE_CNT__ == 1) || ((tx_wcnt_WrPktPaylaod_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt))) ;
+assign post_value_holder__m84__ = (~(__CYCLE_CNT__ == 1) || ((b2b_counter_LastOne_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter))) ;
+assign post_value_holder__m85__ = (~(__CYCLE_CNT__ == 5) || ((b2b_counter_RdByteCnt_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter))) ;
+assign post_value_holder__m86__ = (~(__CYCLE_CNT__ == 1) || ((b2b_counter_WrPktPayload_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter))) ;
+assign post_value_holder__m87__ = (~(__CYCLE_CNT__ == 4) || ((tx_pkt_byte_cnt_RdByteCnt_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg))) ;
+assign post_value_holder__m88__ = (~(__CYCLE_CNT__ == 4) || ((tx_st_encap_RdByteCnt_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state))) ;
+assign post_value_holder__m89__ = (~(__CYCLE_CNT__ == 1) || ((tx_st_encap_WrPktPayload_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state))) ;
+assign post_value_holder__m90__ = (~(__CYCLE_CNT__ == 1) || ((tx_state_LastOne_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state))) ;
+assign post_value_holder__m91__ = (~(__CYCLE_CNT__ == 5) || ((tx_state_RdByteCnt_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state))) ;
+assign post_value_holder__m92__ = (~(__CYCLE_CNT__ == 1) || ((tx_state_WrPktPayload_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state))) ;
+assign post_value_holder__m93__ = (~(__CYCLE_CNT__ == 5) || ((tx_wcnt_RdByteCnt_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt))) ;
+assign post_value_holder__m94__ = (~(__CYCLE_CNT__ == 1) || ((tx_wcnt_WrPktPaylaod_end) == (m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt))) ;
 
 TX_FUNC__DOT__WR_PKT_PAYLOAD_10G m0 (
    .MODE_10G(__ILA_I_MODE_10G),
@@ -912,6 +920,10 @@ LMAC_CORE_TOP m1(
     .ipcs_fifo_dout(__VLG_O_ipcs_fifo_dout),
     .m1__DOT__SYS_ADDR(m1__DOT__SYS_ADDR),
     .m1__DOT__TCORE_MODE(m1__DOT__TCORE_MODE),
+    .m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf(m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf),
+    .m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf(m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf),
+    .m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf(m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf),
+    .m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf(m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf),
     .m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter),
     .m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state),
     .m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy),
@@ -949,10 +961,6 @@ LMAC_CORE_TOP m1(
     .m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr),
     .m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw),
     .m1__DOT__core__DOT__txfifo_wr_en(m1__DOT__core__DOT__txfifo_wr_en),
-    .m1__DOT__mode_10G(m1__DOT__mode_10G),
-    .m1__DOT__mode_1G(m1__DOT__mode_1G),
-    .m1__DOT__mode_2p5G(m1__DOT__mode_2p5G),
-    .m1__DOT__mode_5G(m1__DOT__mode_5G),
     .m1__DOT__tx_mac_full(m1__DOT__tx_mac_full),
     .m1__DOT__tx_mac_usedw(m1__DOT__tx_mac_usedw),
     .mac_addr0(__VLG_I_mac_addr0),
@@ -3035,8 +3043,12 @@ module LMAC_CORE_TOP
 		reg_rd_done_out,		// o-1		
 		                    	
 		FMAC_REGDOUT,			// o-32
-		FIFO_OV_IPEND, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw, m1__DOT__core__DOT__txfifo_wr_en, m1__DOT__mode_10G, m1__DOT__mode_1G, m1__DOT__mode_2p5G, m1__DOT__mode_5G, m1__DOT__tx_mac_full, m1__DOT__tx_mac_usedw, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state, m1__DOT__TCORE_MODE, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg, m1__DOT__SYS_ADDR, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt, m1__DOT__core__DOT__tx_b2b_dly, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_);
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_;
+		FIFO_OV_IPEND, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw, m1__DOT__core__DOT__txfifo_wr_en, m1__DOT__tx_mac_full, m1__DOT__tx_mac_usedw, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1, m1__DOT__TCORE_MODE, m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf, m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf, m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf, m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt, m1__DOT__SYS_ADDR, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt, m1__DOT__core__DOT__tx_b2b_dly);
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_;
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_;
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_;
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_;
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_;
@@ -3044,52 +3056,48 @@ module LMAC_CORE_TOP
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_;
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_;
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_;
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_;
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_;
  output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr;
  output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr;
  output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw;
  output  m1__DOT__core__DOT__txfifo_wr_en;
- output  m1__DOT__mode_10G;
- output  m1__DOT__mode_1G;
- output  m1__DOT__mode_2p5G;
- output  m1__DOT__mode_5G;
  output  m1__DOT__tx_mac_full;
  output [12:0] m1__DOT__tx_mac_usedw;
- output [4:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state;
+ output [63:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1;
  output  m1__DOT__TCORE_MODE;
+ output  m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf;
+ output  m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf;
+ output  m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf;
+ output  m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf;
  output [5:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter;
  output [7:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state;
  output  m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy;
  output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in;
  output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt;
- output [63:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1;
+ output [3:0] m1__DOT__SYS_ADDR;
  output [15:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini;
  output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted;
  output [15:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg;
- output [3:0] m1__DOT__SYS_ADDR;
+ output [4:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state;
  output [63:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin;
  output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32;
  output [7:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc;
  output [63:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd;
  output [15:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt;
  output [1:0] m1__DOT__core__DOT__tx_b2b_dly;
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout;
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_;
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_;
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_;
 	
 input		clk;			   	// 156.25 Mhz
 input		xA_clk; 		    // 156.25 Mhz
 input		reset_;
 
-(* keep *)input		mode_10G; 			//i-1, speed modes;
-(* keep *)input		mode_5G;   			//i-1, ;
-(* keep *)input		mode_2p5G;			//i-1, ;
-(* keep *)input		mode_1G;   			//i-1, ;
+input		mode_10G; 			//i-1, speed modes
+input		mode_5G;   			//i-1, 
+input		mode_2p5G;			//i-1, 
+input		mode_1G;   			//i-1, 
 
 (* keep *)input		TCORE_MODE;
 		
@@ -3440,7 +3448,7 @@ tcore_fmac_core #(FMAC_ID) core(
 .FMAC_RX_PKT_CNT9199P_HI	(FMAC_RX_PKT_CNT9199P_HI)
 
 
- ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw) ,.m1__DOT__core__DOT__txfifo_wr_en(m1__DOT__core__DOT__txfifo_wr_en) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt) ,.m1__DOT__core__DOT__tx_b2b_dly(m1__DOT__core__DOT__tx_b2b_dly) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_));
+ ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw) ,.m1__DOT__core__DOT__txfifo_wr_en(m1__DOT__core__DOT__txfifo_wr_en) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf(m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf(m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf(m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf(m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt) ,.m1__DOT__core__DOT__tx_b2b_dly(m1__DOT__core__DOT__tx_b2b_dly));
 
 
 	reg			reg_rd_delay1;
@@ -3613,10 +3621,6 @@ fmac_register_if fmac_register_if(
     
  assign m1__DOT__tx_mac_usedw = tx_mac_usedw;
  assign m1__DOT__tx_mac_full = tx_mac_full;
- assign m1__DOT__mode_5G = mode_5G;
- assign m1__DOT__mode_2p5G = mode_2p5G;
- assign m1__DOT__mode_1G = mode_1G;
- assign m1__DOT__mode_10G = mode_10G;
  assign m1__DOT__TCORE_MODE = TCORE_MODE;
  assign m1__DOT__SYS_ADDR = SYS_ADDR;
 endmodule
@@ -12982,8 +12986,10 @@ FMAC_RX_PKT_CNT9022_LO,
 FMAC_RX_PKT_CNT9022_HI, 
                         
 FMAC_RX_PKT_CNT9199P_LO,
-FMAC_RX_PKT_CNT9199P_HI, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw, m1__DOT__core__DOT__txfifo_wr_en, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt, m1__DOT__core__DOT__tx_b2b_dly, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_);
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_;
+FMAC_RX_PKT_CNT9199P_HI, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw, m1__DOT__core__DOT__txfifo_wr_en, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini, m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf, m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf, m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1, m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt, m1__DOT__core__DOT__tx_b2b_dly);
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_;
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_;
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_;
@@ -12992,8 +12998,8 @@ FMAC_RX_PKT_CNT9199P_HI, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, m1_
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_;
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_;
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_;
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout;
+ output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_;
  output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_;
@@ -13002,24 +13008,26 @@ FMAC_RX_PKT_CNT9199P_HI, m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_, m1_
  output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr;
  output [4:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw;
  output  m1__DOT__core__DOT__txfifo_wr_en;
- output [4:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state;
+ output [15:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini;
+ output  m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf;
+ output  m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf;
+ output  m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf;
+ output [5:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter;
  output [7:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state;
  output  m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy;
  output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in;
  output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt;
  output [63:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1;
- output [15:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini;
+ output  m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf;
  output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted;
  output [15:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg;
- output [5:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter;
+ output [4:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state;
  output [63:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin;
  output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32;
  output [7:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc;
  output [63:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd;
  output [15:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt;
  output [1:0] m1__DOT__core__DOT__tx_b2b_dly;
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout;
- output [63:0] m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_;
 
 parameter	FMAC_ID = 10;
 parameter	RX_FIFO_DEPTH = 4096;
@@ -13302,7 +13310,7 @@ txfifo_1024x64 txfifo(
 	.wrfull(txfifo_full),
 	.rdempty(txfifo_empty),
 	.wrusedw(txfifo_usedw_int)
-	 ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout));
+	 ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_3_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_0_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_10_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_11_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_12_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_13_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_14_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_15_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_1_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_2_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__dataout) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_4_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_5_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_6_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_7_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_8_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__mem_9_) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__rd_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wr_ptr) ,.m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw(m1__DOT__core__DOT__txfifo__DOT__tx_f__DOT__wrusedw));
 	
 	
 	
@@ -13372,7 +13380,7 @@ tx_10G_wrap tx_10G_wrap(
 	.PRE_FMAC_TX_PKT_CNT_10G	(PRE_FMAC_TX_PKT_CNT_10G),	//o-32
 	.PRE_FMAC_TX_BYTE_CNT_10G	(PRE_FMAC_TX_BYTE_CNT_10G),	//o-32
 	.fmac_tx_clr_en				(fmac_tx_clr_en)
-	 ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt));	
+	 ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf(m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf(m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf(m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf(m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt));	
 
 	
 assign	xaui_mode	= (mode_10G_buf);	
@@ -13766,22 +13774,26 @@ module tx_10G_wrap(
     PRE_FMAC_TX_PKT_CNT_10G,   //o-32 output to tcore
     PRE_FMAC_TX_BYTE_CNT_10G,  //o-32 output to tcore
     
-    fmac_tx_clr_en, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt);
- output [5:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter;
- output [7:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state;
- output  m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy;
- output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in;
- output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt;
+    fmac_tx_clr_en, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini, m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state, m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter, m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf, m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf, m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf);
  output [63:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1;
- output [15:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini;
- output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted;
- output [15:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg;
- output [4:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state;
- output [63:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin;
- output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32;
- output [7:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc;
- output [63:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd;
  output [15:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt;
+ output [63:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd;
+ output [7:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc;
+ output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32;
+ output [63:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin;
+ output [4:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state;
+ output [15:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg;
+ output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted;
+ output [15:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini;
+ output  m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf;
+ output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt;
+ output [31:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in;
+ output  m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__tx_rdy;
+ output [7:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__state;
+ output [5:0] m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_encap__DOT__b2b_counter;
+ output  m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf;
+ output  m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf;
+ output  m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf;
     
 	input 			usr_clk;
 	input 			x_clk;
@@ -13823,10 +13835,10 @@ module tx_10G_wrap(
 	wire 			cts_10G;
 	
 	
-	reg	mode_10G_buf ; 
-	reg	mode_1G_buf  ; 
-	reg	mode_5G_buf  ; 
-	reg	mode_2p5G_buf; 
+(* keep *) 	reg	mode_10G_buf ; ;
+(* keep *) 	reg	mode_1G_buf  ; ;
+(* keep *) 	reg	mode_5G_buf  ; ;
+(* keep *) 	reg	mode_2p5G_buf; ;
 
 	
 always @(posedge x_clk) 
@@ -13899,6 +13911,10 @@ tx_xgmii tx_xgmii(
 	 ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ILA_crc_in) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__accumulated_bcnt) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__bdata1) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__ila_wcnt_ini) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__pkt_transmitted) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__rbytes_reg) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__state) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__bdin) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__tx_mac10g_crc32x64__DOT__crc32) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txc) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__txd) ,.m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt(m1__DOT__core__DOT__tx_10G_wrap__DOT__tx_xgmii__DOT__wcnt)); 
 	
 	
+ assign m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_5G_buf = mode_5G_buf;
+ assign m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_2p5G_buf = mode_2p5G_buf;
+ assign m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_1G_buf = mode_1G_buf;
+ assign m1__DOT__core__DOT__tx_10G_wrap__DOT__mode_10G_buf = mode_10G_buf;
 endmodule
 //
 // Copyright (C) 2018 LeWiz Communications, Inc. 
