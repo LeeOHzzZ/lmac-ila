@@ -174,13 +174,14 @@ namespace ilang {
       // read FIFO
       // For the wr_ptr, rd_ptr, fifo_output, we don't care about the value of them.
       // But the fifo_wused is required to write the refinement relation.
-      instr.SetUpdate(fifo_output, Load(fifo, fifo_rd_ptr));// 1 clk
+      auto fifo_data_out = Load(fifo, fifo_rd_ptr);
+      instr.SetUpdate(fifo_output, fifo_data_out);// 1 clk
       instr.SetUpdate(fifo_rd_ptr, Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1));//1 clk
       instr.SetUpdate(fifo_wused, fifo_wused - 1);// 1 clk
 
       // states update
       // Updating the qword count in bytes
-      instr.SetUpdate(byte_cnt, Extract(fifo_output, 15, 0)); // 4 clk
+      instr.SetUpdate(byte_cnt, Extract(fifo_data_out, 15, 0)); // 4 clk
 
       auto bcnt_h = Extract(byte_cnt, 15, 3);
       auto bcnt_l = Extract(byte_cnt, 2, 0);
@@ -198,7 +199,7 @@ namespace ilang {
 
       // I put the B2B CNTR here 
       instr.SetUpdate(b2b_cntr, TX_B2B_CNTR_INITIAL); // 5 clk
-
+            
       instr.SetUpdate(txd, Concat(BvConst(0xD555, 16), Concat(BvConst(0x5555, 16), BvConst(0x555555FB,32)))); // 6 clk
       instr.SetUpdate(txc, BvConst(0x01, XGMII_COUT_REG_BWID)); // 6 clk 
 
@@ -251,7 +252,8 @@ namespace ilang {
       // Set Update
       // when wcnt < 0, we have taken all the data. No need to fetch from the fifo and update the crc output.
       // Read data from FIFO
-      instr.SetUpdate(fifo_output, Ite((wcnt > 0), Load(fifo, fifo_rd_ptr), fifo_output));
+      auto fifo_data_out = Load(fifo, fifo_rd_ptr);
+      instr.SetUpdate(fifo_output, Ite((wcnt > 0), fifo_data_out, fifo_output));
       instr.SetUpdate(fifo_rd_ptr, Ite((wcnt > 0), Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1), fifo_rd_ptr));
       instr.SetUpdate(fifo_wused, Ite((wcnt > 0), fifo_wused - 1, fifo_wused));
 
@@ -262,47 +264,49 @@ namespace ilang {
       auto rb = Extract(byte_cnt, 2, 0);
       
       // CRC code update
-      instr.SetUpdate(crc_dat_in, Ite(fq, Ite((rb == 0x0), fifo_output,
-                                  Ite((rb == 0x1), Concat(Extract(fifo_output,  7, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 24))),
-                                  Ite((rb == 0x2), Concat(Extract(fifo_output, 15, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 16))),
-                                  Ite((rb == 0x3), Concat(Extract(fifo_output, 23, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 8))),
-                                  Ite((rb == 0x4), Concat(Extract(fifo_output, 31, 0), BvConst(0x0, 32)),
-                                  Ite((rb == 0x5), Concat(Extract(fifo_output, 39, 0), BvConst(0x0, 24)),
-                                  Ite((rb == 0x6), Concat(Extract(fifo_output, 47, 0), BvConst(0x0, 16)),
-                                                   Concat(Extract(fifo_output, 55, 0), BvConst(0x0, 8))))))))),
+      auto crc_data_input = Ite(fq, Ite((rb == 0x0), fifo_data_out,
+                                  Ite((rb == 0x1), Concat(Extract(fifo_data_out,  7, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 24))),
+                                  Ite((rb == 0x2), Concat(Extract(fifo_data_out, 15, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 16))),
+                                  Ite((rb == 0x3), Concat(Extract(fifo_data_out, 23, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 8))),
+                                  Ite((rb == 0x4), Concat(Extract(fifo_data_out, 31, 0), BvConst(0x0, 32)),
+                                  Ite((rb == 0x5), Concat(Extract(fifo_data_out, 39, 0), BvConst(0x0, 24)),
+                                  Ite((rb == 0x6), Concat(Extract(fifo_data_out, 47, 0), BvConst(0x0, 16)),
+                                                   Concat(Extract(fifo_data_out, 55, 0), BvConst(0x0, 8))))))))),
 
-                                  Ite((rb == 0x0), fifo_output,
-                                  Ite((rb == 0x1), Concat(Extract(fifo_output,  7, 0), Extract(tx_buf,  63, 8)),
-                                  Ite((rb == 0x2), Concat(Extract(fifo_output, 15, 0), Extract(tx_buf,  63, 16)),
-                                  Ite((rb == 0x3), Concat(Extract(fifo_output, 23, 0), Extract(tx_buf,  63, 24)),
-                                  Ite((rb == 0x4), Concat(Extract(fifo_output, 31, 0), Extract(tx_buf,  63, 32)),
-                                  Ite((rb == 0x5), Concat(Extract(fifo_output, 39, 0), Extract(tx_buf,  63, 40)),
-                                  Ite((rb == 0x6), Concat(Extract(fifo_output, 47, 0), Extract(tx_buf,  63, 48)),
-                                                   Concat(Extract(fifo_output, 55, 0), Extract(tx_buf,  63, 56))))))))))
-                      );
+                                  Ite((rb == 0x0), fifo_data_out,
+                                  Ite((rb == 0x1), Concat(Extract(fifo_data_out,  7, 0), Extract(tx_buf,  63, 8)),
+                                  Ite((rb == 0x2), Concat(Extract(fifo_data_out, 15, 0), Extract(tx_buf,  63, 16)),
+                                  Ite((rb == 0x3), Concat(Extract(fifo_data_out, 23, 0), Extract(tx_buf,  63, 24)),
+                                  Ite((rb == 0x4), Concat(Extract(fifo_data_out, 31, 0), Extract(tx_buf,  63, 32)),
+                                  Ite((rb == 0x5), Concat(Extract(fifo_data_out, 39, 0), Extract(tx_buf,  63, 40)),
+                                  Ite((rb == 0x6), Concat(Extract(fifo_data_out, 47, 0), Extract(tx_buf,  63, 48)),
+                                                   Concat(Extract(fifo_data_out, 55, 0), Extract(tx_buf,  63, 56))))))))));
+
+      instr.SetUpdate(crc_dat_in, crc_data_input);
       
       // This buffer should be placed after the CRC update.
-      instr.SetUpdate(tx_buf, fifo_output);
+      instr.SetUpdate(tx_buf, fifo_data_out);
 
       // CRC generation, using half_byte algorithm. reference: https://create.stephan-brumme.com/crc32/#half-byte
       auto crc_g = cm.state(CRC_IN);
-      auto data = cm.state(CRC_DAT_IN);
       // The current stores the byte that generator takes. 
       
       for (auto len = 0; len < 8; len++) {
-        auto current = Extract(data, (8*len + 7), 8*len);
+        auto current = Extract(crc_data_input, (8*len + 7), 8*len);
         crc_g = lut_read((Extract(crc_g, 7, 0) ^ current) & BvConst(0x0F, 8)) ^ (crc_g >> 4);
         crc_g = lut_read((Extract(crc_g, 7, 0) ^ (current >> 4)) & BvConst(0x0F, 8)) ^ (crc_g >> 4);
       }
 
       // update CRC code input for the generator;
-      instr.SetUpdate(crc_in, Ite((wcnt > 0), crc_g, crc_in));
+      auto crc_in_temp = Ite((wcnt > 0), crc_g, crc_in);
+      instr.SetUpdate(crc_in, crc_in_temp);
       // update the CRC output. Needs transformation.
-      auto crc_code = ~(((crc_in >> 24) & BvConst(0xFF, 32)) | ((crc_in >> 8) & BvConst(0xFF00, 32)) | ((crc_in << 8) & BvConst(0xFF0000, 32)) | ((crc_in << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16))));
+      auto crc_code = ~(((crc_in_temp >> 24) & BvConst(0xFF, 32)) | ((crc_in_temp >> 8) & BvConst(0xFF00, 32)) | ((crc_in_temp << 8) & BvConst(0xFF0000, 32)) | ((crc_in_temp << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16))));
       instr.SetUpdate(cm.state(CRC), Ite((wcnt > 0), crc_code, cm.state(CRC)));
 
       // when output the crc code, we need to change the endian of the code.
-      auto crc_output = ((crc >> 24) & BvConst(0xFF, 32)) | ((crc >> 8) & BvConst(0xFF00, 32)) | ((crc << 8) & BvConst(0xFF0000, 32)) | ((crc << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16)));
+      auto crc_temp = Ite((wcnt > 0), crc_code, cm.state(CRC));
+      auto crc_output = ((crc_temp >> 24) & BvConst(0xFF, 32)) | ((crc_temp >> 8) & BvConst(0xFF00, 32)) | ((crc_temp << 8) & BvConst(0xFF0000, 32)) | ((crc_temp << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16)));
 
       // difference between crc_code and crc_output is that crc_code is the value in the crc register, however, when
       // outputing the value to txd, we need to change the endian. crc_output is for txd.
