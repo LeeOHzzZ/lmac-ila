@@ -5,7 +5,7 @@
   },
 
   "state mapping": { 
-    "TXFIFO_FULL"               : "m1.tx_mac_full",
+    "TXFIFO_FULL"               : [["__START__", "m1.core.txfifo.tx_f.txfifo_full"], ["__IEND__", "#txfifo_full_end#"]],
     "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw",
     "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem",
     "TXFIFO_BUFF_WR_PTR"        : "m1.core.txfifo.tx_f.wr_ptr",
@@ -78,6 +78,16 @@
 
     "FMAC_REGDOUT"      : "**KEEP**",
     "FIFO_OV_IPEND"     : "**KEEP**"
+  },
+
+
+  "post-value-holder" : {
+
+    "txfifo_full_end": {
+      "cond" : "__START__ == 1",
+      "val"  : "m1.core.txfifo.tx_f.txfifo_full",
+      "width": 1
+    }
   },
 
   "mapping control" : [

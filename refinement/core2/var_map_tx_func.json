@@ -5,7 +5,7 @@
   },
 
   "state mapping": { 
-    "TXFIFO_FULL"               : "m1.core.txfifo.tx_f.txfifo_full",
+    "TXFIFO_FULL"               : [["__START__", "m1.core.txfifo.tx_f.txfifo_full"], ["__IEND__", "#txfifo_full_end#"]],
 
     "TXFIFO_BUFF"               : [["__START__", "m1.core.txfifo.tx_f.mem"], 
                                     ["__IEND__ && m0.TX_FUNC_INSTR == 0", "m1.core.txfifo.tx_f.mem"], 
@@ -53,7 +53,7 @@
     "CRC_IN"                    : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in"], 
                                     ["__IEND__ && m0.TX_FUNC_INSTR == 1", "#crc_in_RdByteCnt_end#"],
                                     ["__IEND__ && m0.TX_FUNC_INSTR == 2", "#crc_in_WrPktPaylaod_end#"]],
-                                    
+
     "CRC_DAT_IN"                : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.bdin",
     "TX_WCNT_INI"               : "m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini",
     "TX_BUF"                    : "m1.core.tx_10G_wrap.tx_xgmii.bdata1"
@@ -69,6 +69,12 @@
 
 
   "post-value-holder" : {
+
+    "txfifo_full_end": {
+      "cond" : "__START__ == 1",
+      "val"  : "m1.core.txfifo.tx_f.txfifo_full",
+      "width": 1
+    },
 
     "txfifo_wused_end": {
       "cond" : "__CYCLE_CNT__ == 1",
