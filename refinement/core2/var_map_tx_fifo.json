@@ -6,6 +6,7 @@
 
   "state mapping": { 
     "TXFIFO_FULL"               : [["__START__", "m1.core.txfifo_full"], ["__IEND__", "#txfifo_full_end#"]],
+    
     "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw",
 
     "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem", 
@@ -86,13 +87,6 @@
   "post-value-holder" : {
 
     "txfifo_full_end": {
-      "cond" : "__START__ == 1",
-      "val"  : "m1.core.txfifo_full",
-      "width": 1
-    },
-
-
-    "txfifo_full_end_2": {
       "cond" : "__START__ == 1",
       "val"  : "m1.core.txfifo_full",
       "width": 1
