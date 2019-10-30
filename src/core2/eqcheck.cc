@@ -42,6 +42,8 @@ VerilogVerificationTargetGenerator::vtg_config_t SetVerifGenConfig() {
 //  config.PortDeclStyle = VlgVerifTgtGenBase::vtg_config_t::NEW;
   config.PortDeclStyle = VlgVerifTgtGenBase::vtg_config_t::AUTO;
   config.CosaGenJgTesterScript = true;
+  config.CosaAddKeep = false;
+  //config.CosaDotReferenceNotify = VlgVerifTgtGenBase::vtg_config_t::CosaDotReferenceNotify_t::NOTIFY_WARNING;
   // config.CosaOtherSolverOptions = "--blackbox-array";
   // config.ForceInstCheckReset = true;
 
