@@ -7,7 +7,13 @@
   "state mapping": { 
     "TXFIFO_FULL"               : [["__START__", "m1.core.txfifo_full"], ["__IEND__", "#txfifo_full_end#"]],
     "TXFIFO_WUSED_QWD"          : "m1.tx_mac_usedw",
-    "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem",
+    
+    "TXFIFO_BUFF"               : [["__START__", "m1.core.txfifo.tx_f.mem"], 
+                                    ["__IEND__ && (m0.TX_FUNC_INSTR == 0)", "m1.core.txfifo.tx_f.mem"], 
+                                    ["__IEND__ && (m0.TX_FUNC_INSTR == 1)", "m1.core.txfifo.tx_f.ILA_mem_6clk"], 
+                                    ["__IEND__ && (m0.TX_FUNC_INSTR == 2)", "m1.core.txfifo.tx_f.ILA_mem_2clk"], 
+                                    ["__IEND__ && (m0.TX_FUNC_INSTR == 3)", "m1.core.txfifo.tx_f.ILA_mem_2clk"]],
+
     "TXFIFO_BUFF_WR_PTR"        : "m1.core.txfifo.tx_f.wr_ptr",
     "TXFIFO_BUFF_RD_PTR"        : "m1.core.txfifo.tx_f.rd_ptr",
     "TXFIFO_RD_OUTPUT"          : "m1.core.txfifo.tx_f.dataout"
