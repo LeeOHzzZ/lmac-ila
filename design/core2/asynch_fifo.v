@@ -175,15 +175,16 @@ assign rdfull  = wrfull ? 1'b1 : 1'b0;
 
 	end
 
+	integer i;
 	always @(posedge wrclk)
 	begin
-		for (int i = 0; i < DEPTH; i = i+1)
+		for (i = 0; i < DEPTH; i = i+1)
 			begin
-				ILA_mem_2clk[i] <= mem[i]
-				ILA_mem_3clk[i] <= ILA_mem_2clk[i]
-				ILA_mem_4clk[i] <= ILA_mem_3clk[i]
-				ILA_mem_5clk[i] <= ILA_mem_4clk[i]
-				ILA_mem_6clk[i] <= ILA_mem_5clk[i]
+				ILA_mem_2clk[i] <= mem[i];
+				ILA_mem_3clk[i] <= ILA_mem_2clk[i];
+				ILA_mem_4clk[i] <= ILA_mem_3clk[i];
+				ILA_mem_5clk[i] <= ILA_mem_4clk[i];
+				ILA_mem_6clk[i] <= ILA_mem_5clk[i];
 			end
 	end
 
