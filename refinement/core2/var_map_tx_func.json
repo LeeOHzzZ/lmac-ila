@@ -114,7 +114,7 @@
     },
 
     "tx_wcnt_RdByteCnt_end": {
-      "cond" : "__CYCLE_CNT__ == 5",
+      "cond" : "__CYCLE_CNT__ == 3",
       "val"  : "m1.core.tx_10G_wrap.tx_xgmii.wcnt",
       "width": 16
     },
@@ -132,13 +132,13 @@
     },
 
     "crc_RdByteCnt_end": {
-      "cond" : "__CYCLE_CNT__ == 3",
+      "cond" : "__CYCLE_CNT__ == 1",
       "val"  : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32",
       "width": 32
     },
 
     "crc_in_RdByteCnt_end": {
-      "cond" : "__CYCLE_CNT__ == 3",
+      "cond" : "__CYCLE_CNT__ == 1",
       "val"  : "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in",
       "width": 32
     },
@@ -265,7 +265,8 @@
     "(m1.core.tx_10G_wrap.mode_1G_buf == 0)",
     "(m1.core.tx_b2b_dly == 2)",
     "(m1.core.tx_10G_wrap.tx_encap.tx_rdy == 1)",
-    "(m1.core.txfifo_wr_en == 0)",
+    "(m1.core.txfifo.tx_f.wren == 0)",
+    "(m1.core.txfifo.tx_f.wrclk == 0)",
     "(m1.core.txfifo.tx_f.wr_ptr <= 16 && m1.core.txfifo.tx_f.wr_ptr >= 0)",
     "(m1.core.txfifo.tx_f.wrusedw <= 16 && m1.core.txfifo.tx_f.wrusedw >= 0)"
   ],
