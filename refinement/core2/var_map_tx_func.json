@@ -13,7 +13,7 @@
                                     ["__IEND__ && (TX_FUNC_INSTR == 2)", "m1.core.txfifo.tx_f.ILA_mem_2clk"], 
                                     ["__IEND__ && (TX_FUNC_INSTR == 3)", "m1.core.txfifo.tx_f.ILA_mem_2clk"]],
 
-    "TXFIFO_WUSED_QWD"          : [["__START__", "m1.core.txfifo_usedw_int"], ["__IEND__", "#txfifo_wused_end#"]],
+    "TXFIFO_WUSED_QWD"          : [["__START__", "m1.core.txfifo_usedw"], ["__IEND__", "#txfifo_wused_end#"]],
     "TXFIFO_BUFF_WR_PTR"        : [["__START__", "m1.core.txfifo.tx_f.wr_ptr"], ["__IEND__", "#txfifo_buff_wr_ptr_end#"]],
     "TXFIFO_BUFF_RD_PTR"        : [["__START__", "m1.core.txfifo.tx_f.rd_ptr"], ["__IEND__", "#txfifo_buff_rd_ptr_end#"]],
     "TXFIFO_RD_OUTPUT"          : [["__START__", "m1.core.txfifo.tx_f.dataout"], ["__IEND__", "#txfifo_buff_rd_output_end#"]],
@@ -78,7 +78,7 @@
 
     "txfifo_wused_end": {
       "cond" : "__CYCLE_CNT__ == 1",
-      "val"  : "m1.core.txfifo_usedw_int",
+      "val"  : "m1.core.txfifo_usedw",
       "width": 13
     },
 
