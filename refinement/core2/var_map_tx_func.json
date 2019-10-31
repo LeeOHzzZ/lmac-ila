@@ -33,6 +33,8 @@
                                     ["__IEND__ && (TX_FUNC_INSTR == 1)", "#b2b_counter_RdByteCnt_end#"],
                                     ["__IEND__ && (TX_FUNC_INSTR == 2)", "#b2b_counter_WrPktPayload_end#"],
                                     ["__IEND__ && (TX_FUNC_INSTR == 3)", "#b2b_counter_LastOne_end#"]],
+    
+    "TX_B2B_OK"                 : "m1.core.tx_10G_wrap.tx_encap.b2b_ok",
 
     "TX_PACKET_BYTE_CNT"        : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg"], ["__IEND__", "#tx_pkt_byte_cnt_RdByteCnt_end#"]],
 

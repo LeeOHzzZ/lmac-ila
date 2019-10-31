@@ -92,6 +92,9 @@ namespace ilang {
 #define TX_B2B_CNTR_BWID 6
 #define TX_B2B_CNTR_INITIAL BvConst(0x5, TX_B2B_CNTR_BWID)
 
+#define TX_B2B_OK "TX_B2B_OK"
+#define TX_B2B_OK_BWID 1
+
 // TX word counter
 #define TX_WCNT "TX_WCNT"
 #define TX_WCNT_BWID 16

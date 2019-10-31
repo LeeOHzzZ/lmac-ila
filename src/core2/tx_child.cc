@@ -142,12 +142,15 @@ namespace ilang {
       auto mode_10G = (cm.input(MODE_10G) == 1);
       auto state_idle = (cm.state(TX_STATE) == TX_STATE_IDLE);
       auto state_encap_idle = (cm.state(TX_STATE_ENCAP) == TX_STATE_ENCAP_IDLE);
-      auto cntr_non_zero = (cm.state(TX_B2B_CNTR) > 0);
+      auto cntr_non_neg = (cm.state(TX_B2B_CNTR) >= 0);
 
-      instr.SetDecode(mode_10G & state_idle & state_encap_idle & cntr_non_zero);
+      instr.SetDecode(mode_10G & state_idle & state_encap_idle & cntr_non_neg);
 
       // State Update
-      instr.SetUpdate(b2b_cntr, b2b_cntr - 1); // 1 clk
+      auto b2b_ok = m.state(TX_B2B_OK);
+
+      instr.SetUpdate(b2b_cntr, Ite((b2b_cntr == 0), b2b_cntr, b2b_cntr - 1); // 1 clk
+      instr.SetUpdate(b2b_ok, Ite((b2b_cntr == 0), BvConst(0x1, 1), BvConst(0x0, 1)));
       instr.SetUpdate(txd, Concat(Concat(BvConst(0xD555,16), BvConst(0x5555, 16)), BvConst(0x555555FB, 32))); // 1 clk
       instr.SetUpdate(txc, BvConst(0xFF, XGMII_COUT_REG_BWID)); // 1 clk
 
@@ -199,6 +202,7 @@ namespace ilang {
 
       // I put the B2B CNTR here 
       instr.SetUpdate(b2b_cntr, TX_B2B_CNTR_INITIAL); // 5 clk
+      instr.SetUpdate(m.state(TX_B2B_OK), BvConst(0x0, 1)); // This is one clock behind b2b_cntr set to zero. If the delay changes, we need to modify this.
             
       instr.SetUpdate(txd, Concat(BvConst(0xD555, 16), Concat(BvConst(0x5555, 16), BvConst(0x555555FB,32)))); // 6 clk
       instr.SetUpdate(txc, BvConst(0x01, XGMII_COUT_REG_BWID)); // 6 clk 

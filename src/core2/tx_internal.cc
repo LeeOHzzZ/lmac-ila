@@ -52,6 +52,8 @@ namespace ilang {
     NewState(cm, TX_STATE_ENCAP, TX_STATE_ENCAP_BWID);
     // TX B2B counter
     NewState(cm, TX_B2B_CNTR, TX_B2B_CNTR_BWID);
+    // TX B2B ok
+    NewState(cm, TX_B2B_OK, TX_B2B_OK_BWID);
     // State holding the packet byte count, which is in the first Qword of the packet.
     NewState(cm, TX_PACKET_BYTE_CNT, TX_PACKET_BYTE_CNT_BWID);
     // State recording the frames needed to transmit the whole package in bytes. reg wcnt in xgmii
