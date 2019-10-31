@@ -13,12 +13,25 @@
                                     ["__IEND__ && (TX_FUNC_INSTR == 2)", "m1.core.txfifo.tx_f.ILA_mem_2clk"], 
                                     ["__IEND__ && (TX_FUNC_INSTR == 3)", "m1.core.txfifo.tx_f.ILA_mem_2clk"]],
 
-    "TXFIFO_WUSED_QWD"          : [["__START__", "m1.core.txfifo_usedw"], ["__IEND__", "#txfifo_wused_end#"]],
-    "TXFIFO_BUFF_WR_PTR"        : [["__START__", "m1.core.txfifo.tx_f.wr_ptr"], ["__IEND__", "#txfifo_buff_wr_ptr_end#"]],
-    "TXFIFO_BUFF_RD_PTR"        : [["__START__", "m1.core.txfifo.tx_f.rd_ptr"], ["__IEND__", "#txfifo_buff_rd_ptr_end#"]],
+    "TXFIFO_WUSED_QWD"          : [["__START__", "m1.core.txfifo_usedw"], 
+                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "#txfifo_wused_RdByte_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#txfifo_wused_normal_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 3)", "#txfifo_wused_normal_end#"]],
+
+    "TXFIFO_BUFF_WR_PTR"        : [["__START__", "m1.core.txfifo.tx_f.wr_ptr"], 
+                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "#txfifo_buff_wr_ptr_RdByteCnt_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#txfifo_buff_wr_ptr_normal_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 3)", "#txfifo_buff_wr_ptr_normal_end#"]],
+
+    "TXFIFO_BUFF_RD_PTR"        : [["__START__", "m1.core.txfifo.tx_f.rd_ptr"], 
+                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "#txfifo_buff_rd_ptr_RdByteCnt_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#txfifo_buff_rd_ptr_normal_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 3)", "#txfifo_buff_rd_ptr_normal_end#"]],
+
     "TXFIFO_RD_OUTPUT"          : [["__START__", "m1.core.txfifo.tx_f.dataout"], 
                                     ["__IEND__ && (TX_FUNC_INSTR == 1)", "#txfifo_buff_rd_output_RdByteCnt_end#"],
-                                    ["__IEND__ && (TX_FUNC_INSTR != 1)", "#txfifo_buff_rd_output_RdByteCnt_end#"]],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#txfifo_buff_rd_output_normal_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 3)", "#txfifo_buff_rd_output_normal_end#"]],
 
 
     "TX_STATE"                  : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.state"], 
@@ -80,19 +93,37 @@
       "width": 1
     },
 
-    "txfifo_wused_end": {
+    "txfifo_wused_RdByte_end": {
+      "cond" : "__CYCLE_CNT__ == 2",
+      "val"  : "m1.core.txfifo_usedw",
+      "width": 13
+    },
+
+    "txfifo_wused_normal_end": {
       "cond" : "__CYCLE_CNT__ == 1",
       "val"  : "m1.core.txfifo_usedw",
       "width": 13
     },
 
-    "txfifo_buff_wr_ptr_end": {
+    "txfifo_buff_wr_ptr_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 2",
+      "val"  : "m1.core.txfifo.tx_f.wr_ptr",
+      "width": 5
+    },
+
+    "txfifo_buff_wr_ptr_normal_end": {
       "cond" : "__CYCLE_CNT__ == 1",
       "val"  : "m1.core.txfifo.tx_f.wr_ptr",
       "width": 5
     },
 
-    "txfifo_buff_rd_ptr_end": {
+    "txfifo_buff_rd_ptr_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 2",
+      "val"  : "m1.core.txfifo.tx_f.rd_ptr",
+      "width": 5
+    },
+
+    "txfifo_buff_rd_ptr_normal_end": {
       "cond" : "__CYCLE_CNT__ == 1",
       "val"  : "m1.core.txfifo.tx_f.rd_ptr",
       "width": 5
