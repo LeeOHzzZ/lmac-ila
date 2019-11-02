@@ -125,6 +125,10 @@ namespace ilang {
 #define TXFIFO_RD_OUTPUT "TXFIFO_RD_OUTPUT"
 #define TXFIFO_RD_OUTPUT_BWID TX_DATA_BWID
 
+// Read Enable signal of TX FIFO
+#define TXFIFO_RD_EN "TXFIFO_RD_EN"
+#define TXFIFO_RD_EN_BWID 1
+
 // register for CRC, store the 4byte CRC
 #define CRC "CRC"
 #define CRC_BWID 32

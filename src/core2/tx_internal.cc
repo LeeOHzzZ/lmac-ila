@@ -35,6 +35,9 @@ namespace ilang {
     // read output
     NewState(m, TXFIFO_RD_OUTPUT, TXFIFO_RD_OUTPUT_BWID);
 
+    // read enable signal
+    NewState(m, TXFIFO_RD_EN, TXFIFO_RD_EN_BWID);
+
     return;
   }
   
