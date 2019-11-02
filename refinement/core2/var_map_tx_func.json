@@ -173,13 +173,13 @@
     },
 
     "crc_RdByteCnt_end": {
-      "cond" : "__CYCLE_CNT__ == 1",
+      "cond" : "__CYCLE_CNT__ == 3",
       "val"  : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32",
       "width": 32
     },
 
     "crc_in_RdByteCnt_end": {
-      "cond" : "__CYCLE_CNT__ == 1",
+      "cond" : "__CYCLE_CNT__ == 3",
       "val"  : "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in",
       "width": 32
     },

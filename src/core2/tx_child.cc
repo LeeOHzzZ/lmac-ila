@@ -177,7 +177,7 @@ namespace ilang {
       // But the fifo_wused is required to write the refinement relation.
       auto fifo_data_out = Load(fifo, fifo_rd_ptr);
       instr.SetUpdate(fifo_output, fifo_data_out);// 1 clk
-      instr.SetUpdate(fifo_rd_ptr, Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1));//1 clk
+      instr.SetUpdate(fifo_rd_ptr, Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1));//1 clk
       instr.SetUpdate(fifo_wused, fifo_wused - 1);// 1 clk
 
       // states update
@@ -256,7 +256,7 @@ namespace ilang {
       // Read data from FIFO
       auto fifo_data_out = Load(fifo, fifo_rd_ptr);
       instr.SetUpdate(fifo_output, Ite((wcnt > 0), fifo_data_out, fifo_output));
-      instr.SetUpdate(fifo_rd_ptr, Ite((wcnt > 0), Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1), fifo_rd_ptr));
+      instr.SetUpdate(fifo_rd_ptr, Ite((wcnt > 0), Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1), fifo_rd_ptr));
       instr.SetUpdate(fifo_wused, Ite((wcnt > 0), fifo_wused - 1, fifo_wused));
 
       // CRC code Update
