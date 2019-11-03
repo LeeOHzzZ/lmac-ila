@@ -147,6 +147,7 @@ namespace ilang {
       instr.SetDecode(mode_10G & state_idle & state_encap_idle & cntr_non_neg);
 
       // State Update
+      instr.SetUpdate(m.state(TXFIFO_RD_EN), BvConst(0x0, 1));
       instr.SetUpdate(b2b_cntr, Ite((b2b_cntr == 0), b2b_cntr, b2b_cntr - 1)); // 1 clk
       instr.SetUpdate(cm.state(TX_B2B_OK), Ite((b2b_cntr == 0), BvConst(0x1, 1), BvConst(0x0, 1)));
       instr.SetUpdate(txd, Concat(Concat(BvConst(0xD555,16), BvConst(0x5555, 16)), BvConst(0x555555FB, 32))); // 1 clk
@@ -168,6 +169,7 @@ namespace ilang {
       auto state_idle = (cm.state(TX_STATE) == TX_STATE_IDLE);
       auto state_encap_idle = (cm.state(TX_STATE_ENCAP) == TX_STATE_ENCAP_IDLE);
       auto b2b_ok = (b2b_cntr == 0);
+      auto fifo_rd_en = m.state(TXFIFO_RD_EN);
       
       instr.SetDecode(mode_10G & b2b_ok & state_idle & state_encap_idle & fifo_non_empty);
 
@@ -175,10 +177,12 @@ namespace ilang {
       // read FIFO
       // For the wr_ptr, rd_ptr, fifo_output, we don't care about the value of them.
       // But the fifo_wused is required to write the refinement relation.
-      auto fifo_data_out = Load(fifo, fifo_rd_ptr);
+      auto actual_rd_ptr = Ite((fifo_rd_en == 0), fifo_rd_ptr, Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr+1));
+      auto fifo_data_out = Load(fifo, Ite((actual_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0, TXFIFO_BUFF_RD_PTR_BWID), actual_rd_ptr));
       instr.SetUpdate(fifo_output, fifo_data_out);// 1 clk
-      instr.SetUpdate(fifo_rd_ptr, Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1));//1 clk
-      instr.SetUpdate(fifo_wused, fifo_wused - 1);// 1 clk
+      instr.SetUpdate(fifo_rd_ptr, Ite((actual_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), actual_rd_ptr + 1));//1 clk
+      instr.SetUpdate(fifo_wused, Ite((fifo_rd_en == 0), fifo_wused - 1, fifo_wused - 2);// 1 clk
+      // Do we need to consider when fifo only has 1 left but with the wused - 2? (However, this should not happen during the Read Stage)? Maybe a bug.
 
       // states update
       // Updating the qword count in bytes
