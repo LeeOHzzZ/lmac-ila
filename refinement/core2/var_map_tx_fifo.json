@@ -24,7 +24,7 @@
 
   "interface mapping": {
     "clk"               : "**CLOCK**",
-    "xA_clk"            : "**CLOCK**",
+    "xA_clk"            : "**KEEP**",
     "reset_"            : "**NRESET**", 
 
     "mode_10G"          : "MODE_10G",
@@ -94,6 +94,7 @@
   },
 
   "mapping control" : [
+    "(m1.core.x_clk == 0)",
     "(m1.TCORE_MODE == 1)",
     "(m1.SYS_ADDR == 1)",
     "(m1.mode_10G == 1)",

@@ -7,6 +7,9 @@
   "state mapping": { 
     "TXFIFO_FULL"               : [["__START__", "m1.core.txfifo.wrfull"], ["__IEND__", "#txfifo_full_end#"]],
 
+    "TXFIFO_RD_EN"              : [["__START__", "m1.core.txfifo.rdreq"], 
+                                    ["__IEND__", "#txfifo_rd_en_end#"]],
+
     "TXFIFO_BUFF"               : [["__START__", "m1.core.txfifo.tx_f.mem"], 
                                     ["__IEND__ && (TX_FUNC_INSTR == 0)", "m1.core.txfifo.tx_f.mem"], 
                                     ["__IEND__ && (TX_FUNC_INSTR == 1)", "m1.core.txfifo.tx_f.ILA_mem_6clk"], 
@@ -90,6 +93,12 @@
     "txfifo_full_end": {
       "cond" : "__START__ == 1",
       "val"  : "m1.core.txfifo.tx_f.wrfull",
+      "width": 1
+    },
+
+    "txfifo_rd_en_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.txfifo.rdreq",
       "width": 1
     },
 
@@ -237,7 +246,7 @@
   },
 
   "interface mapping": {
-    "clk"               : "**CLOCK**",
+    "clk"               : "**KEEP**",
     "xA_clk"            : "**CLOCK**",
     "reset_"            : "RESETN", 
 
@@ -298,6 +307,7 @@
   },
 
   "mapping control" : [
+    "(m1.core.usr_clk == 0)",
     "(m1.TCORE_MODE == 1)",
     "(m1.SYS_ADDR == 1)",
     "(m1.core.tx_10G_wrap.mode_10G_buf == 1)",

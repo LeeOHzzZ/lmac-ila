@@ -181,7 +181,7 @@ namespace ilang {
       auto fifo_data_out = Load(fifo, Ite((actual_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0, TXFIFO_BUFF_RD_PTR_BWID), actual_rd_ptr));
       instr.SetUpdate(fifo_output, fifo_data_out);// 1 clk
       instr.SetUpdate(fifo_rd_ptr, Ite((actual_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), actual_rd_ptr + 1));//1 clk
-      instr.SetUpdate(fifo_wused, Ite((fifo_rd_en == 0), fifo_wused - 1, fifo_wused - 2);// 1 clk
+      instr.SetUpdate(fifo_wused, Ite((fifo_rd_en == 0), fifo_wused - 1, fifo_wused - 2));// 1 clk
       // Do we need to consider when fifo only has 1 left but with the wused - 2? (However, this should not happen during the Read Stage)? Maybe a bug.
 
       // states update
