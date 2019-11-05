@@ -143,8 +143,9 @@ namespace ilang {
       auto state_idle = (cm.state(TX_STATE) == TX_STATE_IDLE);
       auto state_encap_idle = (cm.state(TX_STATE_ENCAP) == TX_STATE_ENCAP_IDLE);
       auto cntr_non_neg = (cm.state(TX_B2B_CNTR) >= 0);
+      auto b2b_no_ok = (cm.state(TX_B2B_OK) == 0);
 
-      instr.SetDecode(mode_10G & state_idle & state_encap_idle & cntr_non_neg);
+      instr.SetDecode(mode_10G & state_idle & state_encap_idle & cntr_non_neg & b2b_no_ok);
 
       // State Update
       instr.SetUpdate(m.state(TXFIFO_RD_EN), BvConst(0x0, 1));
@@ -168,7 +169,7 @@ namespace ilang {
       auto mode_10G = (cm.input(MODE_10G) == 1);
       auto state_idle = (cm.state(TX_STATE) == TX_STATE_IDLE);
       auto state_encap_idle = (cm.state(TX_STATE_ENCAP) == TX_STATE_ENCAP_IDLE);
-      auto b2b_ok = (b2b_cntr == 0);
+      auto b2b_ok = (cm.state(TX_B2B_OK) == 1);
       auto fifo_rd_en = m.state(TXFIFO_RD_EN);
       
       instr.SetDecode(mode_10G & b2b_ok & state_idle & state_encap_idle & fifo_non_empty);
