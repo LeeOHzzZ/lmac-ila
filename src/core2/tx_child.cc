@@ -89,10 +89,14 @@ namespace ilang {
 
   ExprRef lut_read(const ExprRef& idx) {
     assert(idx.bit_width() == 8);
-
-    ExprRef ret = BvConst(CRC_Lut[0], 32);
+    auto first_h = (CRC_Lut[0] >> 16) & 0x0000FFFF;
+    auto first_l = CRC_Lut[0] & 0x0000FFFF;
+    ExprRef ret = Concat(BvConst(first_h, 16), BvConst(first_l, 16));
     for (int i = 1; i < 16; i++) {
-      ret = Ite(idx == i, BvConst(CRC_Lut[i], 32), ret);
+      auto temp_h = (CRC_Lut[i] >> 16) & 0x0000FFFF;
+      auto temp_l = CRC_Lut[i] & 0x0000FFFF;
+      auto temp = Concat(BvConst(temp_h, 16), BvConst(temp_l, 16));
+      ret = Ite(idx == i, temp, ret);
     }
     return ret;
   }
