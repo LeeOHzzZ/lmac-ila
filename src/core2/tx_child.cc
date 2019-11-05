@@ -108,9 +108,9 @@ namespace ilang {
     // Set up internal states for this child
     SetupTxFuncInternal(child_tx_func);
     
-    auto resetn = m.input(RESETN);
-    child_tx_func.SetValid(resetn == RESETN_VALID);
-    //child_tx_func.SetValid(BoolConst(true));
+//    auto resetn = m.input(RESETN);
+//    child_tx_func.SetValid(resetn == RESETN_VALID);
+    child_tx_func.SetValid(BoolConst(true));
     child_tx_func.SetFetch(BvConst(0x1, 1));
 
     // add reference of chile_tx_func for convenience
@@ -174,9 +174,10 @@ namespace ilang {
       auto state_idle = (cm.state(TX_STATE) == TX_STATE_IDLE);
       auto state_encap_idle = (cm.state(TX_STATE_ENCAP) == TX_STATE_ENCAP_IDLE);
       auto b2b_ok = (cm.state(TX_B2B_OK) == 1);
+      auto b2b_counter_zero = (b2b_cntr == 0);
       auto fifo_rd_en = m.state(TXFIFO_RD_EN);
       
-      instr.SetDecode(mode_10G & b2b_ok & state_idle & state_encap_idle & fifo_non_empty);
+      instr.SetDecode(mode_10G & b2b_ok & b2b_counter_zero & state_idle & state_encap_idle & fifo_non_empty);
 
       // State Update
       // read FIFO
@@ -191,10 +192,12 @@ namespace ilang {
 
       // states update
       // Updating the qword count in bytes
-      instr.SetUpdate(byte_cnt, Extract(fifo_data_out, 15, 0)); // 4 clk
+      // Remember to use the updated/new result instead of the value of last cycle!!!!
+      auto byte_cnt_new = Extract(fifo_data_out, 15, 0);
+      instr.SetUpdate(byte_cnt, byte_cnt_new); // 4 clk
 
-      auto bcnt_h = Extract(byte_cnt, 15, 3);
-      auto bcnt_l = Extract(byte_cnt, 2, 0);
+      auto bcnt_h = Extract(byte_cnt_new, 15, 3);
+      auto bcnt_l = Extract(byte_cnt_new, 2, 0);
       auto nbytes = Ite((bcnt_l > 0), Concat((bcnt_h + 1), BvConst(0x0, 3)), Concat(bcnt_h, BvConst(0x0, 3)));
       
       instr.SetUpdate(wcnt, (nbytes - 1)); // 5 clk

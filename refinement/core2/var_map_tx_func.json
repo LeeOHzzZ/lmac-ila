@@ -164,7 +164,7 @@
     },
 
     "tx_wcnt_RdByteCnt_end": {
-      "cond" : "__CYCLE_CNT__ == 4",
+      "cond" : "__CYCLE_CNT__ == 5",
       "val"  : "m1.core.tx_10G_wrap.tx_xgmii.wcnt",
       "width": 16
     },
@@ -248,7 +248,7 @@
   "interface mapping": {
     "clk"               : "**KEEP**",
     "xA_clk"            : "**CLOCK**",
-    "reset_"            : "RESETN", 
+    "reset_"            : "**NRESET**", 
 
     "mode_10G"          : "MODE_10G",
     "mode_5G"           : "MODE_5G",
@@ -316,6 +316,8 @@
     "(m1.core.tx_10G_wrap.mode_1G_buf == 0) && (m1.core.mode_1G == 0)",
     "(m1.core.tx_b2b_dly == 2)",
     "(m1.core.tx_10G_wrap.tx_encap.tx_rdy == 1)",
+    "(m1.core.tx_10G_wrap.tx_encap.xreq == 0)",
+    "(m1.core.tx_10G_wrap.tx_encap.p_send == 0)",
     "(m1.core.tx_10G_wrap.tx_encap.rx_pause_sync == 0)",
     "(m1.core.txfifo.tx_f.wren == 0)",
     "(m1.core.txfifo.tx_f.wrclk == 0)",

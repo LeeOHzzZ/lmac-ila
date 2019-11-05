@@ -26,10 +26,8 @@
     "global invariants" : [
         "(m1.core.tx_10G_wrap.tx_encap.state == 8'h01) || (m1.core.tx_10G_wrap.tx_encap.state == 8'h02) || (m1.core.tx_10G_wrap.tx_encap.state == 8'h04) || (m1.core.tx_10G_wrap.tx_encap.state == 8'h08) || (m1.core.tx_10G_wrap.tx_encap.state == 8'h10)",
         "(m1.core.tx_10G_wrap.tx_xgmii.state == 5'h01) || (m1.core.tx_10G_wrap.tx_xgmii.state == 5'h02) || (m1.core.tx_10G_wrap.tx_xgmii.state == 5'h04) || (m1.core.tx_10G_wrap.tx_xgmii.state == 5'h08) || (m1.core.tx_10G_wrap.tx_xgmii.state == 5'h10)",
-        "~(m1.core.tx_10G_wrap.tx_encap.state == 8'h01) || (m1.core.tx_10G_wrap.tx_xgmii.state == 5'h01) || (m1.core.tx_10G_wrap.tx_xgmii.state == 5'h04) || (m1.core.tx_10G_wrap.tx_xgmii.state == 5'h10)",
-        "~(m1.core.tx_10G_wrap.tx_encap.state == 8'h02) || (m1.core.tx_10G_wrap.tx_xgmii.state == 5'h01)",
-        "~(m1.core.tx_10G_wrap.tx_encap.state == 8'h04) || (m1.core.tx_10G_wrap.tx_xgmii.state == 5'h02)",
-        "~(m1.core.tx_10G_wrap.tx_encap.state == 8'h10) || (m1.core.tx_10G_wrap.tx_xgmii.state == 5'h04)",
+	"~((m1.core.tx_10G_wrap.tx_encap.state == 8'h01) && (m1.core.tx_10G_wrap.tx_encap.b2b_ok == 1)) || ((m1.core.tx_10G_wrap.tx_encap.txfifo_rd_en == 0))",
+	"(m1.core.tx_10G_wrap.tx_encap.b2b_counter >= 0) && (m1.core.tx_10G_wrap.tx_encap.b2b_counter < 7)",
         "~(m1.core.tx_10G_wrap.tx_xgmii.state == 1) || (m1.core.tx_10G_wrap.tx_xgmii.txd == 64'hD5555555555555FB)",
         "~(m1.core.tx_10G_wrap.tx_xgmii.state == 1) || (m1.core.tx_10G_wrap.tx_xgmii.txc == 8'hff)"	
     ]

@@ -174,7 +174,7 @@ assign rdfull  = wrfull ? 1'b1 : 1'b0;
 			end
 
 	end
-
+/*
 	integer i;
 	always @(posedge wrclk)
 	begin
@@ -187,7 +187,7 @@ assign rdfull  = wrfull ? 1'b1 : 1'b0;
 				ILA_mem_6clk[i] <= ILA_mem_5clk[i];
 			end
 	end
-
+*/
 //=== READ FROM FIFO
 
 	always @(rdclk, rdusedw_i )
