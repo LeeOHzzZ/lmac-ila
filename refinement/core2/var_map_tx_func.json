@@ -66,14 +66,6 @@
     "TX_PKT_SENT"               : "m1.core.tx_10G_wrap.tx_xgmii.pkt_transmitted",
     "TX_BYTE_SENT"              : "m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt",
 
-    "CRC"                       : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32"], 
-                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "#crc_RdByteCnt_end#"],
-                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#crc_WrPktPaylaod_end#"]],
-
-    "CRC_IN"                    : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in"], 
-                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "#crc_in_RdByteCnt_end#"],
-                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#crc_in_WrPktPaylaod_end#"]],
-
     "CRC_DAT_IN"                : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.bdin",
     "TX_WCNT_INI"               : "m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini",
     "TX_BUF"                    : "m1.core.tx_10G_wrap.tx_xgmii.bdata1"
@@ -246,7 +238,7 @@
   },
 
   "interface mapping": {
-    "clk"               : "**KEEP**",
+    "clk"               : "**NC**",
     "xA_clk"            : "**CLOCK**",
     "reset_"            : "**NRESET**", 
 
@@ -307,22 +299,15 @@
   },
 
   "mapping control" : [
-    "(m1.core.usr_clk == 0)",
+    "(m1.clk == 0)",
     "(m1.TCORE_MODE == 1)",
     "(m1.SYS_ADDR == 1)",
-    "(m1.core.tx_10G_wrap.mode_10G_buf == 1) && (m1.core.mode_10G == 1)",
-    "(m1.core.tx_10G_wrap.mode_5G_buf == 0) && (m1.core.mode_5G == 0)", 
-    "(m1.core.tx_10G_wrap.mode_2p5G_buf == 0) && (m1.core.mode_2p5G == 0)",
-    "(m1.core.tx_10G_wrap.mode_1G_buf == 0) && (m1.core.mode_1G == 0)",
-    "(m1.core.tx_b2b_dly == 2)",
-    "(m1.core.tx_10G_wrap.tx_encap.tx_rdy == 1)",
-    "(m1.core.tx_10G_wrap.tx_encap.xreq == 0)",
-    "(m1.core.tx_10G_wrap.tx_encap.p_send == 0)",
-    "(m1.core.tx_10G_wrap.tx_encap.rx_pause_sync == 0)",
-    "(m1.core.txfifo.tx_f.wren == 0)",
-    "(m1.core.txfifo.tx_f.wrclk == 0)",
-    "(m1.core.txfifo.tx_f.wr_ptr <= 16 && m1.core.txfifo.tx_f.wr_ptr >= 0)",
-    "(m1.core.txfifo.tx_f.wrusedw <= 16 && m1.core.txfifo.tx_f.wrusedw >= 0)"
+    "(m1.core.tx_10G_wrap.mode_10G == 1) && (m1.core.mode_10G_buf == 1)",
+    "(m1.core.tx_10G_wrap.mode_5G == 0) && (m1.core.mode_5G_buf == 0)", 
+    "(m1.core.tx_10G_wrap.mode_2p5G == 0) && (m1.core.mode_2p5G_buf == 0)",
+    "(m1.core.tx_10G_wrap.mode_1G == 0) && (m1.core.mode_1G == 0)",
+    "(m1.core.txfifo_wr_en == 0)",
+    "(m1.core.tx_10G_wrap.tx_encap.tx_b2b_dly == 2)"
   ],
 
   "functions": {}

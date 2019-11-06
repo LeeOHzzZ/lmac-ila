@@ -155,7 +155,7 @@ namespace ilang {
       instr.SetUpdate(m.state(TXFIFO_RD_EN), BvConst(0x0, 1));
       instr.SetUpdate(b2b_cntr, Ite((b2b_cntr == 0), b2b_cntr, b2b_cntr - 1)); // 1 clk
       instr.SetUpdate(cm.state(TX_B2B_OK), Ite((b2b_cntr == 0), BvConst(0x1, 1), BvConst(0x0, 1)));
-      instr.SetUpdate(txd, Concat(Concat(BvConst(0xD555,16), BvConst(0x5555, 16)), BvConst(0x555555FB, 32))); // 1 clk
+      instr.SetUpdate(txd, Concat(Concat(BvConst(0x0707,16), BvConst(0x0707, 16)), BvConst(0x07070707, 32))); // 1 clk
       instr.SetUpdate(txc, BvConst(0xFF, XGMII_COUT_REG_BWID)); // 1 clk
 
       instr.SetUpdate(cm.state("TX_FUNC_INSTR"), BvConst(0x0, 3));
