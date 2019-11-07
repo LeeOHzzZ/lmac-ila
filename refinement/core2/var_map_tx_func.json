@@ -12,11 +12,6 @@
 
     "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem", 
 
-    "TXFIFO_WUSED_QWD"          : [["__START__", "m1.core.txfifo_usedw"], 
-                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "#txfifo_wused_RdByte_end#"],
-                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#txfifo_wused_normal_end#"],
-                                    ["__IEND__ && (TX_FUNC_INSTR == 3)", "#txfifo_wused_normal_end#"]],
-
     "TXFIFO_BUFF_WR_PTR"        : [["__START__", "m1.core.txfifo.tx_f.wr_ptr"], 
                                     ["__IEND__ && (TX_FUNC_INSTR == 1)", "#txfifo_buff_wr_ptr_RdByteCnt_end#"],
                                     ["__IEND__ && (TX_FUNC_INSTR == 2)", "#txfifo_buff_wr_ptr_normal_end#"],
@@ -32,6 +27,7 @@
                                     ["__IEND__ && (TX_FUNC_INSTR == 2)", "#txfifo_buff_rd_output_normal_end#"],
                                     ["__IEND__ && (TX_FUNC_INSTR == 3)", "#txfifo_buff_rd_output_normal_end#"]],
 
+    "TXFIFO_WUSED_QWD"		: [["__START__", "m1.core.txfifo_usedw"]],
 
     "TX_STATE"                  : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.state"], 
                                     ["__IEND__ && (TX_FUNC_INSTR == 1)", "#tx_state_RdByteCnt_end#"],
@@ -62,6 +58,8 @@
     "TX_PKT_SENT"               : "m1.core.tx_10G_wrap.tx_xgmii.pkt_transmitted",
     "TX_BYTE_SENT"              : "m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt",
 
+    "CRC"			: [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32"]],
+    "CRC_IN"			: [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in"]],
     "CRC_DAT_IN"                : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.bdin",
     "TX_WCNT_INI"               : "m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini",
     "TX_BUF"                    : "m1.core.tx_10G_wrap.tx_xgmii.bdata1"
@@ -302,11 +300,12 @@
     "(m1.core.tx_10G_wrap.mode_5G == 0) && (m1.core.mode_5G_buf == 0)", 
     "(m1.core.tx_10G_wrap.mode_2p5G == 0) && (m1.core.mode_2p5G_buf == 0)",
     "(m1.core.tx_10G_wrap.mode_1G == 0) && (m1.core.mode_1G == 0)",
-    "(m1.core.txfifo.tx_f.wr_ptr != m1.core.txfifo.tx_f.rd_ptr)",
     "(m1.core.txfifo.tx_f.wr_ptr <= 16)",
     "(m1.core.txfifo.tx_f.rd_ptr <= 16)",
     "(m1.core.txfifo.tx_f.dataout < 9000)",
-    "(m1.core.txfifo_wr_en == 0)",
+    "(m1.core.txfifo.tx_f.wrusedw <= 16)",
+    "~((__START__ == 1) || (__CYCLE_CNT__ == 1)) || (m1.core.txfifo.tx_f.wrusedw > 0)",
+    "(m1.core.txfifo.tx_f.wren == 0)",
     "(m1.core.tx_10G_wrap.tx_encap.rx_pause_sync == 0)",
     "(m1.core.tx_10G_wrap.tx_encap.tx_b2b_dly == 2)"
   ],
