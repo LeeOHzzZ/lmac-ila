@@ -70,11 +70,11 @@ reg [PTR : 0 ] wr_cnt, rd_cnt;
 reg [WIDTH-1 : 0] mem[DEPTH-1:0] ;
 
 // MEMORY FOR ILA verification
-reg [WIDTH-1 : 0] ILA_mem_2clk[DEPTH-1:0] ;
-reg [WIDTH-1 : 0] ILA_mem_3clk[DEPTH-1:0] ;
-reg [WIDTH-1 : 0] ILA_mem_4clk[DEPTH-1:0] ;
-reg [WIDTH-1 : 0] ILA_mem_5clk[DEPTH-1:0] ;
-reg [WIDTH-1 : 0] ILA_mem_6clk[DEPTH-1:0] ;
+// reg [WIDTH-1 : 0] ILA_mem_2clk[DEPTH-1:0] ;
+// reg [WIDTH-1 : 0] ILA_mem_3clk[DEPTH-1:0] ;
+// reg [WIDTH-1 : 0] ILA_mem_4clk[DEPTH-1:0] ;
+// reg [WIDTH-1 : 0] ILA_mem_5clk[DEPTH-1:0] ;
+// reg [WIDTH-1 : 0] ILA_mem_6clk[DEPTH-1:0] ;
 
 assign	dbg	=	1'b0;
 
@@ -149,10 +149,11 @@ assign rdfull  = wrfull ? 1'b1 : 1'b0;
 	begin
 		if (!reset_)
 			begin
-			wr_ptr 	  	<= 0;
-			wr_ptr_d  	<= 0;
-			wr_ptr_d1 	<= 0;
-			wr_cnt 		<= 0;
+			// clear the reset for verification from reset.
+			// wr_ptr 	  	<= 0;
+			// wr_ptr_d  	<= 0;
+			// wr_ptr_d1 	<= 0;
+			// wr_cnt 		<= 0;
 			end
 		else
 			begin

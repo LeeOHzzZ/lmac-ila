@@ -306,6 +306,7 @@
     "(m1.core.tx_10G_wrap.mode_5G == 0) && (m1.core.mode_5G_buf == 0)", 
     "(m1.core.tx_10G_wrap.mode_2p5G == 0) && (m1.core.mode_2p5G_buf == 0)",
     "(m1.core.tx_10G_wrap.mode_1G == 0) && (m1.core.mode_1G == 0)",
+    "(m1.core.txfifo.tx_f.wr_ptr != m1.core.txfifo.tx_f.rd_ptr)",
     "(m1.core.txfifo_wr_en == 0)",
     "(m1.core.tx_10G_wrap.tx_encap.tx_b2b_dly == 2)"
   ],
