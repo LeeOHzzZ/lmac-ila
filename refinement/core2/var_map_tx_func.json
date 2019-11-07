@@ -307,7 +307,8 @@
     "~((__START__ == 1) || (__CYCLE_CNT__ == 1)) || (m1.core.txfifo.tx_f.wrusedw > 0)",
     "(m1.core.txfifo.tx_f.wren == 0)",
     "(m1.core.tx_10G_wrap.tx_encap.rx_pause_sync == 0)",
-    "(m1.core.tx_10G_wrap.tx_encap.tx_b2b_dly == 2)"
+    "(m1.core.tx_10G_wrap.tx_encap.tx_b2b_dly == 2)",
+    "(m1.core.tx_10G_wrap.tx_xgmii.fmac_tx_clr_en == 0)"
   ],
 
   "functions": {}
