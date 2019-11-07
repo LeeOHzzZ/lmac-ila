@@ -117,10 +117,10 @@ namespace ilang {
     auto cm = child_tx_func;
 
     // parent states
-    auto fifo_non_empty = (m.state(TXFIFO_WUSED_QWD) > 0);
     auto fifo = m.state(TXFIFO_BUFF);
     auto fifo_rd_ptr = m.state(TXFIFO_BUFF_RD_PTR);
     auto fifo_wused = m.state(TXFIFO_WUSED_QWD);  
+    auto fifo_non_empty = (Ugt(fifo_wused, 0));
     auto fifo_output = m.state(TXFIFO_RD_OUTPUT);
    
     // common child states
@@ -198,7 +198,7 @@ namespace ilang {
 
       auto bcnt_h = Extract(byte_cnt_new, 15, 3);
       auto bcnt_l = Extract(byte_cnt_new, 2, 0);
-      auto nbytes = Ite((bcnt_l > 0), Concat((bcnt_h + 1), BvConst(0x0, 3)), Concat(bcnt_h, BvConst(0x0, 3)));
+      auto nbytes = Ite(Ugt(bcnt_l, 0), Concat((bcnt_h + 1), BvConst(0x0, 3)), Concat(bcnt_h, BvConst(0x0, 3)));
       
       instr.SetUpdate(wcnt, (nbytes - 1)); // 5 clk
       instr.SetUpdate(cm.state(TX_WCNT_INI), (nbytes - 1));

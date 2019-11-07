@@ -10,11 +10,7 @@
     "TXFIFO_RD_EN"              : [["__START__", "m1.core.txfifo.rdreq"], 
                                     ["__IEND__", "#txfifo_rd_en_end#"]],
 
-    "TXFIFO_BUFF"               : [["__START__", "m1.core.txfifo.tx_f.mem"], 
-                                    ["__IEND__ && (TX_FUNC_INSTR == 0)", "m1.core.txfifo.tx_f.mem"], 
-                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "m1.core.txfifo.tx_f.ILA_mem_6clk"], 
-                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "m1.core.txfifo.tx_f.ILA_mem_2clk"], 
-                                    ["__IEND__ && (TX_FUNC_INSTR == 3)", "m1.core.txfifo.tx_f.ILA_mem_2clk"]],
+    "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem", 
 
     "TXFIFO_WUSED_QWD"          : [["__START__", "m1.core.txfifo_usedw"], 
                                     ["__IEND__ && (TX_FUNC_INSTR == 1)", "#txfifo_wused_RdByte_end#"],
@@ -307,7 +303,11 @@
     "(m1.core.tx_10G_wrap.mode_2p5G == 0) && (m1.core.mode_2p5G_buf == 0)",
     "(m1.core.tx_10G_wrap.mode_1G == 0) && (m1.core.mode_1G == 0)",
     "(m1.core.txfifo.tx_f.wr_ptr != m1.core.txfifo.tx_f.rd_ptr)",
+    "(m1.core.txfifo.tx_f.wr_ptr <= 16)",
+    "(m1.core.txfifo.tx_f.rd_ptr <= 16)",
+    "(m1.core.txfifo.tx_f.dataout < 9000)",
     "(m1.core.txfifo_wr_en == 0)",
+    "(m1.core.tx_10G_wrap.tx_encap.rx_pause_sync == 0)",
     "(m1.core.tx_10G_wrap.tx_encap.tx_b2b_dly == 2)"
   ],
 
