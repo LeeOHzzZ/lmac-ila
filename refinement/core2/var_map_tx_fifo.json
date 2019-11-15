@@ -5,9 +5,9 @@
   },
 
   "state mapping": { 
-    "TXFIFO_FULL"               : [["__START__", "m1.core.txfifo_full"], ["__IEND__", "#txfifo_full_end#"]],
+    "TXFIFO_FULL"               : "m1.core.txfifo_full",
 
-    "TXFIFO_WUSED_QWD"          : "m1.core.txfifo_usedw",
+    "TXFIFO_WUSED_QWD"          : "m0.TXFIFO_WUSED_QWD[4:0] == m1.core.txfifo.tx_f.wrusedw_i",
 
     "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem", 
  
@@ -104,7 +104,9 @@
     "(m1.core.txfifo_rd_en == 0)",
     "(m1.core.txfifo.tx_f.rd_ptr == 0)",
     "(m1.core.txfifo.tx_f.wr_ptr <= 16 && m1.core.txfifo.tx_f.wr_ptr >= 0)",
-    "(m1.core.txfifo.tx_f.wrusedw <= 16 && m1.core.txfifo.tx_f.wrusedw >= 0)"
+    "(m1.core.txfifo.tx_f.wrusedw <= 16 && m1.core.txfifo.tx_f.wrusedw >= 0)",
+    "(m1.core.txfifo.tx_f.wrusedw_i <= 16 && m1.core.txfifo.tx_f.wrusedw_i >= 0)",
+    "(m0.TXFIFO_WUSED_QWD <= 16 && m0.TXFIFO_WUSED_QWD >= 0)"
 
     
   ],

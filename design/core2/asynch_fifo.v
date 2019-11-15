@@ -85,7 +85,7 @@ always @(wr_ptr,rd_ptr,wrusedw,rdusedw,wren,rden,reset_)
 		//need to rise quickly to avoid false writing
 		//wrusedw is sync to wrclk
 		wrfull =    !reset_ ? 1'b0 : // for full 1 for empty 0
-			(wrusedw >= DEPTH) 
+			(wrusedw_i >= DEPTH) // The original design is wrusedw instead of wrusedw_i 
 			;
 		wrempty =    !reset_ ? 1'b1 : // for full 1 for empty 0
 			(wrusedw <= 0) 
