@@ -150,10 +150,10 @@ assign rdfull  = wrfull ? 1'b1 : 1'b0;
 		if (!reset_)
 			begin
 			// clear the reset for verification from reset.
-			// wr_ptr 	  	<= 0;
-			// wr_ptr_d  	<= 0;
-			// wr_ptr_d1 	<= 0;
-			// wr_cnt 		<= 0;
+//			wr_ptr 	  	<= 0;
+//			wr_ptr_d  	<= 0;
+//			wr_ptr_d1 	<= 0;
+//			wr_cnt 		<= 0;
 			end
 		else
 			begin

@@ -233,7 +233,9 @@ begin
 	insert_crc<=   0;
 
 	wcnt <=   0;
-	ila_wcnt_ini <= 0;
+	//ila_wcnt_ini <= 0; // don't initialize the ila_wcnt_ini for global
+	//invariant regulation --> the package length must greater than
+	//zero
 	
 	crc_we_ <=   1;
 	crc_last_<=   1;

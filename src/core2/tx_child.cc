@@ -392,7 +392,7 @@ namespace ilang {
                                                                 
       // Update the wcnt
       instr.SetUpdate(b2b_cntr, Ite((tx_encap_state == TX_STATE_ENCAP_IDLE), b2b_cntr - 1, b2b_cntr)); // 1 clk
-      instr.SetUpdate(tx_state, Ite((wcnt < 0), TX_STATE_DAT, TX_STATE_CRC)); // 1 clk
+      instr.SetUpdate(tx_state, Ite((wcnt >= 0), TX_STATE_DAT, TX_STATE_CRC)); // 1 clk
       instr.SetUpdate(tx_encap_state, Ite((wcnt < 16), TX_STATE_ENCAP_IDLE, tx_encap_state)); // 1 clk
       instr.SetUpdate(wcnt, wcnt - 8); // 1 clk
 
