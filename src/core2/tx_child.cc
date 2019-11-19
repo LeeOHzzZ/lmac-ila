@@ -267,7 +267,7 @@ namespace ilang {
       // when wcnt < 0, we have taken all the data. No need to fetch from the fifo and update the crc output.
       // Read data from FIFO
       // Because the ILA model didn't consider the some intermediate states, the rd_ptr needs to be subtracted to read the right data in the fifo for the operation.
-      auto delayed_rd_ptr = Ite(fifo_rd_ptr >= 2, fifo_rd_ptr - 2, TXFIFO_BUFF_DEPTH - (2 - fifo_rd_ptr));
+      auto delayed_rd_ptr = Ite(fifo_rd_ptr >= 2, fifo_rd_ptr - 2, BvConst(TXFIFO_BUFF_DEPTH, TXFIFO_BUFF_RD_PTR_BWID) - (BvConst(0x2, TXFIFO_BUFF_RD_PTR_BWID) - fifo_rd_ptr));
       auto fifo_data_out = Load(fifo, delayed_rd_ptr);
       instr.SetUpdate(fifo_output, Ite((wcnt > 0), fifo_data_out, fifo_output));
       instr.SetUpdate(fifo_rd_ptr, Ite((wcnt > 0), Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1), fifo_rd_ptr));
