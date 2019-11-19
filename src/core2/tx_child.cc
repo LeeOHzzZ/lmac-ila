@@ -320,11 +320,11 @@ namespace ilang {
       instr.SetUpdate(crc_in, crc_in_temp);
       // update the CRC output. Needs transformation.
       auto crc_code = ~(((crc_in_temp >> 24) & BvConst(0xFF, 32)) | ((crc_in_temp >> 8) & BvConst(0xFF00, 32)) | ((crc_in_temp << 8) & BvConst(0xFF0000, 32)) | ((crc_in_temp << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16))));
-      instr.SetUpdate(cm.state(CRC), Ite((wcnt > 0), crc_code, cm.state(CRC)));
-
+//      instr.SetUpdate(cm.state(CRC), Ite((wcnt > 0), crc_code, cm.state(CRC)));
+      instr.SetUpdate(cm.state(CRC), crc_code);
       // when output the crc code, we need to change the endian of the code.
-      auto crc_temp = Ite((wcnt > 0), crc_code, cm.state(CRC));
-      auto crc_output = ((crc_temp >> 24) & BvConst(0xFF, 32)) | ((crc_temp >> 8) & BvConst(0xFF00, 32)) | ((crc_temp << 8) & BvConst(0xFF0000, 32)) | ((crc_temp << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16)));
+      // auto crc_temp = Ite((wcnt > 0), crc_code, cm.state(CRC));
+      auto crc_output = ((crc_code >> 24) & BvConst(0xFF, 32)) | ((crc_code >> 8) & BvConst(0xFF00, 32)) | ((crc_code << 8) & BvConst(0xFF0000, 32)) | ((crc_code << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16)));
 
       // difference between crc_code and crc_output is that crc_code is the value in the crc register, however, when
       // outputing the value to txd, we need to change the endian. crc_output is for txd.
