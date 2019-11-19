@@ -313,21 +313,22 @@ namespace ilang {
       // The current stores the byte that generator takes. 
       
       for (auto len = 0; len < 8; len++) {
-        auto current = Extract(crc_data_input, (8*len + 7), 8*len);
-        crc_g = lut_read((Extract(crc_g, 7, 0) ^ current) & BvConst(0x0F, 8)) ^ (crc_g >> 4);
-        crc_g = lut_read((Extract(crc_g, 7, 0) ^ (current >> 4)) & BvConst(0x0F, 8)) ^ (crc_g >> 4);
+        auto current = Extract(crc_dat_in, (8*len + 7), 8*len);
+        crc_g = lut_read((Extract(crc_g, 7, 0) ^ current) & BvConst(0x0F, 8)) ^ (Lshr(crc_g, 4));
+        crc_g = lut_read((Extract(crc_g, 7, 0) ^ Lshr(current, 4)) & BvConst(0x0F, 8)) ^ Lshr(crc_g, 4);
       }
 
       // update CRC code input for the generator;
-      auto crc_in_temp = Ite((wcnt > 0), crc_g, crc_in);
+      //auto crc_in_temp = Ite((wcnt > 0), crc_g, crc_in);
+      auto crc_in_temp = crc_g;
       instr.SetUpdate(crc_in, crc_in_temp);
       // update the CRC output. Needs transformation.
-      auto crc_code = ~(((crc_in_temp >> 24) & BvConst(0xFF, 32)) | ((crc_in_temp >> 8) & BvConst(0xFF00, 32)) | ((crc_in_temp << 8) & BvConst(0xFF0000, 32)) | ((crc_in_temp << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16))));
+      auto crc_code = ~(( Lshr(crc_in_temp, 24) & BvConst(0xFF, 32)) | (Lshr(crc_in_temp, 8) & BvConst(0xFF00, 32)) | ((crc_in_temp << 8) & BvConst(0xFF0000, 32)) | ((crc_in_temp << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16))));
 //      instr.SetUpdate(cm.state(CRC), Ite((wcnt > 0), crc_code, cm.state(CRC)));
       instr.SetUpdate(cm.state(CRC), crc_code);
       // when output the crc code, we need to change the endian of the code.
       // auto crc_temp = Ite((wcnt > 0), crc_code, cm.state(CRC));
-      auto crc_output = ((crc_code >> 24) & BvConst(0xFF, 32)) | ((crc_code >> 8) & BvConst(0xFF00, 32)) | ((crc_code << 8) & BvConst(0xFF0000, 32)) | ((crc_code << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16)));
+      auto crc_output = ( Lshr(crc_code, 24) & BvConst(0xFF, 32)) | (Lshr(crc_code, 8) & BvConst(0xFF00, 32)) | ((crc_code << 8) & BvConst(0xFF0000, 32)) | ((crc_code << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16)));
 
       // difference between crc_code and crc_output is that crc_code is the value in the crc register, however, when
       // outputing the value to txd, we need to change the endian. crc_output is for txd.
