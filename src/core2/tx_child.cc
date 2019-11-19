@@ -267,8 +267,10 @@ namespace ilang {
       // when wcnt < 0, we have taken all the data. No need to fetch from the fifo and update the crc output.
       // Read data from FIFO
       // Because the ILA model didn't consider the some intermediate states, the rd_ptr needs to be subtracted to read the right data in the fifo for the operation.
-      auto delayed_rd_ptr = Ite(fifo_rd_ptr >= 2, fifo_rd_ptr - 2, BvConst(TXFIFO_BUFF_DEPTH, TXFIFO_BUFF_RD_PTR_BWID) - (BvConst(0x2, TXFIFO_BUFF_RD_PTR_BWID) - fifo_rd_ptr));
-      auto fifo_data_out = Load(fifo, delayed_rd_ptr);
+      auto delayed_rd_ptr = Ite(fifo_rd_ptr >= 3, fifo_rd_ptr - 3, BvConst(TXFIFO_BUFF_DEPTH, TXFIFO_BUFF_RD_PTR_BWID) - (BvConst(0x3, TXFIFO_BUFF_RD_PTR_BWID) - fifo_rd_ptr));
+      auto fifo_data_out = Load(fifo, Ite(fifo_rd_ptr == TXFIFO_BUFF_DEPTH, BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr)); // this state is redundant
+      auto delay_data_out = Load(fifo, delayed_rd_ptr); // this is the actual data that is used for operations.
+
       instr.SetUpdate(fifo_output, Ite((wcnt > 0), fifo_data_out, fifo_output));
       instr.SetUpdate(fifo_rd_ptr, Ite((wcnt > 0), Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1), fifo_rd_ptr));
       instr.SetUpdate(fifo_wused, Ite((wcnt > 0), fifo_wused - 1, fifo_wused));
@@ -280,28 +282,28 @@ namespace ilang {
       auto rb = Extract(byte_cnt, 2, 0);
       
       // CRC code update
-      auto crc_data_input = Ite(fq, Ite((rb == 0x0), fifo_data_out,
-                                  Ite((rb == 0x1), Concat(Extract(fifo_data_out,  7, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 24))),
-                                  Ite((rb == 0x2), Concat(Extract(fifo_data_out, 15, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 16))),
-                                  Ite((rb == 0x3), Concat(Extract(fifo_data_out, 23, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 8))),
-                                  Ite((rb == 0x4), Concat(Extract(fifo_data_out, 31, 0), BvConst(0x0, 32)),
-                                  Ite((rb == 0x5), Concat(Extract(fifo_data_out, 39, 0), BvConst(0x0, 24)),
-                                  Ite((rb == 0x6), Concat(Extract(fifo_data_out, 47, 0), BvConst(0x0, 16)),
-                                                   Concat(Extract(fifo_data_out, 55, 0), BvConst(0x0, 8))))))))),
+      auto crc_data_input = Ite(fq, Ite((rb == 0x0), delay_data_out,
+                                  Ite((rb == 0x1), Concat(Extract(delay_data_out,  7, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 24))),
+                                  Ite((rb == 0x2), Concat(Extract(delay_data_out, 15, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 16))),
+                                  Ite((rb == 0x3), Concat(Extract(delay_data_out, 23, 0), Concat(BvConst(0x0, 32), BvConst(0x0, 8))),
+                                  Ite((rb == 0x4), Concat(Extract(delay_data_out, 31, 0), BvConst(0x0, 32)),
+                                  Ite((rb == 0x5), Concat(Extract(delay_data_out, 39, 0), BvConst(0x0, 24)),
+                                  Ite((rb == 0x6), Concat(Extract(delay_data_out, 47, 0), BvConst(0x0, 16)),
+                                                   Concat(Extract(delay_data_out, 55, 0), BvConst(0x0, 8))))))))),
 
-                                  Ite((rb == 0x0), fifo_data_out,
-                                  Ite((rb == 0x1), Concat(Extract(fifo_data_out,  7, 0), Extract(tx_buf,  63, 8)),
-                                  Ite((rb == 0x2), Concat(Extract(fifo_data_out, 15, 0), Extract(tx_buf,  63, 16)),
-                                  Ite((rb == 0x3), Concat(Extract(fifo_data_out, 23, 0), Extract(tx_buf,  63, 24)),
-                                  Ite((rb == 0x4), Concat(Extract(fifo_data_out, 31, 0), Extract(tx_buf,  63, 32)),
-                                  Ite((rb == 0x5), Concat(Extract(fifo_data_out, 39, 0), Extract(tx_buf,  63, 40)),
-                                  Ite((rb == 0x6), Concat(Extract(fifo_data_out, 47, 0), Extract(tx_buf,  63, 48)),
-                                                   Concat(Extract(fifo_data_out, 55, 0), Extract(tx_buf,  63, 56))))))))));
+                                  Ite((rb == 0x0), delay_data_out,
+                                  Ite((rb == 0x1), Concat(Extract(delay_data_out,  7, 0), Extract(tx_buf,  63, 8)),
+                                  Ite((rb == 0x2), Concat(Extract(delay_data_out, 15, 0), Extract(tx_buf,  63, 16)),
+                                  Ite((rb == 0x3), Concat(Extract(delay_data_out, 23, 0), Extract(tx_buf,  63, 24)),
+                                  Ite((rb == 0x4), Concat(Extract(delay_data_out, 31, 0), Extract(tx_buf,  63, 32)),
+                                  Ite((rb == 0x5), Concat(Extract(delay_data_out, 39, 0), Extract(tx_buf,  63, 40)),
+                                  Ite((rb == 0x6), Concat(Extract(delay_data_out, 47, 0), Extract(tx_buf,  63, 48)),
+                                                   Concat(Extract(delay_data_out, 55, 0), Extract(tx_buf,  63, 56))))))))));
 
       instr.SetUpdate(crc_dat_in, crc_data_input);
       
       // This buffer should be placed after the CRC update.
-      instr.SetUpdate(tx_buf, fifo_data_out);
+      instr.SetUpdate(tx_buf, delay_data_out);
 
       // CRC generation, using half_byte algorithm. reference: https://create.stephan-brumme.com/crc32/#half-byte
       auto crc_g = cm.state(CRC_IN);
@@ -350,7 +352,7 @@ namespace ilang {
                                               BvConst(0xFF, 8)))));
                                                                 
                                                                 
-      auto dat = m.state(TXFIFO_RD_OUTPUT);
+      auto dat = delay_data_out;
 
       auto crc_0 = dat;
       auto crc_1 = Concat(BvConst(0x0707FD, 24), Concat(crc_output, Extract(dat, 7, 0)));
