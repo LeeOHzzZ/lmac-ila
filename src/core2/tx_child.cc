@@ -271,9 +271,9 @@ namespace ilang {
       auto fifo_data_out = Load(fifo, Ite(fifo_rd_ptr == TXFIFO_BUFF_DEPTH, BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr)); // this state is redundant
       auto delay_data_out = Load(fifo, delayed_rd_ptr); // this is the actual data that is used for operations.
 
-      instr.SetUpdate(fifo_output, Ite((wcnt > 0), fifo_data_out, fifo_output));
-      instr.SetUpdate(fifo_rd_ptr, Ite((wcnt > 0), Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1), fifo_rd_ptr));
-      instr.SetUpdate(fifo_wused, Ite((wcnt > 0), fifo_wused - 1, fifo_wused));
+      instr.SetUpdate(fifo_output, Ite((wcnt > 7), fifo_data_out, fifo_output));
+      instr.SetUpdate(fifo_rd_ptr, Ite((wcnt > 7), Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1), fifo_rd_ptr));
+      instr.SetUpdate(fifo_wused, Ite((wcnt > 7), fifo_wused - 1, fifo_wused));
 
       // CRC code Update
 
@@ -333,7 +333,7 @@ namespace ilang {
       // Update output
       // txd & txc take 2 clk to update
       instr.SetUpdate(txc,  Ite((wcnt > 7),   BvConst(0x00, XGMII_COUT_REG_BWID),
-                            Ite((wcnt <= 7),  Ite((rb == 0), BvConst(0x00, XGMII_COUT_REG_BWID),
+                            Ite((wcnt >= 0) & (wcnt <= 7),  Ite((rb == 0), BvConst(0x00, XGMII_COUT_REG_BWID),
                                               Ite((rb == 1), BvConst(0xE0, XGMII_COUT_REG_BWID),
                                               Ite((rb == 2), BvConst(0xC0, XGMII_COUT_REG_BWID),
                                               Ite((rb == 3), BvConst(0x80, XGMII_COUT_REG_BWID),
@@ -375,7 +375,7 @@ namespace ilang {
       auto dout_idle = Concat(BvConst(0x07070707, 32), BvConst(0x07070707, 32));
 
       instr.SetUpdate(txd,  Ite((wcnt > 7), dat,
-                            Ite((wcnt <= 7),  Ite((rb == 0), crc_0,
+                            Ite((wcnt >= 0) & (wcnt <= 7),  Ite((rb == 0), crc_0,
                                               Ite((rb == 1), crc_1,
                                               Ite((rb == 2), crc_2,
                                               Ite((rb == 3), crc_3,

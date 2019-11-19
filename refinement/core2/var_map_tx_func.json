@@ -60,9 +60,9 @@
 
     "CRC"			: [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32"]],
     "CRC_IN"			: [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in"]],
-    "CRC_DAT_IN"                : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.bdin",
+    "CRC_DAT_IN"                : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.bdin"]],
     "TX_WCNT_INI"               : "m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini",
-    "TX_BUF"                    : "m1.core.tx_10G_wrap.tx_xgmii.bdata1"
+    "TX_BUF"                    : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.bdata1"]]
 
   
   },
@@ -232,7 +232,7 @@
   },
 
   "interface mapping": {
-    "clk"               : "**NC**",
+    "clk"               : "**CLOCK**",
     "xA_clk"            : "**CLOCK**",
     "reset_"            : "**NRESET**", 
 
@@ -293,19 +293,15 @@
   },
 
   "mapping control" : [
-    "(m1.clk == 0)",
     "(m1.TCORE_MODE == 1)",
     "(m1.SYS_ADDR == 1)",
     "(m1.core.tx_10G_wrap.mode_10G == 1) && (m1.core.mode_10G_buf == 1)",
     "(m1.core.tx_10G_wrap.mode_5G == 0) && (m1.core.mode_5G_buf == 0)", 
     "(m1.core.tx_10G_wrap.mode_2p5G == 0) && (m1.core.mode_2p5G_buf == 0)",
     "(m1.core.tx_10G_wrap.mode_1G == 0) && (m1.core.mode_1G == 0)",
-    "(m1.core.txfifo.tx_f.wr_ptr <= 16)",
-    "(m1.core.txfifo.tx_f.rd_ptr <= 16)",
+    "(~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.rdusedw > 0))",
+    "(~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.wren == 0))",
     "(~(m1.core.tx_10G_wrap.tx_encap.state == 4) || ((m1.core.tx_10G_wrap.tx_encap.txfifo_dout[15:0] > 0) && (m1.core.tx_10G_wrap.tx_encap.txfifo_dout[15:0] < 100)))",
-    "(m1.core.txfifo.tx_f.wrusedw <= 16)",
-    "~((__START__ == 1) || (__CYCLE_CNT__ == 1)) || (m1.core.txfifo.tx_f.wrusedw > 0)",
-    "(m1.core.txfifo.tx_f.wren == 0)",
     "(m1.core.tx_10G_wrap.tx_encap.rx_pause_sync == 0)",
     "(m1.core.tx_10G_wrap.tx_encap.tx_b2b_dly == 2)",
     "(m1.core.tx_10G_wrap.tx_xgmii.fmac_tx_clr_en == 0)"
