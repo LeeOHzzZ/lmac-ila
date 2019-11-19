@@ -130,8 +130,12 @@ uint32_t crc32_halfbyte(const void* data, size_t length, uint32_t previousCrc32)
   while (length-- != 0)
   {
     cnt++;
-    // printf("half_byte     : input data = %#02x, \n", *current);
+    printf("half_byte     : input data = %#02x, \n", *current);
+    uint16_t ind1 = (crc ^  *current      ) & 0x0F;
+    printf("index 1 is %d, \n", ind1);
     crc = Crc32Lookup16[(crc ^  *current      ) & 0x0F] ^ (crc >> 4);
+    uint16_t ind2 = (crc ^  *current      ) & 0x0F;
+    printf("index 2 is %d, \n", ind2);
     crc = Crc32Lookup16[(crc ^ (*current >> 4)) & 0x0F] ^ (crc >> 4);
     current++;
 

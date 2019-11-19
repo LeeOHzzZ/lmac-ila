@@ -127,33 +127,40 @@ int main(int, char**)
   uint32_t initial_crc_out = ~(((original_crc >> 24) & 0x000000FF) | ((original_crc >> 8) & 0x0000FF00) | ((original_crc << 8) & 0x00FF0000) | ((original_crc << 24) & 0xFF000000));
   printf("half_byte_initial_crc_out  :  CRC =%#08x\n", initial_crc_out);
 
-  for (int j = 0; j < 6; j++) {
+  // for (int j = 0; j < 6; j++) {
 
   
-    for (int i = 0; i < NumBytes; i++) {
-      // printf("test_input : data_in[%d] =%#016llx, \n", i, data_in[i]);
-      // data[i] = char((data_in[0] >> (8*(7-i))) & 0xFF);
-      data[i] = char((data_in[j] >> (8*i)) & 0xFF);
-    }
-    // for (int i = 0; i < NumBytes; i++) {
-    //   // printf("test_input : data[%d] = %#02x\n", i, *current);
-    //   current++;
-    // }
+  //   for (int i = 0; i < NumBytes; i++) {
+  //     // printf("test_input : data_in[%d] =%#016llx, \n", i, data_in[i]);
+  //     // data[i] = char((data_in[0] >> (8*(7-i))) & 0xFF);
+  //     data[i] = char((data_in[j] >> (8*i)) & 0xFF);
+  //   }
+  //   // for (int i = 0; i < NumBytes; i++) {
+  //   //   // printf("test_input : data[%d] = %#02x\n", i, *current);
+  //   //   current++;
+  //   // }
 
 
-    #ifdef CRC32_TEST_HALFBYTE
-    // half-byte
-    previous_crc = original_crc;
-    original_crc = crc32_halfbyte(data, NumBytes, previous_crc);
+  //   #ifdef CRC32_TEST_HALFBYTE
+  //   // half-byte
+  //   previous_crc = original_crc;
+  //   original_crc = crc32_halfbyte(data, NumBytes, previous_crc);
 
-    // crc generator use the orignal output of the last result, but not the output crc code.
-    // The output crc code need to change the endian and reverse all the bits.
-    crc_out = ~(((original_crc >> 24) & 0x000000FF) | ((original_crc >> 8) & 0x0000FF00) | ((original_crc << 8) & 0x00FF0000) | ((original_crc << 24) & 0xFF000000));
-    printf("half_byte_outcome No.%d   : CRC=%#08x\n", j,
-          crc_out);
-    #endif // CRC32_TEST_HALFBYTE
+  //   // crc generator use the orignal output of the last result, but not the output crc code.
+  //   // The output crc code need to change the endian and reverse all the bits.
+  //   crc_out = ~(((original_crc >> 24) & 0x000000FF) | ((original_crc >> 8) & 0x0000FF00) | ((original_crc << 8) & 0x00FF0000) | ((original_crc << 24) & 0xFF000000));
+  //   printf("half_byte_outcome No.%d   : CRC=%#08x\n", j,
+  //         crc_out);
+  //   #endif // CRC32_TEST_HALFBYTE
 
-  }
+  // }
+
+  printf("**************************************");
+  previous_crc = 0x47c48f68;
+  uint64_t data_test = 0x0770dfbf3152fd04;
+  original_crc = crc32_halfbyte(&data_test, NumBytes, previous_crc);
+  crc_out = ~(((original_crc >> 24) & 0x000000FF) | ((original_crc >> 8) & 0x0000FF00) | ((original_crc << 8) & 0x00FF0000) | ((original_crc << 24) & 0xFF000000));
+  printf("test crc_out is : CRC=%#08x\n", crc_out);
 
   // printf("input_data = %s, length = %lu\n", data, strlen(data));
   
