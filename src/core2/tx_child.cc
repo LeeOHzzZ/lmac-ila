@@ -399,7 +399,7 @@ namespace ilang {
                                             dout_idle))));
                                                                 
       // Update the wcnt
-      instr.SetUpdate(b2b_cntr, Ite((tx_encap_state == TX_STATE_ENCAP_IDLE), b2b_cntr - 1, b2b_cntr)); // 1 clk
+      instr.SetUpdate(b2b_cntr, Ite((tx_encap_state == TX_STATE_ENCAP_IDLE) & (b2b_cntr > 0), b2b_cntr - 1, b2b_cntr)); // 1 clk
       instr.SetUpdate(tx_state, Ite((wcnt >= 0), TX_STATE_DAT, TX_STATE_CRC)); // 1 clk
       instr.SetUpdate(tx_encap_state, Ite((wcnt < 16), TX_STATE_ENCAP_IDLE, tx_encap_state)); // 1 clk
       instr.SetUpdate(wcnt, wcnt - 8); // 1 clk
@@ -423,7 +423,7 @@ namespace ilang {
       instr.SetUpdate(cm.state(TX_PKT_SENT), cm.state(TX_PKT_SENT) + 1); // 2 clk
       instr.SetUpdate(cm.state(TX_BYTE_SENT), cm.state(TX_BYTE_SENT) + Concat(BvConst(0x0, 16), byte_cnt)); // 2 clk
       instr.SetUpdate(tx_state, TX_STATE_IDLE); // 1 clk
-      instr.SetUpdate(b2b_cntr, Ite((tx_encap_state == TX_STATE_ENCAP_IDLE), b2b_cntr - 1, b2b_cntr)); // 1 clk
+      instr.SetUpdate(b2b_cntr, Ite((tx_encap_state == TX_STATE_ENCAP_IDLE) & b2b_cntr > 0, b2b_cntr - 1, b2b_cntr)); // 1 clk
 
 
       instr.SetUpdate(cm.state("TX_FUNC_INSTR"), BvConst(0x3, 3));

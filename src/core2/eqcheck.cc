@@ -45,7 +45,7 @@ VerilogVerificationTargetGenerator::vtg_config_t SetVerifGenConfig() {
   config.CosaAddKeep = false;
   //config.CosaDotReferenceNotify = VlgVerifTgtGenBase::vtg_config_t::CosaDotReferenceNotify_t::NOTIFY_WARNING;
   // config.CosaOtherSolverOptions = "--blackbox-array";
-  config.ForceInstCheckReset = true;
+  //config.ForceInstCheckReset = true;
 
   return config;
 }
