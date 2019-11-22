@@ -31,8 +31,13 @@ void GenVerifTargetReg(Ila& model, const std::string& design_path,
                        const std::string& instr_map, const std::string& var_map,
                        const std::string& output_path);
 
-// generate Verilog verification target for tx instr
-void GenVerifTargetTX(Ila& model, const std::string& design_path,
+// generate Verilog verification target for tx fifo instr
+void GenVerifTargetTX_FIFO(Ila& model, const std::string& design_path,
+                      const std::string& instr_map, const std::string& var_map,
+                      const std::string& output_path);
+
+// generate Verilog verification target for tx func instr
+void GenVerifTargetTX_FUNC(Ila& model, const std::string& design_path,
                       const std::string& instr_map, const std::string& var_map,
                       const std::string& output_path);
 
