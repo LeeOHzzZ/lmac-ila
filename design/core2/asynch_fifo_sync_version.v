@@ -38,7 +38,7 @@ module asynch_fifo # (parameter WIDTH = 8,         // considering 8X8 fifo
 			input  wire [WIDTH-1 : 0]	datain,       // Data coming in 
 			output reg					wrfull,       // indicates fifo is full or not (To avoid overiding)
 			output reg 			 		wrempty,      // 0- some data is present (atleast 1 data is present)                                          
-			output reg	[PTR  : 0]		usedw_i,      // number of slots currently in use for writing                                                                                                
+			output 		usedw_i,      // number of slots currently in use for writing                                                                                                
                                                     
 			
 			//=== Signals for READ
@@ -48,7 +48,6 @@ module asynch_fifo # (parameter WIDTH = 8,         // considering 8X8 fifo
 			output reg [WIDTH-1 : 0]	dataout,      // Data coming out 
 			output wire 				rdfull,       // 1-FIFO IS FULL (DATA AVAILABLE FOR READ is == DEPTH)
 			output reg 					rdempty,      // indicates fifo is empty or not (to avoid underflow)
-			output reg [PTR  : 0] 		usedw_i,      // number of slots currently in use for reading
 
 			output 	 		dbg);
 
@@ -57,7 +56,9 @@ module asynch_fifo # (parameter WIDTH = 8,         // considering 8X8 fifo
 //=== INTERNAL SIGNALS
 reg	[PTR  : 0]		wrusedw_i;	//async version
 reg	[PTR  : 0]		rdusedw_i;	//async version
-reg [PTR  : 0]    usedw_i; // sync version
+reg	[PTR  : 0]		wrusedw;
+reg	[PTR  : 0]		rdusedw;
+reg	[PTR  : 0]		usedw_i;        //sync version
 
 reg [PTR : 0 ] wr_ptr, rd_ptr;
 reg [PTR : 0 ] rd_ptr_d , wr_ptr_d  ;		

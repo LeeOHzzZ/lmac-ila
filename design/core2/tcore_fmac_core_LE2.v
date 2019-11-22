@@ -454,7 +454,7 @@ txfifo_1024x64 txfifo(
 	.wrusedw(txfifo_usedw_int)
 	);
 	
-	
+/*	
 	
 tx_1G_wrap tx_1G_wrap(
 	.x_clk					(x_clk),
@@ -486,7 +486,7 @@ tx_1G_wrap tx_1G_wrap(
 
 	);
 
-
+*/
 	
 tx_10G_wrap tx_10G_wrap(
 	.usr_clk				(usr_clk),			//i-1

@@ -78,14 +78,13 @@ asynch_fifo	#(.WIDTH ( WIDTH),
 			.datain	(data),			// write data
 			.wrfull	(wrfull),		// indicates fifo is full or not (To avoid overiding)
 			.wrempty(),				
-			.wrusedw(wrusedw),		// wrusedw -number of locations filled in fifo
+			.usedw_i(wrusedw),		// wrusedw -number of locations filled in fifo
 
 			.rdclk	(rdclk),		// i-1, Clk to read data
 			.rden	(rdreq),		// i-1, read enable of data FIFO
 			.dataout(q),			// Dataout of data FIFO
 			.rdfull	(),				// indicates fifo is full or not (To avoid overiding) (Not used)
 			.rdempty(rdempty),		// indicates fifo is empty or not (to avoid underflow)
-			.rdusedw(),				
 
 			.dbg()
 

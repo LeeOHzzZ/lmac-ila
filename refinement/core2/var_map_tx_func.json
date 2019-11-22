@@ -299,7 +299,7 @@
     "(m1.mode_5G == 0 ) && (m1.core.mode_5G == 0) && (m1.core.tx_10G_wrap.tx_encap.mode_5G == 0) && (m1.core.tx_10G_wrap.tx_xgmii.mode_5G == 0)", 
     "(m1.mode_2p5G == 0) && (m1.core.mode_2p5G == 0) && (m1.core.tx_10G_wrap.mode_2p5G == 0) && (m1.core.tx_10G_wrap.tx_xgmii.mode_2p5G == 0)",
     "(m1.mode_1G == 0) && (m1.core.mode_1G == 0) && (m1.core.tx_10G_wrap.tx_encap.mode_1G == 0) && (m1.core.tx_10G_wrap.tx_xgmii.mode_1G == 0)",
-    "(~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.rdusedw > 0))",
+    "(~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.usedw_i > 0))",
     "(~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.wren == 0))",
     "(~(m1.core.tx_10G_wrap.tx_encap.state == 4) || ((m1.core.tx_10G_wrap.tx_encap.txfifo_dout[15:0] > 60) && (m1.core.tx_10G_wrap.tx_encap.txfifo_dout[15:0] < 100)))",
     "(m1.core.rx_pause == 0) && (m1.core.tx_10G_wrap.tx_encap.rx_pause_sync == 0)",
