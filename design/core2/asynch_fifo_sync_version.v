@@ -111,7 +111,7 @@ begin
   wrempty = !reset_ ? 1'b1 : (usedw_i <= 0);
   rdempty = !reset_ ? 1'b1 : (usedw_i <= 0);
 end
-
+/*
 always @(wr_ptr, rd_ptr)
 begin
 	
@@ -138,7 +138,7 @@ always @(wrusedw_i, rdusedw_i)
 begin
   
 end
-
+*/
 assign rdfull  = wrfull ? 1'b1 : 1'b0;                     
 
 // === WRITE INTO FIFO
