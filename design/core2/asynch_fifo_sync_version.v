@@ -230,7 +230,7 @@ assign rdfull  = wrfull ? 1'b1 : 1'b0;
 			rd_ptr 		<= 0;
 			rd_ptr_d  	<= 0;
 			rd_ptr_d1 	<= 0;
-			dataout 	<= 0;
+			//dataout 	<= 0;
 			rd_cnt  	<= 0;
 			
 			end
