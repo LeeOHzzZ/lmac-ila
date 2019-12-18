@@ -62,4 +62,5 @@ void GenVerifTarget_FIFO_TEST(Ila& model, const std::string& design_path,
   vg.GenerateTargets();
 
   return;
-};
+}
+}

@@ -15,7 +15,7 @@
     "TXFIFO_BUFF_RD_PTR"        : "m1.core.txfifo.tx_f.rd_ptr",
     "TXFIFO_RD_OUTPUT"          : "m1.core.txfifo.tx_f.dataout",
 
-    "counter"                   : "m1.core.txfifo.tx_f.clock_counter",
+    "counter"                   : [["__START__", "m1.core.txfifo.tx_f.clock_counter"]],
     "RE"                        : "m1.core.txfifo.rdreq",
     "fifo_empty"                : [["__START__", "m1.core.txfifo.tx_f.rdempty"], ["__IEND__", "#txfifo_empty_end#"]]
 

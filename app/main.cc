@@ -52,7 +52,7 @@ int main(int argc, const char** argv) {
   core2.child("TX_FUNC").ExportToVerilog(fw_verilog2);
 
   verilog_file_name = "LmacCore2_FIFO_TEST.v";
-  std::ofstream fw_verilog2(verilog_file_name);
+  std::ofstream fw_verilog3(verilog_file_name);
   core2.child("FIFO_TEST").ExportToVerilog(fw_verilog2);
 
   // define the command line parser
