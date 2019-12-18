@@ -82,8 +82,8 @@ namespace ilang {
       auto wne = (m.input(TX_WE) == 0);
       auto fifo_not_empty = (fifo_empty == 0);
       auto re = (child.state("RE") == 1);
-      auto full_temp = Ite((wused == TXFIFO_BUFF_DEPTH), BvConst(1, 1), BvConst(0,0));
-      auto empty_temp = Ite((wused == 0), BvConst(1,1), BvConst(0,0));
+      auto full_temp = Ite((wused == TXFIFO_BUFF_DEPTH), BvConst(1, 1), BvConst(0,1));
+      auto empty_temp = Ite((wused == 0), BvConst(1,1), BvConst(0,1));
 
       instr.SetDecode(wne & fifo_not_empty & re);
 
@@ -118,8 +118,8 @@ namespace ilang {
       auto fifo_not_empty = (fifo_empty == 0);
       instr.SetDecode(we & re & fifo_not_empty & fifo_not_full);
 
-      auto full_temp = Ite((wused == TXFIFO_BUFF_DEPTH), BvConst(1, 1), BvConst(0,0));
-      auto empty_temp = Ite((wused == 0), BvConst(1,1), BvConst(0,0));
+      auto full_temp = Ite((wused == TXFIFO_BUFF_DEPTH), BvConst(1, 1), BvConst(0,1));
+      auto empty_temp = Ite((wused == 0), BvConst(1,1), BvConst(0,1));
       auto run = (counter == trigger);
       auto data_out = Ite(run, Load(fifo, Ite(rd_ptr == TXFIFO_BUFF_DEPTH, 
                                             BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), rd_ptr)),
