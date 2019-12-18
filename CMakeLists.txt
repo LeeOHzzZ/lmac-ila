@@ -42,6 +42,8 @@ add_executable(${MyTarget}
   src/core2/tx_interface.cc
   src/core2/tx_internal.cc
   src/utils.cc
+  src/core2/eqcheck_fifo_test.cc
+  src/core2/fifo_test.cc
 )
 
 target_include_directories(${MyTarget} PRIVATE include)

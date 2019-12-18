@@ -79,6 +79,10 @@ private:
   static void SetupPhyInternal(Ila& m);
   static void SetupPhyInstr(Ila& m);
 
+  // one clock driven fifo test
+  static void SetupFIFOTEST(Ila& m);
+  static void AddChild_FIFO_TEST(Ila& m);
+
 }; // class LmacCore2
 
 }; // namespace ilang

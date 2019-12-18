@@ -41,6 +41,11 @@ void GenVerifTargetTX_FUNC(Ila& model, const std::string& design_path,
                       const std::string& instr_map, const std::string& var_map,
                       const std::string& output_path);
 
+// generate Verilog verification target for fifo test
+void GenVerifTarget_FIFO_TEST(Ila& model, const std::string& design_path,
+                      const std::string& instr_map, const std::string& var_map,
+                      const std::string& output_path);
+
 }; // namespace ilang
 
 #endif // LMAC_CORE2_EQCHECK_H__

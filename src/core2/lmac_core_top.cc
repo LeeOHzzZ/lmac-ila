@@ -158,6 +158,9 @@ void LmacCore2::SetImplStateVar(Ila& m) {
 void LmacCore2::SetChild(Ila& m) {
   ILA_DLOG("LMAC") << "Setup child ILAs";
   SetupTxChild(m);
+
+  ILA_DLOG("LMAC") << "Setup one clock fifo test";
+  SetupFIFOTEST(m);
   
 
   return;
