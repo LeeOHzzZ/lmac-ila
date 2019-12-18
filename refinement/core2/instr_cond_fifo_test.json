@@ -1,0 +1,24 @@
+{
+    "instructions": [
+
+
+        {
+            "instruction"       :   "Write_only",
+            "ready bound"       :   1
+        },
+
+        {
+            "instruction"       :   "Read_only",
+            "ready bound"       :   1
+        },
+
+        {
+            "instruction"       :   "Write-Read",
+            "ready bound"       :   1
+        }
+
+    ],
+
+    "global invariants" : [
+    ]
+}

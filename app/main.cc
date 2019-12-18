@@ -91,14 +91,14 @@ int main(int argc, const char** argv) {
   auto var_map = "../refinement/core2/var_map_tx_fifo.json";
   auto instr_map = "../refinement/core2/instr_cond_tx_fifo.json";
   auto model = core2.child("TX_FIFO");
-  // GenVerifTargetTX_FIFO(model, design_path, instr_map, var_map, output_path);
+  GenVerifTargetTX_FIFO(model, design_path, instr_map, var_map, output_path);
 
   // generating verification target for TX_FUNC
   output_path = "../verification/core2/TX_FUNC";
   var_map = "../refinement/core2/var_map_tx_func.json";
   instr_map = "../refinement/core2/instr_cond_tx_func.json";
   model = core2.child("TX_FUNC");
-  // GenVerifTargetTX_FUNC(model, design_path, instr_map, var_map, output_path);
+  GenVerifTargetTX_FUNC(model, design_path, instr_map, var_map, output_path);
 
   // generating verification target for fifo test
   output_path = "../verification/core2/FIFO_TEST";

@@ -1,0 +1,119 @@
+{
+  "models": { 
+    "ILA"     : "m0", 
+    "VERILOG" : "m1" 
+  },
+
+  "state mapping": { 
+    "TXFIFO_FULL"               : [["__START__", "m1.core.txfifo.wrfull"], ["__IEND__", "#txfifo_full_end#"]],
+
+    "TXFIFO_WUSED_QWD"          : "m0.TXFIFO_WUSED_QWD[4:0] == m1.core.txfifo.tx_f.wrusedw_i",
+
+    "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem", 
+ 
+    "TXFIFO_BUFF_WR_PTR"        : "m1.core.txfifo.tx_f.wr_ptr",
+    "TXFIFO_BUFF_RD_PTR"        : "m1.core.txfifo.tx_f.rd_ptr",
+    "TXFIFO_RD_OUTPUT"          : "m1.core.txfifo.tx_f.dataout",
+
+    "counter"                   : "m1.core.txfifo.tx_f.clock_counter",
+    "RE"                        : "m1.core.txfifo.rdreq",
+    "fifo_empty"                : [["__START__", "m1.core.txfifo.tx_f.rdempty"], ["__IEND__", "#txfifo_empty_end#"]]
+
+  },
+  
+  "annotation" : {
+    "memory" : {
+    	"TXFIFO_BUFF" : "internal"
+    }
+  },
+
+  "interface mapping": {
+    "clk"               : "**CLOCK**",
+    "xA_clk"            : "**KEEP**",
+    "reset_"            : "**NRESET**", 
+
+    "mode_10G"          : "MODE_10G",
+    "mode_5G"           : "MODE_5G",
+    "mode_2p5G"         : "MODE_2P5G",
+    "mode_1G"           : "MODE_1G",
+
+    "TCORE_MODE"        : "**KEEP**",
+
+    "tx_mac_wr"         : "TX_WE",
+    "tx_mac_data"       : "TX_DATA",		
+    "tx_mac_full"       : "**SO**",		
+    "tx_mac_usedw"      : "**SO**",	
+
+    "rx_mac_data"       : "**KEEP**",
+    "rx_mac_ctrl"       : "**KEEP**",
+    "rx_mac_empty"	    : "**KEEP**",
+    "rx_mac_rd"         : "**KEEP**",
+    "rx_mac_rd_cycle"   : "**KEEP**",	
+
+    "rx_mac_full_dbg"   : "**NC**",
+    "rx_mac_usedw_dbg"  : "**NC**",
+
+    "cs_fifo_rd_en"     : "**KEEP**",
+    "cs_fifo_empty"     : "**KEEP**",
+    "ipcs_fifo_dout"    : "**KEEP**",
+
+    "xgmii_reset_"      : "**KEEP**",
+    "xgmii_txd"         : "**KEEP**",
+    "xgmii_txc"         : "**KEEP**",
+
+    "xgmii_rxd"         : "**KEEP**",
+    "xgmii_rxc"         : "**KEEP**",
+    "xgmii_led_"        : "**KEEP**",	
+
+    "xauiA_linkup"      : "**KEEP**",
+
+    "host_addr_reg"     : "**KEEP**",
+    "SYS_ADDR"          : "**KEEP**",
+
+    "fail_over"         : "**KEEP**",
+    "fmac_ctrl"         : "**KEEP**",
+    "fmac_ctrl1"        : "**KEEP**",
+
+    "fmac_rxd_en"       : "**KEEP**",
+
+    "mac_pause_value"   : "**KEEP**",
+    "mac_addr0"         : "**KEEP**",
+    "mcast_saddr"       : "**KEEP**",
+
+    "reg_rd_start"      : "**KEEP**",
+
+    "reg_rd_done_out"   : "**KEEP**",
+
+    "FMAC_REGDOUT"      : "**KEEP**",
+    "FIFO_OV_IPEND"     : "**KEEP**"
+  },
+
+
+  "post-value-holder" : {
+
+    "txfifo_full_end": {
+      "cond" : "__START__ == 1",
+      "val"  : "m1.core.txfifo_full",
+      "width": 1
+    },
+
+    "txfifo_empty_end": {
+      "cond" : "__START__ == 1",
+      "val"  : "m1.core.txfifo.tx_f.rdempty",
+      "width": 1
+    }
+  },
+
+  "mapping control" : [
+    "(m1.TCORE_MODE == 1)",
+    "(m1.SYS_ADDR == 1)",
+    "(m1.mode_10G == 1)",
+    "(m1.mode_5G == 0)", 
+    "(m1.mode_2p5G == 0)",
+    "(m1.mode_1G == 0)",
+    "((m1.core.txfifo.tx_f.datain > 0) && (m1.core.txfifo.tx_f.datain < 20))"
+    
+  ],
+
+  "functions": {}
+}
