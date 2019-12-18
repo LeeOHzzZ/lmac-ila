@@ -82,6 +82,9 @@ namespace ilang {
       auto wne = (m.input(TX_WE) == 0);
       auto fifo_not_empty = (fifo_empty == 0);
       auto re = (child.state("RE") == 1);
+      auto full_temp = Ite((wused == TXFIFO_BUFF_DEPTH), BvConst(1, 1), BvConst(0,0));
+      auto empty_temp = Ite((wused == 0), BvConst(1,1), BvConst(0,0));
+
       instr.SetDecode(wne & fifo_not_empty & re);
 
       //updates
@@ -95,10 +98,9 @@ namespace ilang {
                                             BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), rd_ptr+1),
                                        rd_ptr));
       instr.SetUpdate(wused, Ite(run, wused-1, wused));
-      //instr.SetUpdate(fifo_full, Ite(run, BvConst(0x0, 1), fifo_full));
-      ILA_INFO << "test";
-      //instr.SetUpdate(fifo_empty, Ite(run, Ite(wused == 1, BvConst(0x1,1), BvConst(0x0,1)), 
-      //		      		   fifo_empty));
+      instr.SetUpdate(fifo_full, Ite(run, BvConst(0x0, 1), full_temp));
+      instr.SetUpdate(fifo_empty, Ite(run, Ite(wused == 1, BvConst(0x1,1), BvConst(0x0,1)), 
+      		      		                empty_temp));
 
       
     }
@@ -116,6 +118,8 @@ namespace ilang {
       auto fifo_not_empty = (fifo_empty == 0);
       instr.SetDecode(we & re & fifo_not_empty & fifo_not_full);
 
+      auto full_temp = Ite((wused == TXFIFO_BUFF_DEPTH), BvConst(1, 1), BvConst(0,0));
+      auto empty_temp = Ite((wused == 0), BvConst(1,1), BvConst(0,0));
       auto run = (counter == trigger);
       auto data_out = Ite(run, Load(fifo, Ite(rd_ptr == TXFIFO_BUFF_DEPTH, 
                                             BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), rd_ptr)),
@@ -137,10 +141,10 @@ namespace ilang {
                                        rd_ptr));
 
       instr.SetUpdate(wused, Ite(run, wused, wused+1));
-      instr.SetUpdate(fifo_full, Ite(run, fifo_full, 
+      instr.SetUpdate(fifo_full, Ite(run, full_temp, 
                                   Ite((Uge(wused, TXFIFO_BUFF_DEPTH - 1)), BvConst(1, 1), 
 					  BvConst(0x0, 1))));
-      instr.SetUpdate(fifo_empty, Ite(run, fifo_empty, BvConst(0x0, 1)));
+      instr.SetUpdate(fifo_empty, Ite(run, empty_temp, BvConst(0x0, 1)));
 
     }
   }
