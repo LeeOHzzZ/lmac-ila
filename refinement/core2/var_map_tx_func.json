@@ -302,7 +302,7 @@
     //"(~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.usedw_i > 0))",
     //"(~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.wren == 0))",
     //"(m1.core.txfifo.tx_f.mem[rd_ptr] == 64'hdeadbeefdead0042)",
-    "(m1.core.tx_10G_wrap.p_len > 0) && (m1.core.tx_10G_wrap.p_len < 9000)",
+    "(m1.core.tx_10G_wrap.tx_encap.p_len > 0) && (m1.core.tx_10G_wrap.tx_encap.p_len < 9000)",
 
     "(m1.core.tx_10G_wrap.tx_encap.state == 4) || (m1.core.txfifo.tx_f.dataout == 64'hdeadbeefdeadbeef)",
     "(~(m1.core.tx_10G_wrap.tx_encap.state == 4) || ((m1.core.txfifo.tx_f.dataout[63:16] == 48'h0) && (m1.core.txfifo.tx_f.dataout[15:0] > 60) && (m1.core.txfifo.tx_f.dataout[15:0] < 9000)))",

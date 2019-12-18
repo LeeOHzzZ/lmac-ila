@@ -120,6 +120,22 @@ parameter[7:0]
 	P_PKT		= 8'h80	;
 reg [7:0] state;
 
+// for ILA modeling -- packet length;
+reg [63:0] p_len;
+reg [63:0] p_len_holder;
+
+always @(posedge clk)
+	begin
+		if (st_idle)
+		begin
+			p_len_holder <= p_len;
+		end
+		else
+		begin
+			p_len_holder <= p_len_holder;
+		end
+	end
+
 wire st_idle;		assign	st_idle		=	state[0];
 wire st_readsize;	assign	st_readsize = 	state[1];
 wire st_read1;	    assign	st_read1    = 	state[2];

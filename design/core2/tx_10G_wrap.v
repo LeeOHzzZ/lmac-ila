@@ -111,21 +111,7 @@ module tx_10G_wrap(
 	reg	mode_5G_buf  ; 
 	reg	mode_2p5G_buf; 
 
-	// for ILA modeling -- packet length;
-	reg [63:0] p_len;
-	reg [63:0] p_len_holder;
 
-always @(posedge x_clk)
-	begin
-		if (!usr_rst_)
-		begin
-			p_len_holder <= p_len;
-		end
-		else
-		begin
-			p_len_holder <= p_len_holder;
-		end
-	end
 
 
 	
