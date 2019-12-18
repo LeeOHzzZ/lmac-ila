@@ -43,7 +43,6 @@ namespace ilang {
     AddChild_TX_FUNC(m);
   }
 
-
   // child ILA model for TX_FIFO
   // Attention: Although the FIFO is a seperate child module, however there are multiple states of the FIFO are shared with the TX_FUNC.
   // Therefore, we should set the states of FIFO in the parent level.
