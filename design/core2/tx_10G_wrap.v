@@ -122,10 +122,11 @@ always @(posedge x_clk)
 			p_len_holder <= p_len;
 		end
 		else
+		begin
 			p_len_holder <= p_len_holder;
 		end
 	end
-	
+
 
 	
 always @(posedge x_clk) 
