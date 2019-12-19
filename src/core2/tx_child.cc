@@ -266,9 +266,9 @@ namespace ilang {
       // when wcnt < 0, we have taken all the data. No need to fetch from the fifo and update the crc output.
       // Read data from FIFO
       // Because the ILA model didn't consider the some intermediate states, the rd_ptr needs to be subtracted to read the right data in the fifo for the operation.
-      auto delayed_rd_ptr = Ite((wcnt > 15) ,             Ite(fifo_rd_ptr >= 3, fifo_rd_ptr - 3, BvConst(TXFIFO_BUFF_DEPTH, TXFIFO_BUFF_RD_PTR_BWID) - (BvConst(0x3, TXFIFO_BUFF_RD_PTR_BWID) - fifo_rd_ptr)), 
-                            Ite((wcnt >= 8 & wcnt <= 15), Ite(fifo_rd_ptr >= 2, fifo_rd_ptr - 2, BvConst(TXFIFO_BUFF_DEPTH, TXFIFO_BUFF_RD_PTR_BWID) - (BvConst(0x2, TXFIFO_BUFF_RD_PTR_BWID) - fifo_rd_ptr)),
-                                                         Ite(fifo_rd_ptr >= 1, fifo_rd_ptr - 1, BvConst(TXFIFO_BUFF_DEPTH, TXFIFO_BUFF_RD_PTR_BWID) - (BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID) - fifo_rd_ptr))));
+      auto delayed_rd_ptr = Ite((wcnt > 15) ,             Ite(Uge(fifo_rd_ptr, 3), fifo_rd_ptr - 3, BvConst(TXFIFO_BUFF_DEPTH, TXFIFO_BUFF_RD_PTR_BWID) - (BvConst(0x3, TXFIFO_BUFF_RD_PTR_BWID) - fifo_rd_ptr)), 
+                            Ite((wcnt >= 8 & wcnt <= 15), Ite(Uge(fifo_rd_ptr, 2), fifo_rd_ptr - 2, BvConst(TXFIFO_BUFF_DEPTH, TXFIFO_BUFF_RD_PTR_BWID) - (BvConst(0x2, TXFIFO_BUFF_RD_PTR_BWID) - fifo_rd_ptr)),
+                                                         Ite(Uge(fifo_rd_ptr, 1), fifo_rd_ptr - 1, BvConst(TXFIFO_BUFF_DEPTH, TXFIFO_BUFF_RD_PTR_BWID) - (BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID) - fifo_rd_ptr))));
 
       auto fifo_data_out = Load(fifo, Ite(fifo_rd_ptr == TXFIFO_BUFF_DEPTH, BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr)); // this state is redundant
       auto delay_data_out = Load(fifo, delayed_rd_ptr); // this is the actual data that is used for operations.
