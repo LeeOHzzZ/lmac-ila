@@ -123,6 +123,19 @@ reg [7:0] state;
 // for ILA modeling -- packet length;
 reg [63:0] p_len;
 reg [63:0] p_len_holder;
+reg [63:0] p_len_latch;
+
+always @ (*)
+	begin
+		if (st_idle)
+		begin
+			p_len_latch = p_len;
+		end
+		else begin
+			p_len_latch = p_len_latch;
+		end
+	end
+
 
 always @(posedge clk)
 	begin
