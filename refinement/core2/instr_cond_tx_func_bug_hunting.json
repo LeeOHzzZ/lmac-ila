@@ -1,0 +1,316 @@
+{
+  "models": { 
+    "ILA"     : "m0", 
+    "VERILOG" : "m1" 
+  },
+
+  "state mapping": { 
+    "TXFIFO_FULL"               : [["__START__", "m1.core.txfifo.wrfull"], ["__IEND__", "#txfifo_full_end#"]],
+
+    "TXFIFO_RD_EN"              : [["__START__", "m1.core.txfifo.rdreq"], 
+                                    ["__IEND__", "#txfifo_rd_en_end#"]],
+
+    "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem", 
+
+    "TXFIFO_BUFF_WR_PTR"        : [["__START__", "m1.core.txfifo.tx_f.wr_ptr"], 
+                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "#txfifo_buff_wr_ptr_RdByteCnt_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#txfifo_buff_wr_ptr_normal_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 3)", "#txfifo_buff_wr_ptr_normal_end#"]],
+
+    "TXFIFO_BUFF_RD_PTR"        : [["__START__", "m1.core.txfifo.tx_f.rd_ptr"], 
+                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "#txfifo_buff_rd_ptr_RdByteCnt_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#txfifo_buff_rd_ptr_normal_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 3)", "#txfifo_buff_rd_ptr_normal_end#"]],
+
+    "TXFIFO_RD_OUTPUT"          : [["__START__", "m1.core.txfifo.tx_f.dataout"], 
+                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "#txfifo_buff_rd_output_RdByteCnt_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#txfifo_buff_rd_output_normal_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 3)", "#txfifo_buff_rd_output_normal_end#"]],
+
+    "TXFIFO_WUSED_QWD"		: [["__START__", "m1.core.txfifo_usedw"]],
+
+    "TX_STATE"                  : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.state"], 
+                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "#tx_state_RdByteCnt_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#tx_state_WrPktPayload_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 3)", "#tx_state_LastOne_end#"]],
+
+    "TX_STATE_ENCAP"            : [["__START__", "m1.core.tx_10G_wrap.tx_encap.state"], 
+                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "#tx_st_encap_RdByteCnt_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#tx_st_encap_WrPktPayload_end#"]],
+
+
+    "TX_B2B_CNTR"               : [["__START__", "m1.core.tx_10G_wrap.tx_encap.b2b_counter"], 
+                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "#b2b_counter_RdByteCnt_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#b2b_counter_WrPktPayload_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 3)", "#b2b_counter_LastOne_end#"]],
+    
+    "TX_B2B_OK"                 : "m1.core.tx_10G_wrap.tx_encap.b2b_ok",
+
+    "TX_PACKET_BYTE_CNT"        : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg"], ["__IEND__", "#tx_pkt_byte_cnt_RdByteCnt_end#"]],
+
+    "TX_WCNT"                   : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.wcnt"], 
+                                    ["__IEND__ && (TX_FUNC_INSTR == 1)", "#tx_wcnt_RdByteCnt_end#"],
+                                    ["__IEND__ && (TX_FUNC_INSTR == 2)", "#tx_wcnt_WrPktPaylaod_end#"]],
+
+
+    "XGMII_DOUT_REG"            : "m1.core.tx_10G_wrap.tx_xgmii.txd",
+    "XGMII_COUT_REG"            : "m1.core.tx_10G_wrap.tx_xgmii.txc",
+    "TX_PKT_SENT"               : "m1.core.tx_10G_wrap.tx_xgmii.pkt_transmitted",
+    "TX_BYTE_SENT"              : "m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt",
+
+    "CRC"			: [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32"]],
+    "CRC_IN"			: [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in"]],
+    "CRC_DAT_IN"                : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.bdin"]],
+    "TX_WCNT_INI"               : "m1.core.tx_10G_wrap.tx_xgmii.ila_wcnt_ini",
+    "TX_BUF"                    : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.bdata1"]]
+
+  
+  },
+
+  "annotation" : {
+    "memory" : {
+	    "TXFIFO_BUFF" : "internal"
+    }
+  },
+
+
+  "post-value-holder" : {
+
+    "txfifo_full_end": {
+      "cond" : "__START__ == 1",
+      "val"  : "m1.core.txfifo.tx_f.wrfull",
+      "width": 1
+    },
+
+    "txfifo_rd_en_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.txfifo.rdreq",
+      "width": 1
+    },
+
+    "txfifo_wused_RdByte_end": {
+      "cond" : "__CYCLE_CNT__ == 2",
+      "val"  : "m1.core.txfifo_usedw",
+      "width": 13
+    },
+
+    "txfifo_wused_normal_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.txfifo_usedw",
+      "width": 13
+    },
+
+    "txfifo_buff_wr_ptr_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 2",
+      "val"  : "m1.core.txfifo.tx_f.wr_ptr",
+      "width": 5
+    },
+
+    "txfifo_buff_wr_ptr_normal_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.txfifo.tx_f.wr_ptr",
+      "width": 5
+    },
+
+    "txfifo_buff_rd_ptr_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 2",
+      "val"  : "m1.core.txfifo.tx_f.rd_ptr",
+      "width": 5
+    },
+
+    "txfifo_buff_rd_ptr_normal_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.txfifo.tx_f.rd_ptr",
+      "width": 5
+    },
+
+    "txfifo_buff_rd_output_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 2",
+      "val"  : "m1.core.txfifo.tx_f.dataout",
+      "width": 64
+    },
+
+    "txfifo_buff_rd_output_normal_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.txfifo.tx_f.dataout",
+      "width": 64
+    },
+
+
+    "tx_st_encap_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 4",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.state",
+      "width": 8
+    },
+
+    "tx_pkt_byte_cnt_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 4",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg",
+      "width": 16
+    },
+
+    "tx_wcnt_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 5",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.wcnt",
+      "width": 16
+    },
+
+    "tx_state_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 5",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.state",
+      "width": 8
+    },
+    
+    "b2b_counter_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 5",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.b2b_counter",
+      "width": 6
+    },
+
+    "crc_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 2",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32",
+      "width": 32
+    },
+
+    "crc_in_RdByteCnt_end": {
+      "cond" : "__CYCLE_CNT__ == 2",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in",
+      "width": 32
+    },
+
+    
+    "b2b_counter_WrPktPayload_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.b2b_counter",
+      "width": 6
+    },
+
+    "tx_state_WrPktPayload_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.state",
+      "width": 8
+    },
+
+    "tx_st_encap_WrPktPayload_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.state",
+      "width": 8
+    },
+
+    "tx_wcnt_WrPktPaylaod_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.wcnt",
+      "width": 16
+    },
+
+    "crc_WrPktPaylaod_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.tx_mac10g_crc32x64.crc32",
+      "width": 32
+    },
+
+    "crc_in_WrPktPaylaod_end": {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.ILA_crc_in",
+      "width": 32
+    },
+
+
+
+    "b2b_counter_LastOne_end" : {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_encap.b2b_counter",
+      "width": 6
+    },
+
+    "tx_state_LastOne_end" : {
+      "cond" : "__CYCLE_CNT__ == 1",
+      "val"  : "m1.core.tx_10G_wrap.tx_xgmii.state",
+      "width": 8
+    }
+  },
+
+  "interface mapping": {
+    "clk"               : "**CLOCK**",
+    "xA_clk"            : "**CLOCK**",
+    "reset_"            : "**NRESET**", 
+
+    "mode_10G"          : "MODE_10G",
+    "mode_5G"           : "MODE_5G",
+    "mode_2p5G"         : "MODE_2P5G",
+    "mode_1G"           : "MODE_1G",
+
+    "TCORE_MODE"        : "**KEEP**",
+
+    "tx_mac_wr"         : "**KEEP**",
+    "tx_mac_data"       : "**KEEP**",		
+    "tx_mac_full"       : "**SO**",		
+    "tx_mac_usedw"      : "**SO**",	
+
+    "rx_mac_data"       : "**KEEP**",
+    "rx_mac_ctrl"       : "**KEEP**",
+    "rx_mac_empty"	    : "**KEEP**",
+    "rx_mac_rd"         : "**KEEP**",
+    "rx_mac_rd_cycle"   : "**KEEP**",	
+
+    "rx_mac_full_dbg"   : "**NC**",
+    "rx_mac_usedw_dbg"  : "**NC**",
+
+    "cs_fifo_rd_en"     : "**KEEP**",
+    "cs_fifo_empty"     : "**KEEP**",
+    "ipcs_fifo_dout"    : "**KEEP**",
+
+    "xgmii_reset_"      : "**KEEP**",
+    "xgmii_txd"         : "**KEEP**",
+    "xgmii_txc"         : "**KEEP**",
+
+    "xgmii_rxd"         : "**KEEP**",
+    "xgmii_rxc"         : "**KEEP**",
+    "xgmii_led_"        : "**KEEP**",	
+
+    "xauiA_linkup"      : "**KEEP**",
+
+    "host_addr_reg"     : "**KEEP**",
+    "SYS_ADDR"          : "**KEEP**",
+
+    "fail_over"         : "**KEEP**",
+    "fmac_ctrl"         : "**KEEP**",
+    "fmac_ctrl1"        : "**KEEP**",
+
+    "fmac_rxd_en"       : "**KEEP**",
+
+    "mac_pause_value"   : "**KEEP**",
+    "mac_addr0"         : "**KEEP**",
+    "mcast_saddr"       : "**KEEP**",
+
+    "reg_rd_start"      : "**KEEP**",
+
+    "reg_rd_done_out"   : "**KEEP**",
+
+    "FMAC_REGDOUT"      : "**KEEP**",
+    "FIFO_OV_IPEND"     : "**KEEP**"
+  },
+
+  "mapping control" : [
+    "(m1.TCORE_MODE == 1)",
+    "(m1.mode_10G == 1) && (m1.core.mode_10G == 1) && (m1.core.tx_10G_wrap.tx_encap.mode_10G == 1) && (m1.core.tx_10G_wrap.tx_xgmii.mode_10G == 1)",
+    "(m1.mode_5G == 0 ) && (m1.core.mode_5G == 0) && (m1.core.tx_10G_wrap.tx_encap.mode_5G == 0) && (m1.core.tx_10G_wrap.tx_xgmii.mode_5G == 0)", 
+    "(m1.mode_2p5G == 0) && (m1.core.mode_2p5G == 0) && (m1.core.tx_10G_wrap.mode_2p5G == 0) && (m1.core.tx_10G_wrap.tx_xgmii.mode_2p5G == 0)",
+    "(m1.mode_1G == 0) && (m1.core.mode_1G == 0) && (m1.core.tx_10G_wrap.tx_encap.mode_1G == 0) && (m1.core.tx_10G_wrap.tx_xgmii.mode_1G == 0)",
+
+    //"(~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.usedw_i > 0))",
+    //"(~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.wren == 0))",
+    //"(m1.core.txfifo.tx_f.mem[rd_ptr] == 64'hdeadbeefdead0042)",
+    "(m1.core.tx_10G_wrap.tx_encap.p_len > 0) && (m1.core.tx_10G_wrap.tx_encap.p_len < 60)",
+
+    // "~(m1.core.tx_10G_wrap.tx_encap.state > 4) || (m1.core.txfifo.tx_f.dataout == 64'hdeadbeefdeadbeef)",
+    "~(m1.core.tx_10G_wrap.tx_encap.state <= 4) || (m1.core.txfifo.tx_f.dataout == m1.core.tx_10G_wrap.tx_encap.p_len_latch)",
+    //"(~(m1.core.tx_10G_wrap.tx_encap.state == 4) || ((m1.core.txfifo.tx_f.dataout[63:16] == 48'h0) && (m1.core.txfifo.tx_f.dataout[15:0] > 60) && (m1.core.txfifo.tx_f.dataout[15:0] < 9000)))",
+    "(m1.core.rx_pause == 0) && (m1.core.tx_10G_wrap.tx_encap.rx_pause_sync == 0)",
+    "(m1.core.tx_10G_wrap.tx_encap.tx_b2b_dly == 2)",
+    "(m1.core.tx_10G_wrap.tx_xgmii.fmac_tx_clr_en == 0)"
+  ],
+
+  "functions": {}
+}
