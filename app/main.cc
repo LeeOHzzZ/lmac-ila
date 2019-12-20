@@ -105,7 +105,7 @@ int main(int argc, const char** argv) {
   var_map = "../refinement/core2/var_map_tx_func_bug_hunting.json";
   instr_map = "../refinement/core2/instr_cond_tx_func.json";
   model = core2.child("TX_FUNC");
-  GenVerifTargetTX_FUNC(model, design_path, instr_map, var_map, output_path);
+  GenVerifTargetTX_FUNC_bug_hunting(model, design_path, instr_map, var_map, output_path);
 
   // generating verification target for fifo test
   output_path = "../verification/core2/FIFO_TEST";
