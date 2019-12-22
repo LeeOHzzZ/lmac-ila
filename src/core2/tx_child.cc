@@ -273,9 +273,9 @@ namespace ilang {
       auto fifo_data_out = Load(fifo, Ite(fifo_rd_ptr == TXFIFO_BUFF_DEPTH, BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr)); // this state is redundant
       auto delay_data_out = Load(fifo, delayed_rd_ptr); // this is the actual data that is used for operations.
 
-      instr.SetUpdate(fifo_output, Ite((wcnt > 15), fifo_data_out, fifo_output));
-      instr.SetUpdate(fifo_rd_ptr, Ite((wcnt > 15), Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1), fifo_rd_ptr));
-      instr.SetUpdate(fifo_wused, Ite((wcnt > 15), fifo_wused - 1, fifo_wused));
+      instr.SetUpdate(fifo_output, Ite((wcnt > 23), fifo_data_out, fifo_output));
+      instr.SetUpdate(fifo_rd_ptr, Ite((wcnt > 23), Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1), fifo_rd_ptr));
+      instr.SetUpdate(fifo_wused, Ite((wcnt > 23), fifo_wused - 1, fifo_wused));
 
       // CRC code Update
 
