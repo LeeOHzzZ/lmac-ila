@@ -120,14 +120,14 @@ void GenVerifTargetTX_FUNC_bug_hunting(Ila& model, const std::string& design_pat
 
   std::vector<std::string> design_files = {
       "LMAC_CORE_TOP.v",
-      "asynch_fifo.v", // XXX change accordingly
+      "asynch_fifo_sync_version.v", // XXX change accordingly
       "tcore_fmac_core_LE2.v",
       "tx_10G_wrap.v",
       "tx_1G_wrap.v",
       "tx_encap.v",
       "tx_mac10g_crc32x64.v",
       "tx_xgmii_LE2.v",
-      "txfifo_1024x64_original.v",
+      "txfifo_1024x64_sync.v",
   };
 
   ILA_INFO << "before adding full path";
