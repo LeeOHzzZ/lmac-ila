@@ -149,6 +149,22 @@ always @(posedge clk)
 		end
 	end
 
+// for ILA modeling -- try to force different fifo output everytime
+reg [63:0] fifo_out_holder;
+
+always @ (posedge clk) 
+	begin
+		if (!rst_)
+			begin
+				fifo_out_holder <= 64'b0;
+			end
+		else
+			begin
+				fifo_out_holder <= txfifo_dout;
+			end
+	end
+
+
 wire st_idle;		assign	st_idle		=	state[0];
 wire st_readsize;	assign	st_readsize = 	state[1];
 wire st_read1;	    assign	st_read1    = 	state[2];
