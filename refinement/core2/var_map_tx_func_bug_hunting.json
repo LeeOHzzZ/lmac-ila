@@ -298,16 +298,21 @@
     "(m1.mode_5G == 0 ) && (m1.core.mode_5G == 0) && (m1.core.tx_10G_wrap.tx_encap.mode_5G == 0) && (m1.core.tx_10G_wrap.tx_xgmii.mode_5G == 0)", 
     "(m1.mode_2p5G == 0) && (m1.core.mode_2p5G == 0) && (m1.core.tx_10G_wrap.mode_2p5G == 0) && (m1.core.tx_10G_wrap.tx_xgmii.mode_2p5G == 0)",
     "(m1.mode_1G == 0) && (m1.core.mode_1G == 0) && (m1.core.tx_10G_wrap.tx_encap.mode_1G == 0) && (m1.core.tx_10G_wrap.tx_xgmii.mode_1G == 0)",
+    // these control sets the conditions for bug hunting.
+    // sync_fifo version
+    //"(m1.core.tx_10G_wrap.tx_encap.p_len > 60) && (m1.core.tx_10G_wrap.tx_encap.p_len < 200)",
+    //"~((m1.core.tx_10G_wrap.tx_encap.state > 1) && (m1.core.tx_10G_wrap.tx_encap.state <= 8)) || (m1.core.txfifo.tx_f.usedw_i > 0)", 
+    //"~(m1.core.tx_10G_wrap.tx_encap.state > 8) || (m1.core.txfifo.tx_f.dataout != m1.core.tx_10G_wrap.tx_encap.fifo_out_holder)",
+    //"~(m1.core.tx_10G_wrap.tx_encap.state > 8) || (m1.core.txfifo.tx_f.wren == 0)",
+    //"~(m1.core.tx_10G_wrap.tx_encap.state <= 4) || (m1.core.txfifo.tx_f.dataout == m1.core.tx_10G_wrap.tx_encap.p_len_latch)",
 
-    //"(~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.usedw_i > 0))",
-    //"(~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.wren == 0))",
-    //"(m1.core.txfifo.tx_f.mem[rd_ptr] == 64'hdeadbeefdead0042)",
-    "(m1.core.tx_10G_wrap.tx_encap.p_len > 0) && (m1.core.tx_10G_wrap.tx_encap.p_len < 60)",
-    "~((m1.core.tx_10G_wrap.tx_encap.state > 1) && (m1.core.tx_10G_wrap.tx_encap.state <= 8)) || (m1.core.txfifo.tx_f.usedw_i > 0)", 
-    //"~(m1.core.tx_10G_wrap.tx_encap.state <=4) || (m1.core.txfifo.tx_f.dataout == 128)",
-    // "~(m1.core.tx_10G_wrap.tx_encap.state > 4) || (m1.core.txfifo.tx_f.dataout == 64'hdeadbeefdeadbeef)",
-    "~(m1.core.tx_10G_wrap.tx_encap.state <= 4) || (m1.core.txfifo.tx_f.dataout == m1.core.tx_10G_wrap.tx_encap.p_len_latch)",
-    //"(~(m1.core.tx_10G_wrap.tx_encap.state == 4) || ((m1.core.txfifo.tx_f.dataout[63:16] == 48'h0) && (m1.core.txfifo.tx_f.dataout[15:0] > 60) && (m1.core.txfifo.tx_f.dataout[15:0] < 9000)))",
+    // original fifo version
+    //"~((m1.core.tx_10G_wrap.tx_encap.state > 1) && (m1.core.tx_10G_wrap.tx_encap.state <= 8)) || (m1.core.txfifo.tx_f.wrusedw > 0)", 
+    "~((m1.core.tx_10G_wrap.tx_encap.state > 8) && (m1.core.txfifo.tx_f.rd_ptr == 8)) || (m1.core.txfifo.tx_f.rdempty == 1)",
+    //"~(m1.core.tx_10G_wrap.tx_encap.state > 8) || (m1.core.txfifo.tx_f.dataout != m1.core.tx_10G_wrap.tx_encap.fifo_out_holder)",
+    "~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.wren == 0)",
+    "~(m1.core.tx_10G_wrap.tx_encap.state == 8) || ((m1.core.tx_10G_wrap.tx_encap.bytes_remain > 52) && (m1.core.tx_10G_wrap.tx_encap.bytes_remain < 9000))",
+    // these controls disable the pause function in the tx path.
     "(m1.core.rx_pause == 0) && (m1.core.tx_10G_wrap.tx_encap.rx_pause_sync == 0)",
     "(m1.core.tx_10G_wrap.tx_encap.tx_b2b_dly == 2)",
     "(m1.core.tx_10G_wrap.tx_xgmii.fmac_tx_clr_en == 0)"

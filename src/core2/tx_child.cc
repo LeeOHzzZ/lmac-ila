@@ -318,8 +318,8 @@ namespace ilang {
       }
 
       // update CRC code input for the generator;
-      //auto crc_in_temp = Ite((wcnt > 0), crc_g, crc_in);
-      auto crc_in_temp = crc_g;
+      auto crc_in_temp = Ite((wcnt > 0), crc_g, crc_in);
+      //auto crc_in_temp = crc_g;
       instr.SetUpdate(crc_in, crc_in_temp);
       // update the CRC output. Needs transformation.
       auto crc_code = ~(( Lshr(crc_in_temp, 24) & BvConst(0xFF, 32)) | (Lshr(crc_in_temp, 8) & BvConst(0xFF00, 32)) | ((crc_in_temp << 8) & BvConst(0xFF0000, 32)) | ((crc_in_temp << 24) & Concat(BvConst(0xFF00, 16), BvConst(0x0000, 16))));
