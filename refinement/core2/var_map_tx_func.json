@@ -304,8 +304,8 @@
     //"(m1.core.txfifo.tx_f.mem[rd_ptr] == 64'hdeadbeefdead0042)",
     //"(m1.core.tx_10G_wrap.tx_encap.p_len > 0) && (m1.core.tx_10G_wrap.tx_encap.p_len < 60)",
     "~(m1.core.tx_10G_wrap.tx_encap.state == 8) || ((m1.core.tx_10G_wrap.tx_encap.bytes_remain > 52) && (m1.core.tx_10G_wrap.tx_encap.bytes_remain < 9000))",
-    "~(m1.core.tx_10G_wrap.tx_encap.state > 4) || (m1.core.txfifo.tx_f.dataout == 64'hdeadbeefdeadbeef)",
-    "~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.datain == 64'hdeadbeefdeadbeef)",
+    //"~(m1.core.tx_10G_wrap.tx_encap.state > 4) || (m1.core.txfifo.tx_f.dataout == 64'hdeadbeefdeadbeef)",
+    //"~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.datain == 64'hdeadbeefdeadbeef)",
     "~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.rdempty == 0)",
     // avoid fifo write replacing the original value, causing data mismatch between ILA and verilog
     "~(m1.core.txfifo.tx_f.rden == 1) || ((m1.core.txfifo.tx_f.rd_ptr != m1.core.txfifo.tx_f.wr_ptr_d) && (m1.core.txfifo.tx_f.rd_ptr != m1.core.txfifo.tx_f.wr_ptr_d1))",

@@ -310,7 +310,8 @@
     //"~((m1.core.tx_10G_wrap.tx_encap.state > 1) && (m1.core.tx_10G_wrap.tx_encap.state <= 8)) || (m1.core.txfifo.tx_f.wrusedw > 0)", 
     "~((m1.core.tx_10G_wrap.tx_encap.state > 8) && (m1.core.txfifo.tx_f.rd_ptr == 8)) || (m1.core.txfifo.tx_f.rdempty == 1)",
     //"~(m1.core.tx_10G_wrap.tx_encap.state > 8) || (m1.core.txfifo.tx_f.dataout != m1.core.tx_10G_wrap.tx_encap.fifo_out_holder)",
-    "~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.wren == 0)",
+    //"~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.wren == 0)",
+    "~(m1.core.txfifo.tx_f.rden == 1) || ((m1.core.txfifo.tx_f.rd_ptr != m1.core.txfifo.tx_f.wr_ptr_d) && (m1.core.txfifo.tx_f.rd_ptr != m1.core.txfifo.tx_f.wr_ptr_d1))",
     "~(m1.core.tx_10G_wrap.tx_encap.state == 8) || ((m1.core.tx_10G_wrap.tx_encap.bytes_remain > 52) && (m1.core.tx_10G_wrap.tx_encap.bytes_remain < 9000))",
     // these controls disable the pause function in the tx path.
     "(m1.core.rx_pause == 0) && (m1.core.tx_10G_wrap.tx_encap.rx_pause_sync == 0)",
