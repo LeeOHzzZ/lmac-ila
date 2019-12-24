@@ -26,6 +26,7 @@ namespace ilang {
 #define TX_WE "TX_WE"
 #define TX_WE_BWID 1
 #define TX_WE_V_VALID 1
+#define TX_WE_N 0
 
 // 64-bit data bus
 // The first qword sent by the user logic is the byte count of

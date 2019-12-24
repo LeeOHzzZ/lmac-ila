@@ -170,7 +170,7 @@ void LmacCore2::SetInstr(Ila& m) {
   ILA_DLOG("LMAC") << "Setup instructions";
 
   // TX FIFO instructions
-  // SetupTxInstr(m);
+  SetupTxInstr(m);
 
   // RX FIFO instructions
 

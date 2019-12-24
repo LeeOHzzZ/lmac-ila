@@ -28,6 +28,8 @@
                                     ["__IEND__ && (TX_FUNC_INSTR == 3)", "#txfifo_buff_rd_output_normal_end#"]],
 
     "TXFIFO_WUSED_QWD"		: [["__START__", "m1.core.txfifo_usedw"]],
+    
+    "TXFIFO_RD_EMPTY"           : [["__START__", "m1.core.txfifo.tx_f.rdempty"]],
 
     "TX_STATE"                  : [["__START__", "m1.core.tx_10G_wrap.tx_xgmii.state"], 
                                     ["__IEND__ && (TX_FUNC_INSTR == 1)", "#tx_state_RdByteCnt_end#"],

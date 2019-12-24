@@ -129,6 +129,10 @@ namespace ilang {
 #define TXFIFO_RD_EN "TXFIFO_RD_EN"
 #define TXFIFO_RD_EN_BWID 1
 
+// Read empty signal
+#define TXFIFO_RD_EMPTY "TXFIFO_RD_EMPTY"
+#define TXFIFO_RD_EMPTY_BWID 1
+
 // register for CRC, store the 4byte CRC
 #define CRC "CRC"
 #define CRC_BWID 32
