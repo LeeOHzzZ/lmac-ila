@@ -1,0 +1,490 @@
+$date Tue Dec 24 15:16:11 2019
+ $end
+$version JasperGold $end
+$timescale 1 ns $end
+$scope module TX_FUNC $end
+$var wire 1 ! n18 $end
+$var wire 1 " __ILA_TX_FUNC_decode_of_WR_PKT_PAYLOAD_10G__ $end
+$var wire 13 # n37 [12:0] $end
+$var wire 1 $ __ILA_TX_FUNC_decode_of_SET_B2B_CNTR_10G__ $end
+$var wire 16 % n97 [15:0] $end
+$var wire 8 & n81 [7:0] $end
+$var wire 1 ' n85 $end
+$var wire 13 ( n41 [12:0] $end
+$var wire 1 ) not_empty_start $end
+$var wire 1 * n36 $end
+$var wire 1 + n14 $end
+$var wire 1 , n87 $end
+$var wire 1 - n74 $end
+$var wire 1 . n28 $end
+$var wire 1 / n33 $end
+$var wire 1 0 n12 $end
+$var wire 1 1 n80 $end
+$var wire 1 2 n8 $end
+$var wire 1 3 n70 $end
+$var wire 1 4 n29 $end
+$var wire 16 5 n106 [15:0] $end
+$var wire 1 6 n71 $end
+$var wire 1 7 n21 $end
+$var wire 1 8 mode $end
+$var wire 1 9 instr_valid $end
+$var wire 1 : state_c1 $end
+$var wire 1 ; state_c2 $end
+$var wire 1 < n10 $end
+$var wire 1 = n91 $end
+$var wire 1 > \:jasper_formal_reset $end
+$var wire 1 ? rst $end
+$var reg 8 @ TX_STATE_ENCAP [7:0] $end
+$var reg 5 A TX_STATE [4:0] $end
+$var reg 1 B TXFIFO_RD_EMPTY $end
+$var reg 1 C TXFIFO_RD_EN $end
+$var wire 13 D n39 [12:0] $end
+$var wire 16 E n104 [15:0] $end
+$var reg 16 F TX_WCNT [15:0] $end
+$var reg 1 G TX_B2B_OK $end
+$var reg 6 H TX_B2B_CNTR [5:0] $end
+$var wire 1 I n6 $end
+$var wire 64 J n60 [63:0] $end
+$var wire 1 K n69 $end
+$var wire 6 L n93 [5:0] $end
+$var wire 1 M n26 $end
+$var wire 1 N __ILA_TX_FUNC_decode_of_READ_BYTE_CNT_10G__ $end
+$var wire 1 O n11 $end
+$var wire 1 P n7 $end
+$var wire 6 Q n89 [5:0] $end
+$var wire 64 R TXFIFO_BUFF_data_n59 [63:0] $end
+$var wire 1 S n96 $end
+$var wire 16 T n105 [15:0] $end
+$var wire 1 U n13 $end
+$var wire 1 V n32 $end
+$var wire 13 W n38 [12:0] $end
+$var wire 1 X n0 $end
+$var wire 1 Y n77 $end
+$var wire 1 Z n34 $end
+$var wire 1 [ MODE_10G $end
+$var wire 1 \ n35 $end
+$var wire 4 ] __ILA_TX_FUNC_grant__ [3:0] $end
+$var wire 1 ^ n72 $end
+$var wire 1 _ n30 $end
+$var wire 1 ` n3 $end
+$var wire 1 a state_c3 $end
+$var wire 1 b state_c4 $end
+$var reg 13 c TXFIFO_WUSED_QWD [12:0] $end
+$var wire 3 d n98 [2:0] $end
+$var wire 1 e n25 $end
+$var wire 1 f n90 $end
+$var wire 1 g n15 $end
+$var wire 1 h n1 $end
+$var wire 1 i state_c5 $end
+$var wire 1 j wcnt_c1 $end
+$var wire 13 k n42 [12:0] $end
+$var wire 6 l n88 [5:0] $end
+$var wire 1 m TX_WE $end
+$var wire 1 n n19 $end
+$var wire 6 o n94 [5:0] $end
+$var wire 1 p __ILA_TX_FUNC_decode_of_WR_PKT_LASTONE_10G__ $end
+$var wire 6 q n84 [5:0] $end
+$var wire 1 r n9 $end
+$var wire 1 s n92 $end
+$var wire 1 t n16 $end
+$var wire 1 u b2b_not_neg $end
+$var wire 1 v b2b_ok_c1 $end
+$var wire 1 w n31 $end
+$var wire 5 x n79 [4:0] $end
+$var wire 1 y n76 $end
+$var wire 1 z n75 $end
+$var wire 16 { n102 [15:0] $end
+$var wire 1 | n68 $end
+$var wire 1 } n73 $end
+$var wire 1 ~ n99 $end
+$var wire 1 !! n22 $end
+$var wire 1 "! n27 $end
+$var wire 1 #! __ILA_TX_FUNC_valid__ $end
+$var wire 13 $! n100 [12:0] $end
+$var wire 1 %! n17 $end
+$var wire 1 &! n5 $end
+$var wire 6 '! n83 [5:0] $end
+$var wire 1 (! n86 $end
+$var wire 13 )! n101 [12:0] $end
+$var wire 1 *! n95 $end
+$var wire 1 +! n20 $end
+$var wire 1 ,! n2 $end
+$var wire 1 -! n23 $end
+$var wire 1 .! n78 $end
+$var wire 1 /! n82 $end
+$var wire 1 0! n40 $end
+$var wire 1 1! n4 $end
+$var wire 16 2! n103 [15:0] $end
+$var wire 1 3! n24 $end
+$var wire 1 4! clk $end
+$var wire 1 5! \:jasper_formal_clock $end
+$upscope $end
+$scope module \jasper::tcl_properties $end
+$var wire 1 6! \property:0 $end
+$upscope $end
+$enddefinitions $end
+#0
+1!
+0"
+b0000000000000 #
+1$
+b0000000000011100 %
+b00000001 &
+1'
+b0000000000000 (
+1)
+1*
+0+
+1,
+1-
+0.
+1/
+00
+11
+12
+13
+14
+b1111111111111000 5
+16
+07
+18
+19
+1:
+1;
+1<
+1=
+0>
+0?
+b00000001 @
+b00001 A
+0B
+0C
+b0000000000000 D
+b0000000000100000 E
+b0000000000000000 F
+0G
+b000110 H
+1I
+b0000000000000000000000000000000000000000000000000000000000011100 J
+1K
+b000101 L
+1M
+0N
+1O
+1P
+b000101 Q
+b0000000000000000000000000000000000000000000000000000000000011100 R
+0S
+b0000000000011111 T
+0U
+0V
+b1111111111111 W
+1X
+0Y
+0Z
+1[
+0\
+b0001 ]
+1^
+1_
+1`
+1a
+1b
+b0000000000001 c
+b100 d
+0e
+1f
+0g
+1h
+1i
+1j
+b0000000000001 k
+b000101 l
+0m
+0n
+b000101 o
+0p
+b000101 q
+1r
+1s
+1t
+1u
+1v
+1w
+b01000 x
+1y
+1z
+b0000000000100000 {
+1|
+1}
+1~
+1!!
+0"!
+1#!
+b0000000000011 $!
+0%!
+0&!
+b000101 '!
+1(!
+b0000000000100 )!
+0*!
+1+!
+1,!
+0-!
+1.!
+0/!
+00!
+11!
+b0000000000011000 2!
+03!
+14!
+15!
+16!
+#5
+04!
+05!
+#10
+b0000011111111010 %
+b0000100000000000 E
+b000101 H
+b0000000000000000000000000000000000000000000000000000011111111010 J
+b000100 L
+b000100 Q
+b0000000000000000000000000000000000000000000000000000011111111010 R
+b0000011111111111 T
+b010 d
+b000100 l
+b000100 o
+b000100 q
+b0000100000000000 {
+b0000011111111 $!
+b000100 '!
+b0000100000000 )!
+b0000011111111000 2!
+14!
+15!
+#15
+04!
+05!
+#20
+b0000000000000100 %
+b0000000000001000 E
+b000100 H
+b0000000000000000000000000000000000000000000000000000000000000100 J
+b000011 L
+b000011 Q
+b0000000000000000000000000000000000000000000000000000000000000100 R
+b0000000000000111 T
+b100 d
+b000011 l
+b000011 o
+b000011 q
+b0000000000001000 {
+b0000000000000 $!
+b000011 '!
+b0000000000001 )!
+b0000000000000000 2!
+14!
+15!
+#25
+04!
+05!
+#30
+b0001111111111100 %
+b0010000000000000 E
+b000011 H
+b0000000000000000000000000000000000000000000000000001111111111100 J
+b000010 L
+b000010 Q
+b0000000000000000000000000000000000000000000000000001111111111100 R
+b0001111111111111 T
+b000010 l
+b000010 o
+b000010 q
+b0010000000000000 {
+b0001111111111 $!
+b000010 '!
+b0010000000000 )!
+b0001111111111000 2!
+14!
+15!
+#35
+04!
+05!
+#40
+b0000000001000000 %
+b0000000001000000 E
+b000010 H
+b0000000000000000000000000000000000000000000000000000000001000000 J
+b000001 L
+b000001 Q
+b0000000000000000000000000000000000000000000000000000000001000000 R
+b0000000000111111 T
+b0011 ]
+b000 d
+b000001 l
+b000001 o
+b000001 q
+b0000000001001000 {
+0~
+b0000000001000 $!
+b000001 '!
+b0000000001001 )!
+b0000000001000000 2!
+14!
+15!
+#45
+04!
+05!
+#50
+b0100000000010100 %
+b0100000000011000 E
+b000001 H
+b0000000000000000000000000000000000000000000000000100000000010100 J
+b000000 L
+b000000 Q
+b0000000000000000000000000000000000000000000000000100000000010100 R
+b0100000000010111 T
+b100 d
+b000000 l
+b000000 o
+b000000 q
+b0100000000011000 {
+1~
+b0100000000010 $!
+b000000 '!
+b0100000000011 )!
+b0100000000010000 2!
+14!
+15!
+#55
+04!
+05!
+#60
+b0000000000010100 %
+1+
+0,
+0=
+b0000000000011000 E
+b000000 H
+0I
+b0000000000000000000000000000000000000000000000000000000000010100 J
+b111111 L
+b0000000000000000000000000000000000000000000000000000000000010100 R
+1S
+b0000000000010111 T
+b111111 l
+0s
+b0000000000011000 {
+b0000000000010 $!
+1&!
+b111111 '!
+0(!
+b0000000000011 )!
+1*!
+1/!
+b0000000000010000 2!
+14!
+15!
+#65
+04!
+05!
+#70
+0$
+b0111111111111100 %
+10
+17
+0<
+b1000000000000000 E
+1G
+b0000000000000000000000000000000000000000000000000111111111111100 J
+1N
+b0000000000000000000000000000000000000000000000000111111111111100 R
+b0111111111111111 T
+1U
+b0010 ]
+1g
+1n
+0r
+b1000000000000000 {
+b0111111111111 $!
+1%!
+b1000000000000 )!
+b0111111111111000 2!
+14!
+15!
+#75
+04!
+05!
+#80
+0!
+b1111111111111 #
+b00010000 &
+0'
+b1111111111111 (
+0+
+0-
+00
+01
+02
+03
+04
+b0111111111110111 5
+06
+07
+09
+1=
+b00010000 @
+b01000 A
+1B
+b1111111111111 D
+b0111111111111111 F
+0G
+b000101 H
+1I
+0K
+b000100 L
+0M
+0N
+b000101 Q
+0S
+0U
+b1111111111110 W
+1Y
+0_
+0`
+b0000000000000 c
+1e
+0f
+0g
+0h
+b1111111111111 k
+b000100 l
+0n
+b000101 o
+b000100 q
+1r
+0t
+0w
+0y
+0z
+0}
+0%!
+0&!
+b000100 '!
+1(!
+0*!
+0+!
+0,!
+1-!
+0/!
+10!
+01!
+13!
+14!
+15!
+06!
+#85
+04!
+05!
+#90
