@@ -10,6 +10,6 @@
     ],
 
     "global invariants" : [
-	//"(m1.core.txfifo.tx_f.wrusedw_i == m1.core.txfifo.tx_f.wr_ptr - m1.core.txfifo.tx_f.rd_ptr ) || (m1.core.txfifo.tx_f.wrusedw_i == 16 - (m1.core.txfifo.tx_f.rd_ptr - m1.core.txfifo.tx_f.wr_ptr))"	 
+	"(m1.core.txfifo.tx_f.wrusedw_i == m1.core.txfifo.tx_f.wr_ptr - m1.core.txfifo.tx_f.rd_ptr ) || (m1.core.txfifo.tx_f.wrusedw_i == 16 - (m1.core.txfifo.tx_f.rd_ptr - m1.core.txfifo.tx_f.wr_ptr))"	 
     ]
 }

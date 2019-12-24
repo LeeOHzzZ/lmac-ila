@@ -30,7 +30,7 @@ void GenVerifTargetTX_FIFO(Ila& model, const std::string& design_path,
       "tx_encap.v",
       "tx_mac10g_crc32x64.v",
       "tx_xgmii_LE2.v",
-      "txfifo_1024x64.v",
+      "txfifo_1024x64_original.v",
   };
 
   ILA_INFO << "before adding full path";

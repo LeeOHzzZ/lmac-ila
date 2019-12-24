@@ -10,6 +10,8 @@
     "TXFIFO_WUSED_QWD"          : "m0.TXFIFO_WUSED_QWD[4:0] == m1.core.txfifo.tx_f.wrusedw_i",
 
     "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem", 
+
+    "TXFIFO_RD_EN"		: [["__START__", "m1.core.txfifo.tx_f.rden"]],
  
     "TXFIFO_BUFF_WR_PTR"        : "m1.core.txfifo.tx_f.wr_ptr",
     "TXFIFO_BUFF_RD_PTR"        : "m1.core.txfifo.tx_f.rd_ptr",
@@ -24,7 +26,7 @@
 
   "interface mapping": {
     "clk"               : "**CLOCK**",
-    "xA_clk"            : "**KEEP**",
+    "xA_clk"            : "**CLOCK**",
     "reset_"            : "**NRESET**", 
 
     "mode_10G"          : "MODE_10G",
@@ -94,7 +96,6 @@
   },
 
   "mapping control" : [
-    "(m1.core.x_clk == 0)",
     "(m1.TCORE_MODE == 1)",
     "(m1.SYS_ADDR == 1)",
     "(m1.mode_10G == 1)",
@@ -102,8 +103,8 @@
     "(m1.mode_2p5G == 0)",
     "(m1.mode_1G == 0)",
     "(m1.core.txfifo_rd_en == 0)",
-    "(m1.core.txfifo.tx_f.rd_ptr == 0)",
-    "(m1.core.txfifo.tx_f.datain == 64'hdeadbeefdeadbeef"
+//    "(m1.core.txfifo.tx_f.rd_ptr == 0)",
+    "(m1.core.txfifo.tx_f.datain == 64'hdeadbeefdeadbeef)"
     // "(m1.core.txfifo.tx_f.wr_ptr <= 16 && m1.core.txfifo.tx_f.wr_ptr >= 0)",
     // "(m1.core.txfifo.tx_f.wrusedw <= 16 && m1.core.txfifo.tx_f.wrusedw >= 0)",
     // "(m1.core.txfifo.tx_f.wrusedw_i <= 16 && m1.core.txfifo.tx_f.wrusedw_i >= 0)",

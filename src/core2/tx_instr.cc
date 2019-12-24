@@ -55,18 +55,24 @@ namespace ilang {
       instr.SetDecode(wr_enable & fifo_non_full);
 
       auto data_in = m.input(TX_DATA);
-      auto txfifo_wused = m.state(TXFIFO_WUSED_QWD);
+      auto txfifo_wused = Extract(m.state(TXFIFO_WUSED_QWD), 4, 0);
       auto txfifo_full = m.state(TXFIFO_FULL);
 
       auto fifo = m.state(TXFIFO_BUFF);
       auto wr_ptr = m.state(TXFIFO_BUFF_WR_PTR);
+      // this is only for model refinement checking.
+      auto rd_en = m.state(TXFIFO_RD_EN);
 
+      auto is_full = (txfifo_wused == TXFIFO_BUFF_DEPTH);
+      auto temp1 = Ite(is_full, BvConst(1, 1), BvConst(0, 1));
       // update
       auto wr_entry = Ite((wr_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x0, TXFIFO_BUFF_WR_PTR_BWID), wr_ptr);
+      auto temp = Ite((Uge(txfifo_wused, TXFIFO_BUFF_DEPTH - 1)), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID));
+
       instr.SetUpdate(fifo, Store(fifo, wr_entry, data_in));
       instr.SetUpdate(wr_ptr, Ite((Uge(wr_ptr, TXFIFO_BUFF_DEPTH)), BvConst(0x1, TXFIFO_BUFF_WR_PTR_BWID), wr_ptr + 0x1));
-      instr.SetUpdate(txfifo_wused, txfifo_wused + 0x1);
-      instr.SetUpdate(txfifo_full, Ite((Uge(txfifo_wused, TXFIFO_BUFF_DEPTH - 1)), BvConst(0x1, TXFIFO_FULL_BWID), BvConst(0x0, TXFIFO_FULL_BWID)));
+      instr.SetUpdate(txfifo_wused, Ite((rd_en == 1), txfifo_wused + 0, txfifo_wused + 1));
+      instr.SetUpdate(txfifo_full, Ite((rd_en == 1), temp1, temp));
 //      txfifo_full is combinational logic in the verilog design. We need to add a post value holder to store the result for it.
 
     }
@@ -114,7 +120,7 @@ namespace ilang {
     // parent states
     auto fifo = m.state(TXFIFO_BUFF);
     auto fifo_rd_ptr = m.state(TXFIFO_BUFF_RD_PTR);
-    auto fifo_wused = m.state(TXFIFO_WUSED_QWD);  
+    auto fifo_wused = Extract(m.state(TXFIFO_WUSED_QWD), 4, 0);  
     // auto fifo_non_empty = (Ugt(fifo_wused, 0));
     auto fifo_not_empty = (m.state(TXFIFO_RD_EMPTY) == 0);
     auto fifo_output = m.state(TXFIFO_RD_OUTPUT);
