@@ -97,13 +97,19 @@ namespace ilang {
     // Set up internal states for this child
     SetupTxFuncInternal(child_tx_func);
     
-//    auto resetn = m.input(RESETN);
-//    child_tx_func.SetValid(resetn == RESETN_VALID);
+    // auto resetn = m.input(RESETN);
+    // child_tx_func.SetValid(resetn == RESETN_VALID);
     child_tx_func.SetValid(BoolConst(true));
     child_tx_func.SetFetch(BvConst(0x1, 1));
 
     // add reference of chile_tx_func for convenience
     auto cm = child_tx_func;
+
+    // add initial condition
+    cm.AddInit(cm.state(TX_B2B_OK) == 0);
+    cm.AddInit(cm.state(TX_B2B_CNTR) == TX_B2B_CNTR_INITIAL);
+    cm.AddInit(cm.state(TX_STATE) == TX_STATE_IDLE);
+    cm.AddInit(cm.state(TX_STATE_ENCAP) == TX_STATE_ENCAP_IDLE);
 
     // parent states
     auto fifo = m.state(TXFIFO_BUFF);
