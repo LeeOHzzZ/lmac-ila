@@ -180,7 +180,7 @@ namespace ilang {
       instr.SetUpdate(fifo_output, fifo_data_out);// 1 clk
       instr.SetUpdate(fifo_rd_ptr, Ite((actual_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), actual_rd_ptr + 1));//1 clk
       instr.SetUpdate(fifo_wused, Ite((fifo_rd_en == 0), fifo_wused - 1, fifo_wused - 2));// 1 clk
-      instr.SetUpdate(m.state(TXFIFO_RD_EMPTY), Ite((fifo_wr_en == TX_WE_N) & (fifo_wused == 1), 1, 0));
+      instr.SetUpdate(m.state(TXFIFO_RD_EMPTY), Ite((fifo_wr_en == TX_WE_N) & (fifo_wused == 1), BvConst(1,1), BvConst(0,1)));
       // Do we need to consider when fifo only has 1 left but with the wused - 2? (However, this should not happen during the Read Stage)? Maybe a bug.
 
       // states update
@@ -275,7 +275,7 @@ namespace ilang {
       instr.SetUpdate(fifo_rd_ptr, Ite((wcnt > 23), Ite((fifo_rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), fifo_rd_ptr + 1), fifo_rd_ptr));
       instr.SetUpdate(fifo_wused, Ite((wcnt > 23), fifo_wused - 1, fifo_wused));
       // not sure whether this should consider the delay. TODO: Test 
-      instr.SetUpdate(m.state(TXFIFO_RD_EMPTY), Ite((fifo_wr_en == TX_WE_N) & (fifo_wused == 1), 1, 0));
+      instr.SetUpdate(m.state(TXFIFO_RD_EMPTY), Ite((fifo_wr_en == TX_WE_N) & (fifo_wused == 1), BvConst(1, 1), BvConst(0,1)));
 
       // CRC code Update
 

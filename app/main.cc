@@ -43,9 +43,9 @@ int main(int argc, const char** argv) {
   std::ofstream fw_verilog0(verilog_file_name);
   core2.ExportToVerilog(fw_verilog0);
 
-  verilog_file_name = "LmacCore2_TX_FIFO.v";
-  std::ofstream fw_verilog1(verilog_file_name);
-  core2.child("TX_FIFO").ExportToVerilog(fw_verilog1);
+ // verilog_file_name = "LmacCore2_TX_FIFO.v";
+  //std::ofstream fw_verilog1(verilog_file_name);
+  //core2.child("TX_FIFO").ExportToVerilog(fw_verilog1);
 
   verilog_file_name = "LmacCore2_TX_FUNC.v";
   std::ofstream fw_verilog2(verilog_file_name);
@@ -53,7 +53,7 @@ int main(int argc, const char** argv) {
 
   verilog_file_name = "LmacCore2_FIFO_TEST.v";
   std::ofstream fw_verilog3(verilog_file_name);
-  core2.child("FIFO_TEST").ExportToVerilog(fw_verilog2);
+  core2.child("FIFO_TEST").ExportToVerilog(fw_verilog3);
 
   // define the command line parser
   /*
@@ -87,11 +87,11 @@ int main(int argc, const char** argv) {
 
   // generating verification target for TX_FIFO
   auto design_path = "../design/core2";
-  auto output_path = "../verification/core2/TX_FIFO";
+  auto output_path = "../verification/core2/TX_INSTR";
   auto var_map = "../refinement/core2/var_map_tx_fifo.json";
   auto instr_map = "../refinement/core2/instr_cond_tx_fifo.json";
-  auto model = core2.child("TX_FIFO");
-  //GenVerifTargetTX_FIFO(model, design_path, instr_map, var_map, output_path);
+  auto model = core2;
+  GenVerifTargetTX_FIFO(model, design_path, instr_map, var_map, output_path);
 
   // generating verification target for TX_FUNC
   output_path = "../verification/core2/TX_FUNC";
