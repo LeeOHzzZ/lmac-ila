@@ -103,10 +103,11 @@
     "(m1.mode_1G == 0)",
     "(m1.core.txfifo_rd_en == 0)",
     "(m1.core.txfifo.tx_f.rd_ptr == 0)",
-    "(m1.core.txfifo.tx_f.wr_ptr <= 16 && m1.core.txfifo.tx_f.wr_ptr >= 0)",
-    "(m1.core.txfifo.tx_f.wrusedw <= 16 && m1.core.txfifo.tx_f.wrusedw >= 0)",
-    "(m1.core.txfifo.tx_f.wrusedw_i <= 16 && m1.core.txfifo.tx_f.wrusedw_i >= 0)",
-    "(m0.TXFIFO_WUSED_QWD <= 16 && m0.TXFIFO_WUSED_QWD >= 0)"
+    "(m1.core.txfifo.tx_f.datain == 64'hdeadbeefdeadbeef"
+    // "(m1.core.txfifo.tx_f.wr_ptr <= 16 && m1.core.txfifo.tx_f.wr_ptr >= 0)",
+    // "(m1.core.txfifo.tx_f.wrusedw <= 16 && m1.core.txfifo.tx_f.wrusedw >= 0)",
+    // "(m1.core.txfifo.tx_f.wrusedw_i <= 16 && m1.core.txfifo.tx_f.wrusedw_i >= 0)",
+    // "(m0.TXFIFO_WUSED_QWD <= 16 && m0.TXFIFO_WUSED_QWD >= 0)"
 
     
   ],
