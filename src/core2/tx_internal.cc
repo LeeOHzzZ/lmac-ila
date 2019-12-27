@@ -80,15 +80,13 @@ namespace ilang {
     NewState(cm, CRC_DAT_IN, CRC_DAT_IN_BWID);
     // State for previous crc code input
     NewState(cm, CRC_IN, CRC_IN_BWID);
-    //////////////////////////////////
-    // Internal Non Architectual States
-    //////////////////////////////////
     // State holding the initial wcnt count, used for crc input
     NewState(cm, TX_WCNT_INI, TX_WCNT_INI_BWID);
     // Buffer for CRC Code generation
     NewState(cm, TX_BUF, TX_BUF_BWID);
-
-
+    //////////////////////////////////
+    // Internal Non Architectual States
+    //////////////////////////////////
     // State for recording current instruction
     NewState(cm, "TX_FUNC_INSTR", 3);
 
