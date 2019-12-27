@@ -75,7 +75,7 @@ reg [1:0] clock_counter;
 // assign slower clk according to the counter
 wire slow_clk = clock_counter[0]; // 2 times slower than the faster one
 
-always @ (wrclk) 
+always @ (posedge wrclk) 
   begin
     if (!reset_) 
       begin
@@ -97,7 +97,7 @@ always @(wr_ptr,rd_ptr,wrusedw,rdusedw,wren,rden,reset_)
 		//need to rise quickly to avoid false writing
 		//wrusedw is sync to wrclk
 		wrfull =    !reset_ ? 1'b0 : // for full 1 for empty 0
-			(wrusedw_i >= DEPTH) // The original design is wrusedw instead of wrusedw_i 
+			(wrusedw >= DEPTH) // The original design is wrusedw instead of wrusedw_i 
 			;
 		wrempty =    !reset_ ? 1'b1 : // for full 1 for empty 0
 			(wrusedw <= 0) 
