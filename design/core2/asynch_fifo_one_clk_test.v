@@ -73,7 +73,8 @@ reg [WIDTH-1 : 0] mem[DEPTH-1:0] ;
 reg [1:0] clock_counter;
 
 // assign slower clk according to the counter
-wire slow_clk = clock_counter[0]; // 2 times slower than the faster one
+wire fast_clk = clock_counter[0];
+wire slow_clk = clock_counter[1]; // 2 times slower than the faster one
 
 always @ (posedge wrclk) 
   begin
@@ -142,22 +143,22 @@ end
 assign rdfull  = wrfull ? 1'b1 : 1'b0;                     
 
 //=== WRITE INTO FIFO
-	always @(wrclk, wrusedw_i )
+	always @(fast_clk, wrusedw_i )
 		begin
-		if (!reset_ & !wrclk )
+		if (!reset_ & !fast_clk )
 			begin
 			wrusedw 	<= 0;
 			end
 		else
 			begin
 			wrusedw 	<= 
-				!wrclk ? wrusedw_i :
+				!fast_clk ? wrusedw_i :
 				wrusedw ;
 			end
 			
 		end	
 
-	always @(posedge wrclk)
+	always @(posedge fast_clk)
 	begin
 		if (!reset_)
 			begin
