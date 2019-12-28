@@ -301,20 +301,29 @@
     "(m1.mode_2p5G == 0) && (m1.core.mode_2p5G == 0) && (m1.core.tx_10G_wrap.mode_2p5G == 0) && (m1.core.tx_10G_wrap.tx_xgmii.mode_2p5G == 0)",
     "(m1.mode_1G == 0) && (m1.core.mode_1G == 0) && (m1.core.tx_10G_wrap.tx_encap.mode_1G == 0) && (m1.core.tx_10G_wrap.tx_xgmii.mode_1G == 0)",
 
-    //"(~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.usedw_i > 0))",
-    //"(~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.wren == 0))",
-    //"~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.wr_ptr_d1 > 0)",
-    "(m1.core.tx_10G_wrap.tx_encap.p_len > 60) && (m1.core.tx_10G_wrap.tx_encap.p_len < 200)",
+    // Disable the write fifo will significantly decrease verification time
+    "(~(m1.core.tx_10G_wrap.tx_encap.state > 4) || (m1.core.txfifo.tx_f.wren == 0))",
+    "~(m1.core.tx_10G_wrap.tx_xgmii.state > 4) || (m1.core.txfifo.tx_f.wren == 0)",
+
+
+    // This constrains the packet length:
+    "(m1.core.tx_10G_wrap.tx_encap.p_len > 60) && (m1.core.tx_10G_wrap.tx_encap.p_len < 9000)",
     "~(m1.core.tx_10G_wrap.tx_encap.state <= 4) || (m1.core.txfifo.tx_f.dataout == m1.core.tx_10G_wrap.tx_encap.p_len_latch)",
     //"~(m1.core.tx_10G_wrap.tx_encap.state == 8) || ((m1.core.tx_10G_wrap.tx_encap.bytes_remain > 52) && (m1.core.tx_10G_wrap.tx_encap.bytes_remain < 9000))",
     //"~(m1.core.tx_10G_wrap.tx_encap.state == 4) || ((m1.core.txfifo.tx_f.dataout > 60) && (m1.core.txfifo.tx_f.dataout < 120))",
-    "~(m1.core.tx_10G_wrap.tx_encap.state > 4) || (m1.core.txfifo.tx_f.dataout == 64'hdeadbeefdeadbeef)",
-    "~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.datain == 64'hdeadbeefdeadbeef)",
-    "~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.rdempty == 0)",
+
+    //This is used to constrain the constant data (can be all commented if wren is disable for the fifo)
+    //"~(m1.core.tx_10G_wrap.tx_encap.state > 4) || (m1.core.txfifo.tx_f.dataout == 64'hdeadbeefdeadbeef)",
+    //"~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.datain == 64'hdeadbeefdeadbeef)",
+
+    //Current ILA instructions have added the fifo_not_empty in the decode. Thus uncomment this line will not find the bug
+    //"~(m1.core.tx_10G_wrap.tx_encap.state > 1) || (m1.core.txfifo.tx_f.rdempty == 0)",
 
     // avoid fifo write replacing the original value, causing data mismatch between ILA and verilog
     //"~(m1.core.txfifo.tx_f.rden == 1) || ((m1.core.txfifo.tx_f.rd_ptr != m1.core.txfifo.tx_f.wr_ptr_d) && (m1.core.txfifo.tx_f.rd_ptr != m1.core.txfifo.tx_f.wr_ptr_d1))",
     "~(m1.core.txfifo.tx_f.rden == 1) || ((m1.core.txfifo.tx_f.rd_ptr != m1.core.txfifo.tx_f.wr_ptr_d) && (m1.core.txfifo.tx_f.wr_ptr != m1.core.txfifo.tx_f.rd_ptr) && (m1.core.txfifo.tx_f.wr_ptr != m1.core.txfifo.tx_f.rd_ptr_d) && (m1.core.txfifo.tx_f.wr_ptr != m1.core.txfifo.tx_f.rd_ptr_d1) && (m1.core.txfifo.tx_f.wr_ptr != m1.core.txfifo.tx_f.rd_ptr_d2))",
+
+    // Other conditions constraints
     "(m1.core.rx_pause == 0) && (m1.core.tx_10G_wrap.tx_encap.rx_pause_sync == 0)",
     "(m1.core.tx_10G_wrap.tx_encap.tx_b2b_dly == 2)",
     "(m1.core.tx_10G_wrap.tx_xgmii.fmac_tx_clr_en == 0)"
