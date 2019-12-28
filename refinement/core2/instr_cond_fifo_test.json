@@ -4,17 +4,17 @@
 
         {
             "instruction"       :   "Write_only",
-            "ready bound"       :   1
+            "ready bound"       :   6
         },
 
         {
             "instruction"       :   "Read_only",
-            "ready bound"       :   1
+            "ready bound"       :   6
         },
 
         {
             "instruction"       :   "Write-Read",
-            "ready bound"       :   1
+            "ready bound"       :   6
         }
 
     ],

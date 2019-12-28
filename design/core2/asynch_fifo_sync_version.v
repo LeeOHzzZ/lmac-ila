@@ -63,6 +63,7 @@ reg	[PTR  : 0]		usedw_i;        //sync version
 reg [PTR : 0 ] wr_ptr, rd_ptr;
 reg [PTR : 0 ] rd_ptr_d , wr_ptr_d  ;		
 reg [PTR : 0 ] rd_ptr_d1, wr_ptr_d1 ;
+reg [PTR : 0 ] rd_ptr_d2;
 
 reg [PTR : 0] ptr_diff;
 
@@ -230,6 +231,7 @@ assign rdfull  = wrfull ? 1'b1 : 1'b0;
 			rd_ptr 		<= 0;
 			rd_ptr_d  	<= 0;
 			rd_ptr_d1 	<= 0;
+			rd_ptr_d2	<= 0;
 			//dataout 	<= 0;
 			rd_cnt  	<= 0;
 			
@@ -252,6 +254,7 @@ assign rdfull  = wrfull ? 1'b1 : 1'b0;
   							
 			rd_ptr_d  <= rd_ptr;
 			rd_ptr_d1 <= rd_ptr_d;
+			rd_ptr_d2 <= rd_ptr_d1;
       rdusedw_i <= rdusedw_i + 1;
 			
 			end
