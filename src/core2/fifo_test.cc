@@ -18,7 +18,7 @@
 
 #include <ilang/util/log.h>
 
-#define trigger 2
+#define rd_trigger 0
 
 namespace ilang {
   void LmacCore2::SetupFIFOTEST(Ila& m) {
@@ -63,16 +63,24 @@ namespace ilang {
       auto rne = (child.state("RE") == 0);
       instr.SetDecode(we & fifo_non_full & rne);
 
+      // update
+      auto wr_run = (counter == 0) | (counter == 2);
+
       auto wr_entry = Ite((wr_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x0, TXFIFO_BUFF_WR_PTR_BWID),
                                                           wr_ptr);
 
-      instr.SetUpdate(fifo, Store(fifo, wr_entry, data_in));
-      instr.SetUpdate(wr_ptr, Ite((Uge(wr_ptr, TXFIFO_BUFF_DEPTH)),
-                                    BvConst(0x1, TXFIFO_BUFF_WR_PTR_BWID), wr_ptr+1));
-      instr.SetUpdate(wused, wused+1);
-      instr.SetUpdate(fifo_full, Ite(Uge(wused, TXFIFO_BUFF_DEPTH - 1), BvConst(1,1), 
-			      						BvConst(0,1)));
-      instr.SetUpdate(fifo_empty, BvConst(0x0, 0));
+      instr.SetUpdate(fifo, Ite( wr_run, Store(fifo, wr_entry, data_in), fifo));
+      instr.SetUpdate(wr_ptr, Ite( wr_run,
+                                  Ite((Uge(wr_ptr, TXFIFO_BUFF_DEPTH)),
+                                    BvConst(0x1, TXFIFO_BUFF_WR_PTR_BWID), wr_ptr+1),
+                                  wr_ptr));
+
+      instr.SetUpdate(wused, Ite(wr_run, wused+1, wused));
+      instr.SetUpdate(fifo_full, Ite(wr_run,
+                                      Ite(Uge(wused, TXFIFO_BUFF_DEPTH - 1), BvConst(1,1), 
+			      						                                                      BvConst(0,1)),
+                                      fifo_full));
+      instr.SetUpdate(fifo_empty, Ite(wr_run, BvConst(0x0, 1), fifo_empty));
     }
 
     ILA_INFO << "before fifo_test 2nd instr";
@@ -88,18 +96,18 @@ namespace ilang {
       instr.SetDecode(wne & fifo_not_empty & re);
 
       //updates
-      auto run = (counter == trigger);
-      auto data_out = Ite(run, Load(fifo, Ite(rd_ptr == TXFIFO_BUFF_DEPTH, 
+      auto rd_run = (counter == rd_trigger);
+      auto data_out = Ite(rd_run, Load(fifo, Ite(rd_ptr == TXFIFO_BUFF_DEPTH, 
                                             BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), rd_ptr)),
                                fifo_out);
 
       instr.SetUpdate(fifo_out, data_out);
-      instr.SetUpdate(rd_ptr, Ite(run, Ite((rd_ptr == TXFIFO_BUFF_DEPTH), 
+      instr.SetUpdate(rd_ptr, Ite(rd_run, Ite((rd_ptr == TXFIFO_BUFF_DEPTH), 
                                             BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), rd_ptr+1),
                                        rd_ptr));
-      instr.SetUpdate(wused, Ite(run, wused-1, wused));
-      instr.SetUpdate(fifo_full, Ite(run, BvConst(0x0, 1), full_temp));
-      instr.SetUpdate(fifo_empty, Ite(run, Ite(wused == 1, BvConst(0x1,1), BvConst(0x0,1)), 
+      instr.SetUpdate(wused, Ite(rd_run, wused-1, wused));
+      instr.SetUpdate(fifo_full, Ite(rd_run, BvConst(0x0, 1), full_temp));
+      instr.SetUpdate(fifo_empty, Ite(rd_run, Ite(wused == 1, BvConst(0x1,1), BvConst(0x0,1)), 
       		      		                empty_temp));
 
       
@@ -120,10 +128,11 @@ namespace ilang {
 
       auto full_temp = Ite((wused == TXFIFO_BUFF_DEPTH), BvConst(1, 1), BvConst(0,1));
       auto empty_temp = Ite((wused == 0), BvConst(1,1), BvConst(0,1));
-      auto run = (counter == trigger);
-      auto data_out = Ite(run, Load(fifo, Ite(rd_ptr == TXFIFO_BUFF_DEPTH, 
+      auto both_run = (counter == rd_trigger);
+      auto wr_run = (counter == 0) | (counter == 2);
+      auto data_out = Ite(both_run, Load(fifo, Ite(rd_ptr == TXFIFO_BUFF_DEPTH, 
                                             BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), rd_ptr)),
-                               fifo_out);
+                                    fifo_out);
       ILA_INFO << "TEST";
       // state updates
       auto wr_entry = Ite((wr_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x0, TXFIFO_BUFF_WR_PTR_BWID),
@@ -131,20 +140,24 @@ namespace ilang {
       auto rd_entry = Ite((rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID),
                                                           rd_ptr);
 
-      instr.SetUpdate(fifo, Store(fifo, wr_entry, data_in));
+      instr.SetUpdate(fifo, Ite((wr_run), Store(fifo, wr_entry, data_in), fifo));
       instr.SetUpdate(fifo_out, data_out);
 
-      instr.SetUpdate(wr_ptr,Ite((Uge(wr_ptr, TXFIFO_BUFF_DEPTH)),
-                                    BvConst(0x1, TXFIFO_BUFF_WR_PTR_BWID), wr_ptr+1));
-      instr.SetUpdate(rd_ptr, Ite(run, Ite((rd_ptr == TXFIFO_BUFF_DEPTH), 
-                                            BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), rd_ptr+1),
-                                       rd_ptr));
+      instr.SetUpdate(wr_ptr,Ite( wr_run, Ite((Uge(wr_ptr, TXFIFO_BUFF_DEPTH)),
+                                                BvConst(0x1, TXFIFO_BUFF_WR_PTR_BWID), wr_ptr+1),
+                                          wr_ptr));
+      instr.SetUpdate(rd_ptr, Ite(both_run, Ite((rd_ptr == TXFIFO_BUFF_DEPTH), 
+                                                BvConst(0x1, TXFIFO_BUFF_RD_PTR_BWID), rd_ptr+1),
+                                            rd_ptr));
 
-      instr.SetUpdate(wused, Ite(run, wused, wused+1));
-      instr.SetUpdate(fifo_full, Ite(run, full_temp, 
-                                  Ite((Uge(wused, TXFIFO_BUFF_DEPTH - 1)), BvConst(1, 1), 
-					  BvConst(0x0, 1))));
-      instr.SetUpdate(fifo_empty, Ite(run, empty_temp, BvConst(0x0, 1)));
+      instr.SetUpdate(wused, Ite(both_run, wused, Ite(wr_run, wused+1, wused)));
+      instr.SetUpdate(fifo_full, Ite(both_run, full_temp, 
+                                  Ite(wr_run,
+                                        Ite((Uge(wused, TXFIFO_BUFF_DEPTH - 1)), BvConst(1, 1), BvConst(0, 1)),
+                                        fifo_full)));
+      instr.SetUpdate(fifo_empty, Ite(both_run, 
+                                        empty_temp, 
+                                        Ite(wr_run, BvConst(0, 1), fifo_empty)));
 
     }
   }

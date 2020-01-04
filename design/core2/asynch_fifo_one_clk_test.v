@@ -43,7 +43,7 @@ module asynch_fifo # (parameter WIDTH = 8,         // considering 8X8 fifo
 			
 			//=== Signals for READ
 
-            input  wire 				rdclk,        // Clk for reading data    
+      input  wire 				rdclk,        // Clk for reading data    
 			input  wire 				rden,         // Request to read from FIFO 
 			output reg [WIDTH-1 : 0]	dataout,      // Data coming out 
 			output wire 				rdfull,       // 1-FIFO IS FULL (DATA AVAILABLE FOR READ is == DEPTH)
@@ -71,16 +71,22 @@ reg [WIDTH-1 : 0] mem[DEPTH-1:0] ;
 
 // Counter for one clk domain test
 reg [1:0] clock_counter;
-
+// reg	clk_cntr;
 // assign slower clk according to the counter
-wire fast_clk = clock_counter[0];
-wire slow_clk = clock_counter[1]; // 2 times slower than the faster one
+// wire fast_clk = clock_counter[0];
+// wire slow_clk = clock_counter[1]; // 2 times slower than the faster one
+
+
+reg fast_clk;
+reg	slow_clk;
 
 always @ (posedge wrclk) 
   begin
     if (!reset_) 
       begin
         clock_counter <= 2'b0;
+				fast_clk <= 1'b0;
+				slow_clk <= 1'b0;
       end
     else
       begin
@@ -88,6 +94,15 @@ always @ (posedge wrclk)
       end
   end
 
+always @ (*)
+	begin
+		fast_clk = clock_counter[0];
+	end
+
+always @ (posedge fast_clk)
+	begin
+		slow_clk <= ~slow_clk;
+	end
 
 assign	dbg	=	1'b0;
 
