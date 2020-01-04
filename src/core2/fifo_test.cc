@@ -70,6 +70,8 @@ namespace ilang {
                                                           wr_ptr);
 
       auto fifo_full_new = Ite(Uge(wused, TXFIFO_BUFF_DEPTH - 1), BvConst(1,1), BvConst(0,1));                                                   
+      auto fifo_full_old = Ite(Uge(wused, TXFIFO_BUFF_DEPTH), BvConst(1,1), BvConst(0,1));
+      auto fifo_empty_old = Ite(wused == 0, BvConst(1,1), BvConst(0,1));
 
       instr.SetUpdate(fifo, Ite( wr_run, Store(fifo, wr_entry, data_in), fifo));
       instr.SetUpdate(wr_ptr, Ite( wr_run,
@@ -78,8 +80,8 @@ namespace ilang {
                                   wr_ptr));
 
       instr.SetUpdate(wused, Ite(wr_run, wused+1, wused));
-      instr.SetUpdate(fifo_full, Ite(wr_run, fifo_full_new, fifo_full));
-      instr.SetUpdate(fifo_empty, Ite(wr_run, BvConst(0x0, 1), fifo_empty));
+      instr.SetUpdate(fifo_full, Ite(wr_run, fifo_full_new, fifo_full_old));
+      instr.SetUpdate(fifo_empty, Ite(wr_run, BvConst(0x0, 1), fifo_empty_old));
     }
 
     ILA_INFO << "before fifo_test 2nd instr";
