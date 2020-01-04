@@ -140,8 +140,10 @@ namespace ilang {
                                                           wr_ptr);
       auto rd_entry = Ite((rd_ptr == TXFIFO_BUFF_DEPTH), BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID),
                                                           rd_ptr);
+      auto fifo_full_old = Ite(Uge(wused, TXFIFO_BUFF_DEPTH), BvConst(1,1), BvConst(0,1));
+      auto fifo_empty_old = Ite(wused == 0, BvConst(1,1), BvConst(0,1));                                                          
 
-      instr.SetUpdate(fifo, Ite((wr_run), Store(fifo, wr_entry, data_in), fifo));
+      instr.SetUpdate(fifo, Ite(wr_run, Store(fifo, wr_entry, data_in), fifo));
       instr.SetUpdate(fifo_out, data_out);
 
       instr.SetUpdate(wr_ptr,Ite( wr_run, Ite((Uge(wr_ptr, TXFIFO_BUFF_DEPTH)),
@@ -152,13 +154,14 @@ namespace ilang {
                                             rd_ptr));
 
       instr.SetUpdate(wused, Ite(both_run, wused, Ite(wr_run, wused+1, wused)));
+
       instr.SetUpdate(fifo_full, Ite(both_run, full_temp, 
                                   Ite(wr_run,
                                         Ite((Uge(wused, TXFIFO_BUFF_DEPTH - 1)), BvConst(1, 1), BvConst(0, 1)),
-                                        fifo_full)));
+                                        fifo_full_old)));
       instr.SetUpdate(fifo_empty, Ite(both_run, 
                                         empty_temp, 
-                                        Ite(wr_run, BvConst(0, 1), fifo_empty)));
+                                        Ite(wr_run, BvConst(0, 1), fifo_empty_old)));
 
     }
   }
