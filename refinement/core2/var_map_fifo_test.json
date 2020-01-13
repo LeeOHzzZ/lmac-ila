@@ -5,9 +5,10 @@
   },
 
   "state mapping": { 
-    "TXFIFO_FULL"               : [["__START__", "m1.core.txfifo.wrfull"], ["__IEND__", "#txfifo_full_end#"]],
+    "TXFIFO_FULL"               : [["__START__", "m1.core.txfifo.wrfull"] ],
+    //"TXFIFO_FULL"               : [["__START__", "m1.core.txfifo.wrfull"], ["__IEND__", "#txfifo_full_end#"]],
 
-    "TXFIFO_WUSED_QWD"          : "m0.TXFIFO_WUSED_QWD[4:0] == m1.core.txfifo.tx_f.wrusedw_i",
+    "TXFIFO_WUSED_QWD"          : [["__START__", "m0.TXFIFO_WUSED_QWD[4:0] == m1.core.txfifo.tx_f.wrusedw_i"], ["__IEND__", "m0.TXFIFO_WUSED_QWD[4:0] == #txfifo_wrusedw_i_end#"]],
 
     "TXFIFO_BUFF"               : "m1.core.txfifo.tx_f.mem", 
  
@@ -17,7 +18,8 @@
 
     "counter"                   : [["__START__", "m1.core.txfifo.tx_f.clock_counter"]],
     "RE"                        : "m1.core.txfifo.rdreq",
-    "fifo_empty"                : [["__START__", "m1.core.txfifo.tx_f.rdempty"], ["__IEND__", "#txfifo_empty_end#"]]
+    "fifo_empty"                : [["__START__", "m1.core.txfifo.tx_f.rdempty"] ]
+    //"fifo_empty"                : [["__START__", "m1.core.txfifo.tx_f.rdempty"], ["__IEND__", "#txfifo_empty_end#"]]
 
   },
   
@@ -98,9 +100,15 @@
     },
 
     "txfifo_empty_end": {
-      "cond" : "__START__ == 1",
+      "cond" : "__IEND__ == 1",
       "val"  : "m1.core.txfifo.tx_f.rdempty",
       "width": 1
+    },
+
+    "txfifo_wrusedw_i_end" : {
+	"cond" : "__START__ == 1",
+	"val"  : "m1.core.txfifo.tx_f.wrusedw_i",
+	"width": 5
     }
   },
 
@@ -111,7 +119,11 @@
     "(m1.mode_5G == 0)", 
     "(m1.mode_2p5G == 0)",
     "(m1.mode_1G == 0)",
-    "((m1.core.txfifo.tx_f.datain > 0) && (m1.core.txfifo.tx_f.datain < 20))"
+//    "(m1.core.txfifo.tx_f.wren == 1)",
+//    "(m1.core.txfifo.tx_f.rden == 1)",
+    "~((m1.core.txfifo.tx_f.slow_clk == 1) && (m1.core.txfifo.tx_f.fast_clk == 1)) || ((m1.core.txfifo.tx_f.clock_counter == 0) || (m1.core.txfifo.tx_f.clock_counter == 3))",
+    "((m1.core.txfifo.tx_f.datain > 0) && (m1.core.txfifo.tx_f.datain < 20))",
+    "(m1.core.txfifo.tx_f.wr_ptr <= 16) && (m1.core.txfifo.tx_f.rd_ptr <= 16)"
     
   ],
 

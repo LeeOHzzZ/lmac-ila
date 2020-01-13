@@ -85,8 +85,8 @@ always @ (posedge wrclk)
     if (!reset_) 
       begin
         clock_counter <= 2'b0;
-				fast_clk <= 1'b0;
-				slow_clk <= 1'b0;
+//	fast_clk <= 1'b0;
+//	slow_clk <= 1'b0;
       end
     else
       begin
@@ -101,7 +101,7 @@ always @ (*)
 
 always @ (posedge fast_clk)
 	begin
-		slow_clk <= ~slow_clk;
+		slow_clk <= slow_clk + 1'b1;
 	end
 
 assign	dbg	=	1'b0;

@@ -41,7 +41,7 @@ namespace ilang {
 
     // common states used
     auto data_in = m.input(TX_DATA);
-    auto wused = m.state(TXFIFO_WUSED_QWD);
+    auto wused = Extract(m.state(TXFIFO_WUSED_QWD), 4, 0);
     
     auto fifo_full = m.state(TXFIFO_FULL);
     auto fifo_empty = child.state("fifo_empty");
@@ -97,7 +97,7 @@ namespace ilang {
       instr.SetDecode(wne & fifo_not_empty & re);
 
       //updates
-      auto rd_run = (counter == rd_trigger);
+      auto rd_run = (counter == 2);
       auto data_out = Ite(rd_run, Load(fifo, Ite(rd_ptr == TXFIFO_BUFF_DEPTH, 
                                             BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), rd_ptr)),
                                fifo_out);
@@ -129,7 +129,7 @@ namespace ilang {
 
       auto full_temp = Ite((wused == TXFIFO_BUFF_DEPTH), BvConst(1, 1), BvConst(0,1));
       auto empty_temp = Ite((wused == 0), BvConst(1,1), BvConst(0,1));
-      auto both_run = (counter == rd_trigger);
+      auto both_run = (counter == 2);
       auto wr_run = (counter == 0) | (counter == 2);
       auto data_out = Ite(both_run, Load(fifo, Ite(rd_ptr == TXFIFO_BUFF_DEPTH, 
                                             BvConst(0x0, TXFIFO_BUFF_RD_PTR_BWID), rd_ptr)),
