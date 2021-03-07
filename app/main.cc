@@ -31,6 +31,7 @@ int main(int argc, const char** argv) {
   // create LMac Core 2 ILA
   ILA_INFO << "before creating ILA model";
 
+  // create LMac Core 2 ILA
   auto core2 = LmacCore2::New();
 
   ILA_INFO << "before export ILA portable";

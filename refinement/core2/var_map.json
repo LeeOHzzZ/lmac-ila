@@ -59,9 +59,9 @@
     "XGMII_DOUT_REG"            : "m1.core.tx_10G_wrap.tx_xgmii.txd",
     "XGMII_COUT_REG"            : "m1.core.tx_10G_wrap.tx_xgmii.txc",
     "TX_PKT_SENT"               : "m1.core.tx_10G_wrap.tx_xgmii.pkt_transmitted",
-    "TX_BYTE_SENT"              : "m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt"
+    "TX_BYTE_SENT"              : "m1.core.tx_10G_wrap.tx_xgmii.accumulated_bcnt",
     
-    "test"                      : [ ["__START__","m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg"],["__IEND__", "#byte_cnt_end#"]],
+    "test"                      : [ ["__START__","m1.core.tx_10G_wrap.tx_xgmii.rbytes_reg"],["__IEND__", "#byte_cnt_end#"]]
 
 
   
